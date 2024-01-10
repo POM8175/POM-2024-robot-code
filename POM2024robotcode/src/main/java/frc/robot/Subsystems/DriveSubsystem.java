@@ -110,9 +110,9 @@ public class DriveSubsystem extends PomSubsystem {
    * @param targetPosition the distance to drive
    */
   @Override
-  public void setSetPoint(double target) {
-    leftPid.setReference(target - getLeftEncoder().getPosition(), CANSparkMax.ControlType.kPosition);
-    rightPid.setReference(target - getLeftEncoder().getPosition(), CANSparkMax.ControlType.kPosition);
+  public void setSetPoint(double distance) {
+    leftPid.setReference(getLeftEncoder().getPosition() + distance, CANSparkMax.ControlType.kPosition);
+    rightPid.setReference(getLeftEncoder().getPosition() + distance, CANSparkMax.ControlType.kPosition);
   }
 
   /** returns the current pitch of the robot from gyro
