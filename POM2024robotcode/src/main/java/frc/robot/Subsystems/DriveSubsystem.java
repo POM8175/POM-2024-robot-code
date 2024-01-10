@@ -2,6 +2,8 @@ package frc.robot.Subsystems;
 
 import static frc.robot.Constants.DriveConstants.*;
 
+import java.util.function.Supplier;
+
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
@@ -16,6 +18,8 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 
 /**
  *
@@ -94,6 +98,12 @@ public class DriveSubsystem extends PomSubsystem {
     // This method will be called once per scheduler run during simulation
   }
 
+
+  @Override
+  public void stopMotor(){
+    masterLeftMotor.stopMotor();
+    masterRightMotor.stopMotor();
+  }
 
   /**
    * sets the mottors to go a distance from the curent position.
@@ -243,6 +253,19 @@ public class DriveSubsystem extends PomSubsystem {
   public double getTurnRate() {
     return -mGyro.getRate();
   }
+
+
+  public Command tankDriveCommand(Supplier<Double> left, Supplier<Double> right)
+  {
+    return new RunCommand(() -> tankDriveVolts(left.get(), right.get()), this);
+  }
+
+
+    public Command arcadeDriveCommand(Supplier<Double> left, Supplier<Double> right)
+  {
+    return new RunCommand(() -> arcadeDrive(left.get(), right.get()), this);
+  }
+
 
 
 }
