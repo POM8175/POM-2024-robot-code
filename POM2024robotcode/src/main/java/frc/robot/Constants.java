@@ -11,6 +11,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants.  This class should not be used for any other purpose.  All constants should be
@@ -61,6 +63,41 @@ public class Constants {
         public static final double THRESHOLD = 0.3;
     }
 
+    public static final class DriveConstants
+    {
+        public static final int LEFT_MOTOR_LEAD = 1;
+        public static final int LEFT_MOTOR_SLAVE = 2;
+        public static final int RIGHT_MOTOR_LEAD = 3;
+        public static final int RIGHT_MOTOR_SLAVE = 4;
+
+        public static final int GYRO_ID = 7;
+
+        public static final double TO_RADIANS = 1 / 180 * Math.PI;
+        public static final double ROTATIONS_TO_METERS = 1 / 8.45 * 15.24 * Math.PI / 100;
+
+        //all below need to be calculated
+        public static final double KS_VOLTS = 0.5;
+        public static final double KV_VOLT_SECOND_PER_METER  = 2.8419;
+        public static final double KA_VOLT_SECONDS_SQUARE_PER_METER = 1.4226;
+
+        public static final double KP = 0.8;
+        public static final double KI = 0.02;
+    
+        public static final double KP_DRIVE_VEL = 0.002;
+        public static final double KTRACK_WIDTH_METERS = 0.54;
+        public static final DifferentialDriveKinematics DRIVE_KINEMATICS =
+            new DifferentialDriveKinematics(KTRACK_WIDTH_METERS);
+    
+        public static final double MAX_SPEED_METER_PER_SECOND = 2;
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 2;
+
+        public static final double RATE = 0.04;
+        public static final double ANGLE_TOLERANCE = 2;
+
+        // const values we dont need to calculate
+        public static final double RAMSETE_B = 2;
+        public static final double RAMSETE_ZETA = 0.7;
+    }
 
 }
 
