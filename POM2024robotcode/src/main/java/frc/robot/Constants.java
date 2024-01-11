@@ -91,12 +91,26 @@ public class Constants {
         public static final double MAX_SPEED_METER_PER_SECOND = 2;
         public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 2;
 
-        public static final double RATE = 0.04;
+        public static final double RATE = 1.3; //Check!
         public static final double ANGLE_TOLERANCE = 2;
 
         // const values we dont need to calculate
         public static final double RAMSETE_B = 2;
         public static final double RAMSETE_ZETA = 0.7;
+    }
+
+    public static final class GeneralFunctions{
+        /**
+         * checks if you reached set point with an alowed error
+         * @param state the current state
+         * @param setPoint the set point
+         * @param tolerance the allowed error
+         * @return have you reached
+         */
+        public static boolean allowedError(double state, double setPoint, double tolerance)
+        {
+            return Math.abs(state - setPoint) < tolerance; 
+        }
     }
 
 }
