@@ -11,8 +11,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
-
-
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -25,8 +24,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
  *
  */
 public class DriveSubsystem extends PomSubsystem {
-
-  private double output = 0;
 
   private Field2d field;
 
@@ -159,18 +156,16 @@ public class DriveSubsystem extends PomSubsystem {
    * @param rot the commanded rotation
    */
   public void arcadeDrive(double fwd, double rot) {
-    if (Math.abs(output) < Math.abs(fwd / 2)) {
-      output = fwd / 2;
-    }
-    if (fwd - output > RATE) {
-      output += RATE;
-    } else if (output - fwd > RATE) {
-      output -= RATE;
-    }
+    //restroe if slew rate doesnt work properly
+    // if (Math.abs(output) < Math.abs(fwd / 2)) {
+    //   output = fwd / 2;
+    // }
+    // if (fwd - output > RATE) {
+    //   output += RATE;
+    // } else if (output - fwd > RATE) {
+    //   output -= RATE;
+    // }
 
-    mDrive.arcadeDrive(output, rot);
-  }
-  public void simpleArcadeDrive(double fwd, double rot){
     mDrive.arcadeDrive(fwd, rot);
   }
 
@@ -261,12 +256,12 @@ public class DriveSubsystem extends PomSubsystem {
   }
 
 
-    public Command arcadeDriveCommand(Supplier<Double> left, Supplier<Double> right)
+    public Command arcadeDriveCommand(Supplier<Double> fwd, Supplier<Double> rot)
   {
-    return new RunCommand(() -> arcadeDrive(left.get(), right.get()), this);
+    SlewRateLimiter rateLimit = new SlewRateLimiter(RATE);
+    rateLimit.reset((leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2);
+    return new RunCommand(() -> arcadeDrive(rateLimit.calculate(fwd.get()), rot.get()), this);
   }
-
-
 
 }
 
