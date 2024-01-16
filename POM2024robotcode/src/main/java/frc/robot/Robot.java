@@ -35,11 +35,12 @@ import edu.wpi.first.util.datalog.DoubleLogEntry;
  * the project.
  */
 public class Robot extends TimedRobot {
-    DoubleLogEntry testlog;
+    DoubleLogEntry[] testlog;
 
     private Command m_autonomousCommand;
 
     private RobotContainer m_robotContainer;
+        DataLog log = DataLogManager.getLog();
 
     /**
      * This function is run when the robot is first started up and should be
@@ -53,7 +54,10 @@ public class Robot extends TimedRobot {
         HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
         enableLiveWindowInTest(true);
         DataLogManager.start();
-        DataLog log = DataLogManager.getLog();
+        testlog[0].append(m_robotContainer.driveSubsystem.getPose().getX());
+        testlog[1].append(m_robotContainer.driveSubsystem.getPose().getY());
+        testlog[2].append(m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees());
+        
     }
 
     /**
@@ -113,7 +117,6 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {  
             m_autonomousCommand.cancel();
         }
-        testlog.append(10);
         
     }
 
