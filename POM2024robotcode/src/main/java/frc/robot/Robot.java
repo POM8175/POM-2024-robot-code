@@ -14,12 +14,19 @@ package frc.robot;
 
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
+
+import javax.xml.crypto.Data;
+
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.util.datalog.*;;
+import edu.wpi.first.util.datalog.*;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+
+
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -28,6 +35,7 @@ import edu.wpi.first.util.datalog.*;;
  * the project.
  */
 public class Robot extends TimedRobot {
+    DoubleLogEntry testlog;
 
     private Command m_autonomousCommand;
 
@@ -45,7 +53,7 @@ public class Robot extends TimedRobot {
         HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
         enableLiveWindowInTest(true);
         DataLogManager.start();
-       // DataLog log = DataLogManager.getLog();
+        DataLog log = DataLogManager.getLog();
     }
 
     /**
@@ -102,9 +110,11 @@ public class Robot extends TimedRobot {
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        if (m_autonomousCommand != null) {
+        if (m_autonomousCommand != null) {  
             m_autonomousCommand.cancel();
         }
+        testlog.append(10);
+        
     }
 
     /**
