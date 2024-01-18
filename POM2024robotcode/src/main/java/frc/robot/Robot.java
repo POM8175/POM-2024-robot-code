@@ -15,6 +15,12 @@ package frc.robot;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 
+import static frc.robot.Constants.JoystickConstants.A;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import javax.xml.crypto.Data;
 
 import edu.wpi.first.hal.HAL;
@@ -36,11 +42,13 @@ import edu.wpi.first.util.datalog.DoubleLogEntry;
  * the project.
  */
 public class Robot extends TimedRobot {
-    DoubleLogEntry testlog;
     DoubleLogEntry Xpose;
     DoubleLogEntry Ypose;
     DoubleLogEntry Rotpose;
     DoubleArrayLogEntry pose;
+    double[] posearr = new double[3];
+
+    BooleanLogEntry Abutton;
     private Command m_autonomousCommand;
 
     private RobotContainer m_robotContainer;
@@ -58,24 +66,28 @@ public class Robot extends TimedRobot {
         HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
         enableLiveWindowInTest(true);
 
-
+        
 
         //Logs
         DataLogManager.start();
-        testlog = new DoubleLogEntry(log,"test");
+
+        // Pose
         Xpose = new DoubleLogEntry(log, "/Pose/X");
         Ypose = new DoubleLogEntry(log, "/Pose/Y");
         Rotpose = new DoubleLogEntry(log, "/Pose/Rot");
         pose = new DoubleArrayLogEntry(log, "Pose");
-        testlog.append(10.0);
         Xpose.append(m_robotContainer.driveSubsystem.getPose().getX());
         Ypose.append(m_robotContainer.driveSubsystem.getPose().getY());
         Rotpose.append(m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees());
-        double[] arr = new double[3];
-        arr[0] = m_robotContainer.driveSubsystem.getPose().getX();
-        arr[1] = m_robotContainer.driveSubsystem.getPose().getY();
-        arr[2] = m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees();
-        pose.append(arr);
+        posearr[0] = m_robotContainer.driveSubsystem.getPose().getX();
+        posearr[1] = m_robotContainer.driveSubsystem.getPose().getY();
+        posearr[2] = m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees();
+
+        //Joystick
+        Abutton = new BooleanLogEntry(log,"Abtn");
+        Abutton.append(m_robotContainer.operateJoystick.getRawButton(A));
+
+        pose.append(posearr);
         
         
 
@@ -83,6 +95,14 @@ public class Robot extends TimedRobot {
   
     }
 
+
+    ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        Runnable task = () -> {
+            posearr[0] = m_robotContainer.driveSubsystem.getPose().getX();
+            posearr[1] = m_robotContainer.driveSubsystem.getPose().getY();
+            posearr[2] = m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees();
+            pose.append(posearr);
+        };
     /**
     * This function is called every robot packet, no matter the mode. Use this for items like
     * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
@@ -98,22 +118,23 @@ public class Robot extends TimedRobot {
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
     }
-
-
+    
+    
     /**
-    * This function is called once each time the robot enters Disabled mode.
-    */
+     * This function is called once each time the robot enters Disabled mode.
+     */
     @Override
     public void disabledInit() {
+        executor.shutdown();
     }
-
+    
     @Override
     public void disabledPeriodic() {
     }
-
+    
     /**
-    * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
-    */
+     * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
+     */
     @Override
     public void autonomousInit() {
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
@@ -123,14 +144,14 @@ public class Robot extends TimedRobot {
             m_autonomousCommand.schedule();
         }
     }
-
+    
     /**
-    * This function is called periodically during autonomous.
-    */
+     * This function is called periodically during autonomous.
+     */
     @Override
     public void autonomousPeriodic() {
     }
-
+    
     @Override
     public void teleopInit() {
         // This makes sure that the autonomous stops running when
@@ -140,6 +161,7 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {  
             m_autonomousCommand.cancel();
         }
+        executor.scheduleAtFixedRate(task, 0, 3, TimeUnit.SECONDS);
         
     }
 
