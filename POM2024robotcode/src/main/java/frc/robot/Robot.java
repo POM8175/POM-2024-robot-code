@@ -35,12 +35,14 @@ import edu.wpi.first.util.datalog.DoubleLogEntry;
  * the project.
  */
 public class Robot extends TimedRobot {
-    DoubleLogEntry[] testlog;
-
+    DoubleLogEntry testlog;
+    DoubleLogEntry Xpose;
+    DoubleLogEntry Ypose;
+    DoubleLogEntry Rotpose;
     private Command m_autonomousCommand;
 
     private RobotContainer m_robotContainer;
-        DataLog log = DataLogManager.getLog();
+    DataLog log = DataLogManager.getLog();
 
     /**
      * This function is run when the robot is first started up and should be
@@ -53,11 +55,24 @@ public class Robot extends TimedRobot {
         m_robotContainer = RobotContainer.getInstance();
         HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
         enableLiveWindowInTest(true);
+
+
+
+        //Logs
         DataLogManager.start();
-        testlog[0].append(m_robotContainer.driveSubsystem.getPose().getX());
-        testlog[1].append(m_robotContainer.driveSubsystem.getPose().getY());
-        testlog[2].append(m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees());
+        testlog = new DoubleLogEntry(log,"test");
+        Xpose = new DoubleLogEntry(log, "/Pose/X");
+        Ypose = new DoubleLogEntry(log, "/Pose/Y");
+        Rotpose = new DoubleLogEntry(log, "/Pose/Rot");
+        testlog.append(10.0);
+        Xpose.append(m_robotContainer.driveSubsystem.getPose().getX());
+        Ypose.append(m_robotContainer.driveSubsystem.getPose().getY());
+        Rotpose.append(m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees());
         
+        
+
+        
+  
     }
 
     /**
