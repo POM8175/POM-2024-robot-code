@@ -20,6 +20,7 @@ import javax.xml.crypto.Data;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.util.datalog.*;
@@ -39,6 +40,7 @@ public class Robot extends TimedRobot {
     DoubleLogEntry Xpose;
     DoubleLogEntry Ypose;
     DoubleLogEntry Rotpose;
+    DoubleArrayLogEntry pose;
     private Command m_autonomousCommand;
 
     private RobotContainer m_robotContainer;
@@ -64,10 +66,16 @@ public class Robot extends TimedRobot {
         Xpose = new DoubleLogEntry(log, "/Pose/X");
         Ypose = new DoubleLogEntry(log, "/Pose/Y");
         Rotpose = new DoubleLogEntry(log, "/Pose/Rot");
+        pose = new DoubleArrayLogEntry(log, "Pose");
         testlog.append(10.0);
         Xpose.append(m_robotContainer.driveSubsystem.getPose().getX());
         Ypose.append(m_robotContainer.driveSubsystem.getPose().getY());
         Rotpose.append(m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees());
+        double[] arr = new double[3];
+        arr[0] = m_robotContainer.driveSubsystem.getPose().getX();
+        arr[1] = m_robotContainer.driveSubsystem.getPose().getY();
+        arr[2] = m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees();
+        pose.append(arr);
         
         
 
@@ -140,7 +148,19 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-    }
+        //Pose Widget
+        SmartDashboard.putNumber("Pose/Pose X Value", m_robotContainer.driveSubsystem.getPose().getX());
+        SmartDashboard.putNumber("Pose/Pose Y Value", m_robotContainer.driveSubsystem.getPose().getY());
+        SmartDashboard.putNumber("Pose/Pose Rotation Value", m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees());
+
+        //Encoder Widget
+        SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Velocity",m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity());
+        SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Velocity",m_robotContainer.driveSubsystem.getRightEncoder().getVelocity());
+        SmartDashboard.putNumber("Drive/Encoder/LeftEncoder", m_robotContainer.driveSubsystem.getLeftEncoder().getPosition());
+        SmartDashboard.putNumber("Drive/Encoder/RightEncoder", m_robotContainer.driveSubsystem.getRightEncoder().getPosition());
+        SmartDashboard.putNumber("Drive/Encoder", m_robotContainer.driveSubsystem.getEncoderPosition());
+
+    }   
 
     @Override
     public void testInit() {
