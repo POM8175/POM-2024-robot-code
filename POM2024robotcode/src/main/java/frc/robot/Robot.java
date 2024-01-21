@@ -26,11 +26,12 @@ import javax.xml.crypto.Data;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.util.datalog.*;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.sendable.SendableRegistry;
 
 
 
@@ -125,7 +126,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit() {
-        executor.shutdown();
+        // executor.shutdown();
     }
     
     @Override
@@ -174,6 +175,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Pose/Pose X Value", m_robotContainer.driveSubsystem.getPose().getX());
         SmartDashboard.putNumber("Pose/Pose Y Value", m_robotContainer.driveSubsystem.getPose().getY());
         SmartDashboard.putNumber("Pose/Pose Rotation Value", m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees());
+
 
         //Encoder Widget
         SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Velocity",m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity());

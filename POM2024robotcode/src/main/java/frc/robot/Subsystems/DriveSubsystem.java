@@ -260,7 +260,9 @@ public class DriveSubsystem extends PomSubsystem {
   {
     SlewRateLimiter rateLimit = new SlewRateLimiter(RATE);
     rateLimit.reset((leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2);
+    
     return new RunCommand(() -> arcadeDrive(rateLimit.calculate(fwd.get()), rot.get()), this);
+    
   }
 
 }
