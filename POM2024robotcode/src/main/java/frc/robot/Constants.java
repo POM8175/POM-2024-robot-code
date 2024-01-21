@@ -99,6 +99,10 @@ public class Constants {
         public static final double RAMSETE_ZETA = 0.7;
     }
 
+    public static final class IntakeConstants{
+       public static final int ULTRASOINC_PORT = 0;
+    }
+
     public static final class GeneralFunctions{
         /**
          * checks if you reached set point with an alowed error
