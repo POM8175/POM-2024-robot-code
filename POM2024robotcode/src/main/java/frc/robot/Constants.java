@@ -103,6 +103,15 @@ public class Constants {
        public static final int ULTRASOINC_PORT = 0;
     }
 
+    public static final class LedsConstants{
+        public static final int pRED = 0;
+        public static final int pGREEN = 1;
+        public static final int pBLUE = 2;
+        public static final int PWM = 9;
+        public static final int NUM_LEDS = 60;
+        public static final int LED_PORT = 5;
+    }
+
     public static final class GeneralFunctions{
         /**
          * checks if you reached set point with an alowed error

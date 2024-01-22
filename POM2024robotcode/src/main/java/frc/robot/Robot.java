@@ -14,6 +14,7 @@ package frc.robot;
 
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
+import edu.wpi.first.units.Unit;
 
 import static frc.robot.Constants.JoystickConstants.A;
 
@@ -24,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 import javax.xml.crypto.Data;
 
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -54,7 +56,7 @@ public class Robot extends TimedRobot {
 
     private RobotContainer m_robotContainer;
     DataLog log = DataLogManager.getLog();
-
+    AnalogPotentiometer ultrasoinc = new AnalogPotentiometer(0,12,-0.6);
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -89,6 +91,8 @@ public class Robot extends TimedRobot {
         Abutton.append(m_robotContainer.operateJoystick.getRawButton(A));
 
         pose.append(posearr);
+        
+
         
         
 
@@ -171,19 +175,22 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        //Pose Widget
+        //Pose Tab
         SmartDashboard.putNumber("Pose/Pose X Value", m_robotContainer.driveSubsystem.getPose().getX());
         SmartDashboard.putNumber("Pose/Pose Y Value", m_robotContainer.driveSubsystem.getPose().getY());
         SmartDashboard.putNumber("Pose/Pose Rotation Value", m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees());
 
 
-        //Encoder Widget
+        //Encoder Tab
         SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Velocity",m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity());
         SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Velocity",m_robotContainer.driveSubsystem.getRightEncoder().getVelocity());
         SmartDashboard.putNumber("Drive/Encoder/LeftEncoder", m_robotContainer.driveSubsystem.getLeftEncoder().getPosition());
         SmartDashboard.putNumber("Drive/Encoder/RightEncoder", m_robotContainer.driveSubsystem.getRightEncoder().getPosition());
         SmartDashboard.putNumber("Drive/Encoder", m_robotContainer.driveSubsystem.getEncoderPosition());
 
+
+        //Intake Tab
+        SmartDashboard.putNumber("Intake/Ultrasoinc Value", ultrasoinc.get());
     }   
 
     @Override
