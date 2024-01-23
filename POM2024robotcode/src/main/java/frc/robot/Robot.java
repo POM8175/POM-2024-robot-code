@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
         enableLiveWindowInTest(true);
 
         colorSensor.configureColorSensor(ColorSensorResolution.kColorSensorRes16bit, ColorSensorMeasurementRate.kColorRate100ms, GainFactor.kGain1x);
-        colorSensor.configureProximitySensor(ProximitySensorResolution.kProxRes9bit, ColorSensorV3.ProximitySensorMeasurementRate.kProxRate100ms);
+        colorSensor.configureProximitySensor(ProximitySensorResolution.kProxRes8bit, ColorSensorV3.ProximitySensorMeasurementRate.kProxRate100ms);
         //Logs
         DataLogManager.start();
 
