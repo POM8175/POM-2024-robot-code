@@ -204,6 +204,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Intake/Color/Red", colorSensor.getRed());
         SmartDashboard.putNumber("Intake/Color/Green", colorSensor.getGreen());
         SmartDashboard.putNumber("Intake/Color/Blue", colorSensor.getBlue());
+        SmartDashboard.putNumber("Intake/Color/Dist",colorSensor.getProximity());
     }   
 
     @Override
