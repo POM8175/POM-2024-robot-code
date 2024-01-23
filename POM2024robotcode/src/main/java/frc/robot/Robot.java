@@ -24,9 +24,15 @@ import java.util.concurrent.TimeUnit;
 
 import javax.xml.crypto.Data;
 
+import com.revrobotics.ColorSensorV3;
+import com.revrobotics.ColorSensorV3.ColorSensorMeasurementRate;
+import com.revrobotics.ColorSensorV3.ColorSensorResolution;
+import com.revrobotics.ColorSensorV3.GainFactor;
+
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -56,7 +62,11 @@ public class Robot extends TimedRobot {
 
     private RobotContainer m_robotContainer;
     DataLog log = DataLogManager.getLog();
-    AnalogPotentiometer ultrasoinc = new AnalogPotentiometer(0,12,-0.6);
+    
+
+    // Color Sensor
+    public I2C.Port i2cPort =  I2C.Port.kOnboard;
+    public  ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -69,7 +79,7 @@ public class Robot extends TimedRobot {
         HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
         enableLiveWindowInTest(true);
 
-        
+        colorSensor.configureColorSensor(ColorSensorResolution.kColorSensorRes16bit, ColorSensorMeasurementRate.kColorRate100ms, GainFactor.kGain1x);
 
         //Logs
         DataLogManager.start();
@@ -190,7 +200,9 @@ public class Robot extends TimedRobot {
 
 
         //Intake Tab
-        SmartDashboard.putNumber("Intake/Ultrasoinc Value", ultrasoinc.get());
+        SmartDashboard.putNumber("Intake/Color/Red", colorSensor.getRed());
+        SmartDashboard.putNumber("Intake/Color/Green", colorSensor.getGreen());
+        SmartDashboard.putNumber("Intake/Color/Blue", colorSensor.getBlue());
     }   
 
     @Override
