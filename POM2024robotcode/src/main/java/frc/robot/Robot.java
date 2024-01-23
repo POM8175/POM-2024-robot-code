@@ -52,6 +52,10 @@ import edu.wpi.first.util.sendable.SendableRegistry;
  * the project.
  */
 public class Robot extends TimedRobot {
+    double map(double x, double in_min, double in_max, double out_min, double out_max)
+    {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    }
     DoubleLogEntry Xpose;
     DoubleLogEntry Ypose;
     DoubleLogEntry Rotpose;
@@ -82,7 +86,6 @@ public class Robot extends TimedRobot {
 
         colorSensor.configureColorSensor(ColorSensorResolution.kColorSensorRes20bit, ColorSensorMeasurementRate.kColorRate100ms, GainFactor.kGain1x);
         colorSensor.configureProximitySensor(ProximitySensorResolution.kProxRes10bit, ColorSensorV3.ProximitySensorMeasurementRate.kProxRate100ms);
-        //Logs
         DataLogManager.start();
 
         // Pose
@@ -205,7 +208,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Intake/Color/Green", colorSensor.getGreen());
         SmartDashboard.putNumber("Intake/Color/Blue", colorSensor.getBlue());
         SmartDashboard.putString("Intake/Color/Color",colorSensor.getColor().toString());
-        SmartDashboard.putNumber("Intake/Color/Dist",colorSensor.getProximity());
+        SmartDashboard.putNumber("Intake/Color/Dist",map(colorSensor.getProximity(),1,2047,1,30));
     }   
 
     @Override
