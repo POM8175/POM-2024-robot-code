@@ -28,6 +28,7 @@ import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorSensorV3.ColorSensorMeasurementRate;
 import com.revrobotics.ColorSensorV3.ColorSensorResolution;
 import com.revrobotics.ColorSensorV3.GainFactor;
+import com.revrobotics.ColorSensorV3.ProximitySensorResolution;
 
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
@@ -80,7 +81,7 @@ public class Robot extends TimedRobot {
         enableLiveWindowInTest(true);
 
         colorSensor.configureColorSensor(ColorSensorResolution.kColorSensorRes16bit, ColorSensorMeasurementRate.kColorRate100ms, GainFactor.kGain1x);
-
+        colorSensor.configureProximitySensor(ProximitySensorResolution.kProxRes9bit, ColorSensorV3.ProximitySensorMeasurementRate.kProxRate100ms);
         //Logs
         DataLogManager.start();
 
