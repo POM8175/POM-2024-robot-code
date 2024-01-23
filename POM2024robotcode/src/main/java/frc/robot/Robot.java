@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
         HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
         enableLiveWindowInTest(true);
 
-        colorSensor.configureColorSensor(ColorSensorResolution.kColorSensorRes16bit, ColorSensorMeasurementRate.kColorRate100ms, GainFactor.kGain1x);
+        colorSensor.configureColorSensor(ColorSensorResolution.kColorSensorRes20bit, ColorSensorMeasurementRate.kColorRate100ms, GainFactor.kGain1x);
         colorSensor.configureProximitySensor(ProximitySensorResolution.kProxRes10bit, ColorSensorV3.ProximitySensorMeasurementRate.kProxRate100ms);
         //Logs
         DataLogManager.start();
@@ -204,6 +204,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Intake/Color/Red", colorSensor.getRed());
         SmartDashboard.putNumber("Intake/Color/Green", colorSensor.getGreen());
         SmartDashboard.putNumber("Intake/Color/Blue", colorSensor.getBlue());
+        SmartDashboard.putString("Intake/Color/Color",colorSensor.getColor().toString());
         SmartDashboard.putNumber("Intake/Color/Dist",colorSensor.getProximity());
     }   
 
