@@ -108,8 +108,8 @@ public class Constants {
         public static final int pGREEN = 1;
         public static final int pBLUE = 2;
         public static final int PWM = 9;
-        public static final int NUM_LEDS = 60;
-        public static final int LED_PORT = 5;
+        public static final int NUM_LEDS = 180;
+        public static final int LED_PORT = 9;
     }
 
     public static final class GeneralFunctions{

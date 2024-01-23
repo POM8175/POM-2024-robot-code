@@ -72,6 +72,10 @@ public class Robot extends TimedRobot {
     // Color Sensor
     public I2C.Port i2cPort =  I2C.Port.kOnboard;
     public  ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
+
+    
+
+    
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -84,8 +88,7 @@ public class Robot extends TimedRobot {
         HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
         enableLiveWindowInTest(true);
 
-        colorSensor.configureColorSensor(ColorSensorResolution.kColorSensorRes20bit, ColorSensorMeasurementRate.kColorRate100ms, GainFactor.kGain1x);
-        colorSensor.configureProximitySensor(ProximitySensorResolution.kProxRes10bit, ColorSensorV3.ProximitySensorMeasurementRate.kProxRate100ms);
+        // colorSensor.configureColorSensor(ColorSensorResolution.kColorSensorRes20bit, ColorSensorMeasurementRate.kColorRate25ms, GainFactor.kGain9x);
         DataLogManager.start();
 
         // Pose
@@ -108,7 +111,9 @@ public class Robot extends TimedRobot {
         
 
         
-        
+        //Leds
+         m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
+
 
         
   
@@ -181,7 +186,8 @@ public class Robot extends TimedRobot {
             m_autonomousCommand.cancel();
         }
         executor.scheduleAtFixedRate(task, 0, 3, TimeUnit.SECONDS);
-        
+        m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
+
     }
 
     /**
@@ -207,8 +213,12 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Intake/Color/Red", colorSensor.getRed());
         SmartDashboard.putNumber("Intake/Color/Green", colorSensor.getGreen());
         SmartDashboard.putNumber("Intake/Color/Blue", colorSensor.getBlue());
-        SmartDashboard.putString("Intake/Color/Color",colorSensor.getColor().toString());
-        SmartDashboard.putNumber("Intake/Color/Dist",map(colorSensor.getProximity(),1,2047,1,30));
+        SmartDashboard.putString("Intake/Color/Color",colorSensor.getColor().toHexString());
+        SmartDashboard.putNumber("Intake/Color/Dist",map(colorSensor.getProximity(),2047,155,0,10));
+        SmartDashboard.putNumber("Intake/Color/Dist(no Map)",colorSensor.getProximity());
+
+    // m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
+
     }   
 
     @Override
