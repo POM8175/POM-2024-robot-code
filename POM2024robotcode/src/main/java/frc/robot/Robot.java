@@ -22,8 +22,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javax.lang.model.util.ElementScanner14;
 import javax.xml.crypto.Data;
 
+import com.revrobotics.ColorMatch;
+import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorSensorV3.ColorSensorMeasurementRate;
 import com.revrobotics.ColorSensorV3.ColorSensorResolution;
@@ -37,6 +40,7 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.util.datalog.*;
@@ -52,15 +56,11 @@ import edu.wpi.first.util.sendable.SendableRegistry;
  * the project.
  */
 public class Robot extends TimedRobot {
-    double map(double x, double in_min, double in_max, double out_min, double out_max)
-    {
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-    }
         /**
      * Converts a raw optical inverse-square reading into a fitted, calibrated linear reading in
      * INCHES.
      */
-
+    double maxColor;
     DoubleLogEntry Xpose;
     DoubleLogEntry Ypose;
     DoubleLogEntry Rotpose;
@@ -78,15 +78,19 @@ public class Robot extends TimedRobot {
     public I2C.Port i2cPort =  I2C.Port.kOnboard;
     public  ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
 
-    
+    private final ColorMatch m_colorMatcher = new ColorMatch();
+    ColorMatchResult match;
+    final Color noteColor = new Color(130, 98, 26);
+    final Color blueColor = new Color(54, 113, 86);
 
-    
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     @Override
     public void robotInit() {
+        m_colorMatcher.addColorMatch(noteColor);
+        m_colorMatcher.addColorMatch(blueColor);
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = RobotContainer.getInstance();
@@ -223,7 +227,9 @@ public class Robot extends TimedRobot {
         //SmartDashboard.putNumber("Intake/Color/Dist(no Map)",colorSensor.getProximity());
 
     // m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
-
+    match = m_colorMatcher.matchClosestColor(colorSensor.getColor());
+    if(match.color == blueColor) m_robotContainer.ledSubsystem.setLeds(255, 0, 0);
+    else m_robotContainer.ledSubsystem.setLeds(0, 255, 0);
     }   
 
     @Override
