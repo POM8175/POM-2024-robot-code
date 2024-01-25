@@ -56,6 +56,11 @@ public class Robot extends TimedRobot {
     {
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
+        /**
+     * Converts a raw optical inverse-square reading into a fitted, calibrated linear reading in
+     * INCHES.
+     */
+
     DoubleLogEntry Xpose;
     DoubleLogEntry Ypose;
     DoubleLogEntry Rotpose;
@@ -186,7 +191,7 @@ public class Robot extends TimedRobot {
             m_autonomousCommand.cancel();
         }
         executor.scheduleAtFixedRate(task, 0, 3, TimeUnit.SECONDS);
-m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
+        m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
         
     }
 
@@ -214,8 +219,8 @@ m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen
         SmartDashboard.putNumber("Intake/Color/Green", colorSensor.getGreen());
         SmartDashboard.putNumber("Intake/Color/Blue", colorSensor.getBlue());
         SmartDashboard.putString("Intake/Color/Color",colorSensor.getColor().toHexString());
-        SmartDashboard.putNumber("Intake/Color/Dist",map(Math.sqrt(map(colorSensor.getProximity(),2047,0,100,0)),0,10,10,0));
-        SmartDashboard.putNumber("Intake/Color/Dist(no Map)",colorSensor.getProximity());
+        //SmartDashboard.putNumber("Intake/Color/Dist",));
+        //SmartDashboard.putNumber("Intake/Color/Dist(no Map)",colorSensor.getProximity());
 
     // m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
 
