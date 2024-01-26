@@ -6,16 +6,17 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Subsystems.LedSubsystem;
 
-public class LedCommand extends Command {
+public class RainbowCommand {
     private LedSubsystem m_ledSubsystem;
     private int m_red;
     private int m_green;
     private int m_blue;
 
-    public LedCommand(LedSubsystem ledSubsystem, int red, int green, int blue){ 
+    public RainbowCommand(LedSubsystem ledSubsystem, int red, int green, int blue){ 
         m_ledSubsystem = ledSubsystem;
         m_red = red;
         m_green = green;
+        addRequirements(m_ledSubsystem);
     }
     
     @Override
