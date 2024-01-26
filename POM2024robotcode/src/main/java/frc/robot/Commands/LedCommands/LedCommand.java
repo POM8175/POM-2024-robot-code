@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.RobotContainer;
 import frc.robot.Subsystems.LedSubsystem;
 
 public class LedCommand extends Command {
@@ -21,5 +22,9 @@ public class LedCommand extends Command {
     @Override
     public void initialize() {
         m_ledSubsystem.setLeds(m_red, m_green, m_blue);
+    }
+
+    @Override
+    public void execute(){
     }
 }

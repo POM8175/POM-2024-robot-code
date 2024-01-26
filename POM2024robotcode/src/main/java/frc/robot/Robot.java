@@ -214,13 +214,15 @@ public class Robot extends TimedRobot {
 
 
         //Intake Tab
-        // SmartDashboard.putNumber("Intake/Color/Red", colorSensor.getRed());
-        // SmartDashboard.putNumber("Intake/Color/Green", colorSensor.getGreen());
-        // SmartDashboard.putNumber("Intake/Color/Blue", colorSensor.getBlue());
-        // SmartDashboard.putString("Intake/Color/Color",colorSensor.getColor().toHexString());
-        // //SmartDashboard.putNumber("Intake/Color/Dist",));
-        //SmartDashboard.putNumber("Intake/Color/Dist(no Map)",colorSensor.getProximity());
+        SmartDashboard.putNumber("Intake/Color/Red", m_robotContainer.intakeSubsystem.colorSensor.getRed());
+        SmartDashboard.putNumber("Intake/Color/Green", m_robotContainer.intakeSubsystem.colorSensor.getGreen());
+        SmartDashboard.putNumber("Intake/Color/Blue", m_robotContainer.intakeSubsystem.colorSensor.getBlue());
+        SmartDashboard.putString("Intake/Color/Color",m_robotContainer.intakeSubsystem.colorSensor.getColor().toHexString());
+        //SmartDashboard.putNumber("Intake/Color/Dist",));
+        SmartDashboard.putNumber("Intake/Color/Dist(no Map)",m_robotContainer.intakeSubsystem.colorSensor.getProximity());
         SmartDashboard.putBoolean("Intake/Color/IsNoteIn",m_robotContainer.intakeSubsystem.isNoteIn());
+
+
 
     // m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
 
