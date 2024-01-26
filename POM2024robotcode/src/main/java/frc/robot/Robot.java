@@ -78,29 +78,14 @@ public class Robot extends TimedRobot {
     // public I2C.Port i2cPort =  I2C.Port.kOnboard;
     // public  ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
 
-<<<<<<< HEAD
     // private final ColorMatch m_colorMatcher = new ColorMatch();
     // ColorMatchResult match;
     // final Color noteColor = new Color(130, 98, 26);
     // final Color blueColor = new Color(54, 113, 86);
-=======
-    
->>>>>>> parent of 4c10fbc (detecting note and switching led color)
 
-    
-    /**
-     * This function is run when the robot is first started up and should be
-     * used for any initialization code.
-     */
-    @Override
     public void robotInit() {
-<<<<<<< HEAD
-        // m_colorMatcher.addColorMatch(noteColor);
-        // m_colorMatcher.addColorMatch(blueColor);
-        // // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-=======
+
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
->>>>>>> parent of 4c10fbc (detecting note and switching led color)
         // autonomous chooser on the dashboard.
         m_robotContainer = RobotContainer.getInstance();
         HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
@@ -236,13 +221,7 @@ public class Robot extends TimedRobot {
         //SmartDashboard.putNumber("Intake/Color/Dist(no Map)",colorSensor.getProximity());
 
     // m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
-<<<<<<< HEAD
-    // match = m_colorMatcher.matchClosestColor(colorSensor.getColor());
-    // if(match.color == blueColor) m_robotContainer.ledSubsystem.setLeds(255, 0, 0);
-    // else m_robotContainer.ledSubsystem.setLeds(0, 255, 0);
-=======
 
->>>>>>> parent of 4c10fbc (detecting note and switching led color)
     }   
 
     @Override
