@@ -220,6 +220,7 @@ public class Robot extends TimedRobot {
         // SmartDashboard.putString("Intake/Color/Color",colorSensor.getColor().toHexString());
         // //SmartDashboard.putNumber("Intake/Color/Dist",));
         //SmartDashboard.putNumber("Intake/Color/Dist(no Map)",colorSensor.getProximity());
+        SmartDashboard.putBoolean("Intake/Color/IsNoteIn",m_robotContainer.intakeSubsystem.isNoteIn());
 
     // m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
 
