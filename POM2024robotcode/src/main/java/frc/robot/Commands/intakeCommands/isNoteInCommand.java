@@ -18,6 +18,7 @@ public class IsNoteInCommand extends Command
     {
         this.intakeSubsystem = m_intakeSubsystem;
         this.ledSubsystem = m_LedSubsystem;
+        addRequirements(m_intakeSubsystem);
     }
 
     @Override

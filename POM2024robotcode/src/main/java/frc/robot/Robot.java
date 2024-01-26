@@ -75,13 +75,13 @@ public class Robot extends TimedRobot {
     
 
     // Color Sensor
-    public I2C.Port i2cPort =  I2C.Port.kOnboard;
-    public  ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
+    // public I2C.Port i2cPort =  I2C.Port.kOnboard;
+    // public  ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
 
-    private final ColorMatch m_colorMatcher = new ColorMatch();
-    ColorMatchResult match;
-    final Color noteColor = new Color(130, 98, 26);
-    final Color blueColor = new Color(54, 113, 86);
+    // private final ColorMatch m_colorMatcher = new ColorMatch();
+    // ColorMatchResult match;
+    // final Color noteColor = new Color(130, 98, 26);
+    // final Color blueColor = new Color(54, 113, 86);
 
     /**
      * This function is run when the robot is first started up and should be
@@ -89,9 +89,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        m_colorMatcher.addColorMatch(noteColor);
-        m_colorMatcher.addColorMatch(blueColor);
-        // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+        // m_colorMatcher.addColorMatch(noteColor);
+        // m_colorMatcher.addColorMatch(blueColor);
+        // // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = RobotContainer.getInstance();
         HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
@@ -121,7 +121,7 @@ public class Robot extends TimedRobot {
 
         
 //Leds
-         m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
+         //m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
         
 
         
@@ -195,7 +195,7 @@ public class Robot extends TimedRobot {
             m_autonomousCommand.cancel();
         }
         executor.scheduleAtFixedRate(task, 0, 3, TimeUnit.SECONDS);
-        m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
+        //m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
         
     }
 
@@ -219,17 +219,17 @@ public class Robot extends TimedRobot {
 
 
         //Intake Tab
-        SmartDashboard.putNumber("Intake/Color/Red", colorSensor.getRed());
-        SmartDashboard.putNumber("Intake/Color/Green", colorSensor.getGreen());
-        SmartDashboard.putNumber("Intake/Color/Blue", colorSensor.getBlue());
-        SmartDashboard.putString("Intake/Color/Color",colorSensor.getColor().toHexString());
-        //SmartDashboard.putNumber("Intake/Color/Dist",));
+        // SmartDashboard.putNumber("Intake/Color/Red", colorSensor.getRed());
+        // SmartDashboard.putNumber("Intake/Color/Green", colorSensor.getGreen());
+        // SmartDashboard.putNumber("Intake/Color/Blue", colorSensor.getBlue());
+        // SmartDashboard.putString("Intake/Color/Color",colorSensor.getColor().toHexString());
+        // //SmartDashboard.putNumber("Intake/Color/Dist",));
         //SmartDashboard.putNumber("Intake/Color/Dist(no Map)",colorSensor.getProximity());
 
     // m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
-    match = m_colorMatcher.matchClosestColor(colorSensor.getColor());
-    if(match.color == blueColor) m_robotContainer.ledSubsystem.setLeds(255, 0, 0);
-    else m_robotContainer.ledSubsystem.setLeds(0, 255, 0);
+    // match = m_colorMatcher.matchClosestColor(colorSensor.getColor());
+    // if(match.color == blueColor) m_robotContainer.ledSubsystem.setLeds(255, 0, 0);
+    // else m_robotContainer.ledSubsystem.setLeds(0, 255, 0);
     }   
 
     @Override
