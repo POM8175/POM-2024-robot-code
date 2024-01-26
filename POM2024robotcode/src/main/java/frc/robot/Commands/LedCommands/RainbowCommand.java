@@ -16,11 +16,11 @@ public class RainbowCommand {
         m_ledSubsystem = ledSubsystem;
         m_red = red;
         m_green = green;
-        addRequirements(m_ledSubsystem);
+        // addRequirements(m_ledSubsystem);
     }
     
-    @Override
-    public void initialize() {
-        m_ledSubsystem.setLeds(m_red, m_green, m_blue);
-    }
+    // @Override
+//     public void initialize() {
+//         m_ledSubsystem.setLeds(m_red, m_green, m_blue);
+//     }
 }
