@@ -70,6 +70,8 @@ public class Robot extends TimedRobot {
     BooleanLogEntry Abutton;
     private Command m_autonomousCommand;
 
+    BooleanLogEntry IsNoteIn;
+
     private RobotContainer m_robotContainer;
     DataLog log = DataLogManager.getLog();
     
@@ -112,7 +114,10 @@ public class Robot extends TimedRobot {
 
         pose.append(posearr);
         
+        // Intake
 
+        IsNoteIn = new BooleanLogEntry(log, "Intake/IsNoteIn");
+        IsNoteIn.append(m_robotContainer.intakeSubsystem.isNoteIn());
         
 //Leds
         // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());
