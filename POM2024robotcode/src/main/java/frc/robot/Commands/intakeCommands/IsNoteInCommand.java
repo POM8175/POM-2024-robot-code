@@ -20,10 +20,10 @@ public class IsNoteInCommand extends Command
         greenLedCommand = new LedCommand(ledSubsystem, 0, 255, 0);
     }
 
-    @Override
+    
     public void execute()
     {
-        if(intakeSubsystem.isNoteIn()) greenLedCommand.execute();
-        else greenLedCommand.execute();
+        if(intakeSubsystem.isNoteIn()) ledSubsystem.setLeds(0, 255, 0);
+        else ledSubsystem.setLeds(255, 0, 0);
     }
 }

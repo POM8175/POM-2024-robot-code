@@ -115,7 +115,7 @@ public class Robot extends TimedRobot {
 
         
 //Leds
-         //m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
+        // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());
         
 
         
@@ -190,8 +190,6 @@ public class Robot extends TimedRobot {
             m_autonomousCommand.cancel();
         }
         executor.scheduleAtFixedRate(task, 0, 3, TimeUnit.SECONDS);
-        //m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
-        
     }
 
     /**
@@ -222,9 +220,9 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Intake/Color/Dist(no Map)",m_robotContainer.intakeSubsystem.colorSensor.getProximity());
         SmartDashboard.putBoolean("Intake/Color/IsNoteIn",m_robotContainer.intakeSubsystem.isNoteIn());
 
+        // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());        
 
 
-    // m_robotContainer.ledSubsystem.setLeds(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue());
 
     }   
 

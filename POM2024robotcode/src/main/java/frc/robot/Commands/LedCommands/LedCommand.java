@@ -24,7 +24,5 @@ public class LedCommand extends Command {
         m_ledSubsystem.setLeds(m_red, m_green, m_blue);
     }
 
-    @Override
-    public void execute(){
-    }
+ 
 }
