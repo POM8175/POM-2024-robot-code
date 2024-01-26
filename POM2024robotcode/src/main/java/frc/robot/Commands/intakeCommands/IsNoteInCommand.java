@@ -9,18 +9,15 @@ public class IsNoteInCommand extends Command
 {
     LedSubsystem ledSubsystem;
     IntakeSubsystem intakeSubsystem;
-    LedCommand greenLedCommand,redLedCommand;
 
     public IsNoteInCommand(LedSubsystem ledSubsystem,IntakeSubsystem intakeSubsystem)
     {
         this.ledSubsystem = ledSubsystem;
         this.intakeSubsystem = intakeSubsystem;
         addRequirements(intakeSubsystem);
-        redLedCommand = new LedCommand(ledSubsystem, 255, 0, 0);
-        greenLedCommand = new LedCommand(ledSubsystem, 0, 255, 0);
     }
 
-    
+    @Override
     public void execute()
     {
         if(intakeSubsystem.isNoteIn()) ledSubsystem.setLeds(0, 255, 0);
