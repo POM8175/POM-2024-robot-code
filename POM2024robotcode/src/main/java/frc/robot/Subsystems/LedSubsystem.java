@@ -7,7 +7,8 @@ import static frc.robot.Constants.LedsConstants.*;
 public class LedSubsystem extends SubsystemBase {
     
     AddressableLED m_led;
-    AddressableLEDBuffer m_ledBuffer;
+    public AddressableLEDBuffer m_ledBuffer;
+    private int m_rainbowFirstPixelHue;
 
     
     public LedSubsystem(){
@@ -25,4 +26,14 @@ public class LedSubsystem extends SubsystemBase {
         m_led.setData(m_ledBuffer);
     }
 
+    public void rainbow() {
+        for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+            final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
+            m_ledBuffer.setHSV(i, hue, 255, 128);
+        }
+        m_rainbowFirstPixelHue += 3;
+        m_rainbowFirstPixelHue %= 180;
+        m_led.setData(m_ledBuffer);
+    }
 }
+

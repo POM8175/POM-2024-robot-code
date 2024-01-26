@@ -197,6 +197,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        // Uncomment This To GO RAINBOW
+        // m_robotContainer.ledSubsystem.rainbow();
+
         //Pose Tab
         SmartDashboard.putNumber("Pose/Pose X Value", m_robotContainer.driveSubsystem.getPose().getX());
         SmartDashboard.putNumber("Pose/Pose Y Value", m_robotContainer.driveSubsystem.getPose().getY());
@@ -223,6 +226,8 @@ public class Robot extends TimedRobot {
         // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());        
 
 
+
+       
 
     }   
 
