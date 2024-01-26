@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class intakeSubsystem extends SubsystemBase
+public class IntakeSubsystem extends SubsystemBase
 {
     private final ColorMatch colorMatcher = new ColorMatch();
     ColorMatchResult match;
