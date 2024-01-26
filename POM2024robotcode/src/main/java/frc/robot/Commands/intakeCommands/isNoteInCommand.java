@@ -6,7 +6,7 @@ import frc.robot.Commands.LedCommands.LedCommand;
 import frc.robot.Subsystems.IntakeSubsystem;
 import frc.robot.Subsystems.LedSubsystem;
 
-public class isNoteInCommand extends Command
+public class IsNoteInCommand extends Command
 {
     IntakeSubsystem intakeSubsystem;
     LedSubsystem ledSubsystem;
@@ -14,7 +14,7 @@ public class isNoteInCommand extends Command
     LedCommand redLedCommand = new LedCommand(null, 255, 0, 0);
     
 
-    public isNoteInCommand(IntakeSubsystem m_intakeSubsystem,LedSubsystem m_LedSubsystem) 
+    public IsNoteInCommand(IntakeSubsystem m_intakeSubsystem,LedSubsystem m_LedSubsystem) 
     {
         this.intakeSubsystem = m_intakeSubsystem;
         this.ledSubsystem = m_LedSubsystem;
