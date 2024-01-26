@@ -18,7 +18,7 @@ public class IntakeSubsystem extends SubsystemBase
     public I2C.Port i2cPort =  I2C.Port.kOnboard;
     public  ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
 
-    public intakeSubsystem()
+    public IntakeSubsystem()
     {
         colorMatcher.addColorMatch(blueColor);
         colorMatcher.addColorMatch(noteColor);
