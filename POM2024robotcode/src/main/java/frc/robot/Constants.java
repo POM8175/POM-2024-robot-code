@@ -100,8 +100,8 @@ public class Constants {
     }
 
     public static final class IntakeConstants{
-       public static final int ULTRASOINC_PORT = 0;
-       public static final int ROLLER_MOTOR = 5;
+       public static final int COLOR_SENSOR_PORT = 5;
+       public static final int ROLLER_MOTOR = 6;
     }
 
     public static final class LedsConstants{

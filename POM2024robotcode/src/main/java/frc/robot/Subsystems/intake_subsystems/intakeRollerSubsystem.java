@@ -7,11 +7,12 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Subsystems.PomSubsystem;
+import static frc.robot.Constants.IntakeConstants.*;
 
 
 public class IntakeRollerSubsystem extends PomSubsystem
 {
-    CANSparkMax rollerMotor = new CANSparkMax(6, MotorType.kBrushless);
+    CANSparkMax rollerMotor = new CANSparkMax(ROLLER_MOTOR, MotorType.kBrushless);
     private final RelativeEncoder rollerMotorEncoder = rollerMotor.getEncoder();
     private final SparkPIDController rollerMotorPidController = rollerMotor.getPIDController();
 
