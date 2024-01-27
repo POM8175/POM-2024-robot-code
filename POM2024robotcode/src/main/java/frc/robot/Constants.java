@@ -63,11 +63,6 @@ public class Constants {
         public static final double THRESHOLD = 0.3;
     }
 
-    public static final class IntakeConstants
-    {
-        public static final int ROLLER_MOTOR = 5;
-    }
-
     public static final class DriveConstants
     {
         public static final int LEFT_MOTOR_LEAD = 1;
@@ -106,6 +101,7 @@ public class Constants {
 
     public static final class IntakeConstants{
        public static final int ULTRASOINC_PORT = 0;
+       public static final int ROLLER_MOTOR = 5;
     }
 
     public static final class LedsConstants{
