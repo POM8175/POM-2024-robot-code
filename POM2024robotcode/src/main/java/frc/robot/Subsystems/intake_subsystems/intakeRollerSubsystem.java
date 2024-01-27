@@ -6,15 +6,12 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Subsystems.PomSubsystem;
 
 
 public class IntakeRollerSubsystem extends PomSubsystem
 {
-    CANSparkMax rollerMotor = new CANSparkMax(0, MotorType.kBrushless);
+    CANSparkMax rollerMotor = new CANSparkMax(6, MotorType.kBrushless);
     private final RelativeEncoder rollerMotorEncoder = rollerMotor.getEncoder();
     private final SparkPIDController rollerMotorPidController = rollerMotor.getPIDController();
 
@@ -57,7 +54,4 @@ public class IntakeRollerSubsystem extends PomSubsystem
     {
         rollerMotorPidController.setReference(target, ControlType.kPosition);
     }
-
-    // the subsystems commands
-    // public Command OuttakeNoteCommand = Commands.startEnd(() -> this.setMotor(-1), () -> this.stopMotor(), this).until(() -> );
 }
