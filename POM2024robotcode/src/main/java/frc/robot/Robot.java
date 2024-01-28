@@ -14,7 +14,6 @@ package frc.robot;
 
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
-import edu.wpi.first.units.Unit;
 
 import static frc.robot.Constants.JoystickConstants.A;
 
@@ -22,25 +21,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import javax.xml.crypto.Data;
-
-import com.revrobotics.ColorSensorV3;
-import com.revrobotics.ColorSensorV3.ColorSensorMeasurementRate;
-import com.revrobotics.ColorSensorV3.ColorSensorResolution;
-import com.revrobotics.ColorSensorV3.GainFactor;
-import com.revrobotics.ColorSensorV3.ProximitySensorResolution;
-
 import edu.wpi.first.hal.HAL;
-import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.util.datalog.*;
-import edu.wpi.first.util.sendable.SendableRegistry;
 
 
 

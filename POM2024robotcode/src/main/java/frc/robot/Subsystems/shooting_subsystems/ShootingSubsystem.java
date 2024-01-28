@@ -22,13 +22,11 @@ public class ShootingSubsystem extends PomSubsystem {
 
 
 
-    private void ShootingSubsystem(){
-
-        rightEncoder.setVelocityConversionFactor(ROTATIONS_TO_METERS);
-        leftEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
-        shooterMotorLeft.follow(shooterMotorRight, true);
-
-    }
+   public ShootingSubsystem(){
+       rightEncoder.setVelocityConversionFactor(ROTATIONS_TO_METERS);
+       leftEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
+       shooterMotorLeft.follow(shooterMotorRight, true);
+   }
 
     @Override
     public void setMotor(double speed) {
@@ -39,7 +37,6 @@ public class ShootingSubsystem extends PomSubsystem {
 
         return (rightEncoder.getVelocity()+leftEncoder.getVelocity())/2;
 
+
     }
-
-
-}
+    }
