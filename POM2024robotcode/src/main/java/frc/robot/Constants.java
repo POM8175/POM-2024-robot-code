@@ -12,6 +12,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.util.Color;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -82,6 +83,7 @@ public class Constants {
 
         public static final double KP = 0.8;
         public static final double KI = 0.02;
+        public static final double KD = 0;
     
         public static final double KP_DRIVE_VEL = 0.002;
         public static final double KTRACK_WIDTH_METERS = 0.54;
@@ -97,7 +99,20 @@ public class Constants {
         // const values we dont need to calculate
         public static final double RAMSETE_B = 2;
         public static final double RAMSETE_ZETA = 0.7;
+
+        public static final int TL = 6;
+        public static final int BOT_POSE_LEN = 7;
+        
     }
+
+    public static final class ShootingConstants{
+
+        public static final int SHOOTER_MOTOR_RIGHT = 0;
+        public static final int SHOOTER_MOTOR_LEFT = 1;
+        
+
+    }
+
 
     public static final class IntakeConstants{
        public static final int COLOR_SENSOR_PORT = 5;
@@ -111,6 +126,7 @@ public class Constants {
         public static final int PWM = 9;
         public static final int NUM_LEDS = 180;
         public static final int LED_PORT = 9;
+        public static final Color POM_PURPLE = new Color(148, 0, 211);
     }
 
     public static final class GeneralFunctions{
