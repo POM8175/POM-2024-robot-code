@@ -124,6 +124,9 @@ public class Constants {
         public static final double NONE = -1;
 
         public static final double TOLERANCE = 0.5;
+        
+        public static final double SHOOT_SPEED = 0.5;
+
 
     }
 

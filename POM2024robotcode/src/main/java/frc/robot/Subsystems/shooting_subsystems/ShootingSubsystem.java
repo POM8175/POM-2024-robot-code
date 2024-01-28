@@ -7,6 +7,8 @@ import static frc.robot.Constants.ShootingConstants.*;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.Subsystems.PomSubsystem;
 
 public class ShootingSubsystem extends PomSubsystem {
@@ -26,6 +28,7 @@ public class ShootingSubsystem extends PomSubsystem {
        rightEncoder.setVelocityConversionFactor(ROTATIONS_TO_METERS);
        leftEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
        shooterMotorLeft.follow(shooterMotorRight, true);
+       
    }
 
     @Override
@@ -39,4 +42,15 @@ public class ShootingSubsystem extends PomSubsystem {
 
 
     }
+
+    public Command spinWheelsCommand()
+    {
+        return new StartEndCommand(() -> setMotor(SHOOT_SPEED), null, this).until(() -> getRate() >= SHOOT_SPEED);
     }
+    public Command spinWheelsToSpeedCommand(double speed)
+    {
+        return new StartEndCommand(() -> setMotor(speed), null, this).until(() -> getRate() >= speed);
+    }
+        
+
+}
