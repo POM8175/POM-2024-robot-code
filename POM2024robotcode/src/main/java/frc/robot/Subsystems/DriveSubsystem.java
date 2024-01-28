@@ -11,10 +11,18 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelPositions;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -43,17 +51,32 @@ public class DriveSubsystem extends PomSubsystem {
 
   private final WPI_PigeonIMU mGyro = new WPI_PigeonIMU(GYRO_ID);
 
+  private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(
+                                            mGyro.getRotation2d(),
+                                          leftEncoder.getPosition(), 
+                                          rightEncoder.getPosition()
+                                          );
 
+  private final DifferentialDrivePoseEstimator poseEstimator = new DifferentialDrivePoseEstimator
+              (DRIVE_KINEMATICS, 
+              mGyro.getRotation2d(), 
+              leftEncoder.getPosition(), 
+              rightEncoder.getPosition(), 
+              getPose(),
+              VecBuilder.fill(0.02, 0.02, 0.01),
+              VecBuilder.fill(0.1, 0.1, 0.15));
+
+  double [] botPose = new double[BOT_POSE_LEN];
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
 
     leftPid.setP(KP);
     leftPid.setI(KI);
-    leftPid.setD(0);
+    leftPid.setD(KD);
 
     rightPid.setP(KP);
     rightPid.setI(KI);
-    rightPid.setD(0);
+    rightPid.setD(KD);
 
     zeroHeading();
 
@@ -61,7 +84,8 @@ public class DriveSubsystem extends PomSubsystem {
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
     masterRightMotor.setInverted(true);
-
+    slaveRightMotor.setInverted(true);
+    
     leftEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
     rightEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
 
@@ -87,6 +111,28 @@ public class DriveSubsystem extends PomSubsystem {
   public void periodic() {
     // This method will be called once per scheduler run
     // Update the odometry in the periodic block
+    if (NetworkTableInstance.getDefault().getTable("limelight-pom").getEntry("tv").getDouble(0) == 1) {
+      try {
+
+        if (DriverStation.getAlliance().get() == Alliance.Red) {
+          botPose = NetworkTableInstance.getDefault().getTable("limelight-pom").getEntry("botpose_wpired")
+              .getDoubleArray(new double[7]);
+        } 
+        else {
+          botPose = NetworkTableInstance.getDefault().getTable("limelight-pom").getEntry("botpose_wpiblue")
+              .getDoubleArray(new double[7]);
+        }
+      } 
+      catch (Exception e) {
+        botPose = NetworkTableInstance.getDefault().getTable("limelight-pom").getEntry("botpose_wpired")
+            .getDoubleArray(new double[7]);
+      }
+      finally { }
+    }
+    //TODO get limelight pose into botpose, make it pose 2d
+    odometry.update(mGyro.getRotation2d(), new DifferentialDriveWheelPositions(leftEncoder.getPosition(), rightEncoder.getPosition()));
+    poseEstimator.update(mGyro.getRotation2d(), new DifferentialDriveWheelPositions(leftEncoder.getPosition(), rightEncoder.getPosition()));
+    poseEstimator.addVisionMeasurement(new Pose2d(botPose[0], botPose[1], Rotation2d.fromDegrees(botPose[5])), Timer.getFPGATimestamp() - (botPose[TL]/1000.0));
     field.setRobotPose(getPose());
   }
 
@@ -125,9 +171,10 @@ public class DriveSubsystem extends PomSubsystem {
    * @return The pose.
    */
   public Pose2d getPose() {
-    //TODO: return to a real position when implementing odometry/poseestimator
-    //return estimator.getEstimatedPosition();
-    return new Pose2d();
+    return poseEstimator.getEstimatedPosition();
+  }
+  public Pose2d getPoseOdometry() {
+    return odometry.getPoseMeters();
   }
 
   /**sets all of the motors to a paramater value
