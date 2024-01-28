@@ -107,23 +107,49 @@ public class Constants {
 
     public static final class ShootingConstants{
 
-        public static final int SHOOTER_MOTOR_RIGHT = 0;
-        public static final int SHOOTER_MOTOR_LEFT = 1;
+        public static final int SHOOTER_MOTOR_RIGHT = 5;
+        public static final int SHOOTER_MOTOR_LEFT = 6;
         
+        public static final int SHOOTER_ARM_MOTOR = 7;
+        public static final int FOLD_MICRO_SWITCH_ID = 3;
+        public static final int FULL_MICRO_SWITCH_ID = 40;
+        
+        public static final double KP = 0.0124;
+        public static final double KI = 0.00005;
+        public static final double KIZONE = 5;
+        public static final double KD = 0.00005;
+
+        public static final double MAX_VEL = 0.5;//CHECK!!
+
+        public static final double NONE = -1;
+
+        public static final double TOLERANCE = 0.5;
 
     }
 
 
     public static final class IntakeConstants{
-       public static final int COLOR_SENSOR_PORT = 5;
        public static final int ROLLER_MOTOR = 6;
+       public static final int LIFT_MOTOR = 12;
+
+        public static final int[] ENCODER_PORTS = {0,1};
+
+        public static final double KP = 0.8;
+        public static final double KI = 0.02;
+        public static final double KD = 0;
+
+        public static final double FOLD = 0;
+        public static final double GROUND = 0;
+        public static final double TOLERANCE = 2.0;
+
+
+
     }
 
     public static final class LedsConstants{
         public static final int pRED = 0;
         public static final int pGREEN = 1;
         public static final int pBLUE = 2;
-        public static final int PWM = 9;
         public static final int NUM_LEDS = 180;
         public static final int LED_PORT = 9;
         public static final Color POM_PURPLE = new Color(148, 0, 211);
