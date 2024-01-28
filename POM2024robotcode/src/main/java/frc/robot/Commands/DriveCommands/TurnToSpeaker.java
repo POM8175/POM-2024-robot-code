@@ -14,6 +14,7 @@ public class TurnToSpeaker extends Command {
     {
         this.driveSubsystem = driveSubsystem;
         addRequirements(driveSubsystem);
+        //TODO switch to the right pipeline
         table = NetworkTableInstance.getDefault().getTable("limelight-pom");
         tx = table.getEntry("tx");
     }
@@ -24,8 +25,7 @@ public class TurnToSpeaker extends Command {
     @Override
     public void initialize()
     {
-        TurnToDegreeCommand turn = new TurnToDegreeCommand(driveSubsystem, () -> tx.getDouble(0), 0);
-        turn.schedule();
+        new TurnToDegreeCommand(driveSubsystem, () -> tx.getDouble(0), 0).schedule();;
     }
 
 
