@@ -33,23 +33,30 @@ public class IntakeRollerSubsystem extends PomSubsystem
 
     public IntakeRollerSubsystem()
     {
+        // adding collors to the dataset of m_colorMatcher
         m_colorMatcher.addColorMatch(blueColor);
         m_colorMatcher.addColorMatch(noteColor);
+
+        // setting rollerMotorSlave to follow rollerMotor
         rollerMotorSlave.follow(rollerMotor);
     }
     // the subsystems functions
+
+    // stoping the motor
     @Override
     public void stopMotor()
     {
         rollerMotor.set(VictorSPXControlMode.PercentOutput,0);
     }
 
+    // setting the motors speed
     @Override
     public void setMotor(double speed)
     {
         rollerMotor.set(VictorSPXControlMode.PercentOutput,speed);
     }
 
+    // a boolean function that checks if the color sensor sees a note
     public boolean isNoteIn()
     {
         match = m_colorMatcher.matchClosestColor(colorSensor.getColor());
