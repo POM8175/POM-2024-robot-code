@@ -6,12 +6,8 @@ package frc.robot.Commands.DriveCommands;
 
 import static frc.robot.Constants.DriveConstants.ANGLE_TOLERANCE;
 
-import java.util.Optional;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Subsystems.DriveSubsystem;
 
@@ -29,12 +25,7 @@ public class TurnByDegreeCommand extends Command {
    * @param subsystem The subsystem used by this command.
    */
   public  TurnByDegreeCommand(DriveSubsystem subsystem, double delta) {
-    driveSubsystem = subsystem;
-    Optional<Alliance> ali = DriverStation.getAlliance();
-    //flips the angle if robot in red side
-    if(ali.get() == Alliance.Red){
-      mDelta = -delta;
-    }
+    driveSubsystem = subsystem;    
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
 

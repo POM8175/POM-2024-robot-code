@@ -9,7 +9,6 @@ import static frc.robot.Constants.DriveConstants.ANGLE_TOLERANCE;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Subsystems.DriveSubsystem;
 
@@ -18,7 +17,7 @@ public class TurnToDegreeCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveSubsystem driveSubsystem;
   private final PIDController anglePidController;
-  private Rotation2d mSetPoint;
+  private double mSetPoint;
   private Supplier<Double> curr;
 
   /**
@@ -26,9 +25,10 @@ public class TurnToDegreeCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public  TurnToDegreeCommand(DriveSubsystem subsystem, Supplier<Double> curr) {
+  public  TurnToDegreeCommand(DriveSubsystem subsystem, Supplier<Double> curr, double mSetPoint) {
     driveSubsystem = subsystem;    
     this.curr = curr;
+    this.mSetPoint = mSetPoint;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
 
@@ -42,16 +42,16 @@ public class TurnToDegreeCommand extends Command {
     anglePidController.enableContinuousInput(-180, 180);
     anglePidController.setTolerance(ANGLE_TOLERANCE);
   }
-
+  
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    anglePidController.setSetpoint(mSetPoint);
   }
   
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    anglePidController.setSetpoint(0);
     driveSubsystem.arcadeDrive(0, anglePidController.calculate(curr.get()));
   }
 
