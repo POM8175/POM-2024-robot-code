@@ -1,33 +1,36 @@
 package frc.robot.Commands.intakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Subsystems.IntakeSubsystem;
+import frc.robot.Subsystems.intake_subsystems.IntakeRollerSubsystem;
 
 public class IntakeUntilInCommand extends Command
 {
-    IntakeSubsystem intakeSubsystem;
+     IntakeRollerSubsystem intakeRollerSubsystem;
 
-    public IntakeUntilInCommand(IntakeSubsystem intakeSubsystem)
+    public IntakeUntilInCommand(IntakeRollerSubsystem intakeRollerSubsystem)
     {
-        this.intakeSubsystem = intakeSubsystem;
-        addRequirements(intakeSubsystem);
+        this.intakeRollerSubsystem = intakeRollerSubsystem;
+        addRequirements(intakeRollerSubsystem);
+
     }
 
     @Override
     public void initialize()
     {
-        intakeSubsystem.rollerSubsystem.setMotor(1);
+        intakeRollerSubsystem.setMotor(1);
+
     }
 
     @Override
     public void end(boolean interrupted)
     {
-        intakeSubsystem.rollerSubsystem.stopMotor();
+        intakeRollerSubsystem.stopMotor();
+
     }
 
     @Override
     public boolean isFinished()
     {
-        return intakeSubsystem.isNoteIn();
+        return intakeRollerSubsystem.isNoteIn();
     }
 }
