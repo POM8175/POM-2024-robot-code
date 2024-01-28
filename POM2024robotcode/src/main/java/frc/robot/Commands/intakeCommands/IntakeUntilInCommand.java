@@ -7,6 +7,8 @@ public class IntakeUntilInCommand extends Command
 {
      IntakeRollerSubsystem intakeRollerSubsystem;
 
+     double motorInputPower = 1;
+
     public IntakeUntilInCommand(IntakeRollerSubsystem intakeRollerSubsystem)
     {
         this.intakeRollerSubsystem = intakeRollerSubsystem;
@@ -17,7 +19,7 @@ public class IntakeUntilInCommand extends Command
     @Override
     public void initialize()
     {
-        intakeRollerSubsystem.setMotor(1);
+        intakeRollerSubsystem.setMotor(motorInputPower);
 
     }
 

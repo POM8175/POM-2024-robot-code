@@ -7,6 +7,8 @@ public class OutakeNote extends Command
 {
     IntakeRollerSubsystem rollerSubsystem;
 
+    double motorOutputPower = -1;
+
     public OutakeNote(IntakeRollerSubsystem rollerSubsystem)
     {
         this.rollerSubsystem = rollerSubsystem;
@@ -16,13 +18,13 @@ public class OutakeNote extends Command
     @Override
     public void initialize()
     {
-        rollerSubsystem.setMotor(-1);
+        rollerSubsystem.setMotor(motorOutputPower);
     }
 
     @Override
     public void end(boolean interrupted)
     {
-        rollerSubsystem.stopMotor();;
+        rollerSubsystem.stopMotor();
     }
 
     @Override
