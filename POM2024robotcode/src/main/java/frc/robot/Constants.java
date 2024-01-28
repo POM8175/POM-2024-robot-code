@@ -82,6 +82,7 @@ public class Constants {
 
         public static final double KP = 0.8;
         public static final double KI = 0.02;
+        public static final double KD = 0;
     
         public static final double KP_DRIVE_VEL = 0.002;
         public static final double KTRACK_WIDTH_METERS = 0.54;
@@ -97,6 +98,10 @@ public class Constants {
         // const values we dont need to calculate
         public static final double RAMSETE_B = 2;
         public static final double RAMSETE_ZETA = 0.7;
+
+        public static final int TL = 6;
+        public static final int BOT_POSE_LEN = 7;
+        
     }
 
     public static final class IntakeConstants{
