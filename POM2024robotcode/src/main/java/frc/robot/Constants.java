@@ -100,6 +100,15 @@ public class Constants {
         public static final double RAMSETE_ZETA = 0.7;
     }
 
+    public static final class ShootingConstants{
+
+        public static final int SHOOTER_MOTOR_RIGHT = 0;
+        public static final int SHOOTER_MOTOR_LEFT = 1;
+        
+
+    }
+
+
     public static final class IntakeConstants{
        public static final int COLOR_SENSOR_PORT = 5;
        public static final int ROLLER_MOTOR = 6;
