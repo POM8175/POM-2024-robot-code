@@ -12,6 +12,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.util.Color;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -111,6 +112,7 @@ public class Constants {
         public static final int PWM = 9;
         public static final int NUM_LEDS = 180;
         public static final int LED_PORT = 9;
+        public static final Color POM_PURPLE = new Color(148, 0, 211);
     }
 
     public static final class GeneralFunctions{
