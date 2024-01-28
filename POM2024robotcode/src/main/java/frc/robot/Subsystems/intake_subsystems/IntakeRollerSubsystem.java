@@ -11,13 +11,15 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Subsystems.PomSubsystem;
 
+import static frc.robot.Constants.IntakeConstants.*;
+
 
 public class IntakeRollerSubsystem extends PomSubsystem
 {
     // Motors
     //------------------------------------------------------------------------------------
-    VictorSPX rollerMotor = new VictorSPX(10);    
-    VictorSPX rollerMotorSlave = new VictorSPX(11);    
+    VictorSPX rollerMotor = new VictorSPX(ROLLER_MOTOR);    
+    VictorSPX rollerMotorSlave = new VictorSPX(ROLLER_MOTOR_SLAVE);    
     PIDController rollerPidController;
     //------------------------------------------------------------------------------------
     
