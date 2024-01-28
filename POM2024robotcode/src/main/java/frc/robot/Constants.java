@@ -71,7 +71,7 @@ public class Constants {
         public static final int RIGHT_MOTOR_LEAD = 3;
         public static final int RIGHT_MOTOR_SLAVE = 4;
 
-        public static final int GYRO_ID = 7;
+        public static final int GYRO_ID = 13;
 
         public static final double TO_RADIANS = 1 / 180 * Math.PI;
         public static final double ROTATIONS_TO_METERS = 1 / 8.45 * 15.24 * Math.PI / 100;
@@ -129,7 +129,8 @@ public class Constants {
 
 
     public static final class IntakeConstants{
-       public static final int ROLLER_MOTOR = 6;
+       public static final int ROLLER_MOTOR = 10;
+
        public static final int LIFT_MOTOR = 12;
 
         public static final int[] ENCODER_PORTS = {0,1};
