@@ -7,13 +7,13 @@ public class IntakeUntilInCommand extends Command
 {
      IntakeRollerSubsystem intakeRollerSubsystem;
 
-     double motorInputPower = 1;
+     double motorInputPower;
 
-    public IntakeUntilInCommand(IntakeRollerSubsystem intakeRollerSubsystem)
+    public IntakeUntilInCommand(IntakeRollerSubsystem intakeRollerSubsystem, double speed)
     {
         this.intakeRollerSubsystem = intakeRollerSubsystem;
         addRequirements(intakeRollerSubsystem);
-
+        motorInputPower = speed;
     }
 
     @Override

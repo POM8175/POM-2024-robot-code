@@ -7,12 +7,13 @@ public class OutakeNote extends Command
 {
     IntakeRollerSubsystem rollerSubsystem;
 
-    double motorOutputPower = -1;
+    double motorOutputPower;
 
-    public OutakeNote(IntakeRollerSubsystem rollerSubsystem)
+    public OutakeNote(IntakeRollerSubsystem rollerSubsystem,double speed)
     {
         this.rollerSubsystem = rollerSubsystem;
         addRequirements(rollerSubsystem);
+        motorOutputPower = speed;
     }
 
     @Override
