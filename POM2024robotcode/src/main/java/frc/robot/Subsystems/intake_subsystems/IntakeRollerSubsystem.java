@@ -6,6 +6,7 @@ import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Subsystems.PomSubsystem;
@@ -17,8 +18,11 @@ public class IntakeRollerSubsystem extends PomSubsystem
     //------------------------------------------------------------------------------------
     VictorSPX rollerMotor = new VictorSPX(10);    
     VictorSPX rollerMotorSlave = new VictorSPX(11);    
+    PIDController rollerPidController;
     //------------------------------------------------------------------------------------
     
+    // the power given to the motor
+    double motorSet = 0;
     
     // Color Sensor
     //------------------------------------------------------------------------------------
@@ -39,6 +43,10 @@ public class IntakeRollerSubsystem extends PomSubsystem
 
         // setting rollerMotorSlave to follow rollerMotor
         rollerMotorSlave.follow(rollerMotor);
+
+        // setting the values of the PID Controller
+        double kI = 0,KD = 0,kP = 0,kF = 0;
+        rollerPidController = new PIDController(kP, kI, KD);
     }
     // the subsystems functions
 
@@ -46,14 +54,18 @@ public class IntakeRollerSubsystem extends PomSubsystem
     @Override
     public void stopMotor()
     {
-        rollerMotor.set(VictorSPXControlMode.PercentOutput,0);
+        rollerPidController.setSetpoint(0);
+        motorSet = rollerPidController.calculate(motorSet);
+        rollerMotor.set(VictorSPXControlMode.PercentOutput,motorSet);
     }
 
     // setting the motors speed
     @Override
     public void setMotor(double speed)
     {
-        rollerMotor.set(VictorSPXControlMode.PercentOutput,speed);
+        rollerPidController.setSetpoint(speed);
+        motorSet = rollerPidController.calculate(motorSet);
+        rollerMotor.set(VictorSPXControlMode.PercentOutput,motorSet);
     }
 
     // a boolean function that checks if the color sensor sees a note
