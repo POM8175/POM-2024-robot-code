@@ -1,5 +1,11 @@
 package frc.robot.Subsystems;
 
+import static frc.robot.Constants.TransferConstants.TRANSFER_MOTOR;
+import static frc.robot.Constants.TransferConstants.TRANSFER_SPEED;
+import static frc.robot.Constants.TransferConstants.TRANSFER_TIME_OUT;
+import static frc.robot.Constants.TransferConstants.blueColor;
+import static frc.robot.Constants.TransferConstants.noteColor;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.ColorMatch;
@@ -8,11 +14,8 @@ import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
-
-import static frc.robot.Constants.TransferConstants.*;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class TransferSubsystem extends PomSubsystem
 {
@@ -52,12 +55,12 @@ public class TransferSubsystem extends PomSubsystem
         transferMotor.set(ControlMode.PercentOutput,0);
     }
 
-    public Command transferIntake()
+    public Command getFromIntake()
     {
-        return new RunCommand(() -> setMotor(TRANSFER_SPEED)).until(() -> !isNoteIn()).withTimeout(TRANSFER_TIME_OUT).andThen(() -> stopMotor());
+        return new StartEndCommand(() -> setMotor(TRANSFER_SPEED), () -> stopMotor()).until(() -> !isNoteIn());
     }
-    public Command transferShooter(boolean isToShooter)
+    public Command transfer(boolean isToShooter)
     {
-        return new RunCommand(() -> setMotor(isToShooter ? TRANSFER_SPEED : -TRANSFER_SPEED),this).until(() -> !isNoteIn()).withTimeout(TRANSFER_TIME_OUT).andThen(() -> stopMotor());
+        return new StartEndCommand(() -> setMotor(isToShooter ? TRANSFER_SPEED : -TRANSFER_SPEED), null, this).until(() -> !isNoteIn()).andThen(new WaitCommand(TRANSFER_TIME_OUT)).andThen(() -> stopMotor(), this);
     }
 }
