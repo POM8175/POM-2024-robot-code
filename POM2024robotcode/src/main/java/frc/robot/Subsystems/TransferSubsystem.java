@@ -14,7 +14,7 @@ import static frc.robot.Constants.TransferConstants.*;
 
 public class TransferSubsystem extends PomSubsystem
 {
-    VictorSPX transferMotor = new VictorSPX(0);
+    VictorSPX transferMotor = new VictorSPX(TRANSFER_MOTOR);
     
     // Color Sensor
     //------------------------------------------------------------------------------------
