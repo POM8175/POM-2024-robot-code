@@ -8,6 +8,8 @@ import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 import static frc.robot.Constants.TransferConstants.*;
@@ -50,14 +52,12 @@ public class TransferSubsystem extends PomSubsystem
         transferMotor.set(ControlMode.PercentOutput,0);
     }
 
-    public Command transferIntake(boolean isToTransfer,double speed)
+    public Command transferIntake()
     {
-        if(isToTransfer) return new StartEndCommand(() -> setMotor(speed),() -> stopMotor(),this).until(() -> !isNoteIn());
-        return new StartEndCommand(() -> setMotor(-speed),() -> stopMotor(),this).until(() -> !isNoteIn());
+        return new RunCommand(() -> setMotor(TRANSFER_SPEED)).until(() -> !isNoteIn()).withTimeout(TRANSFER_TIME_OUT).andThen(() -> stopMotor());
     }
-    public Command transferShooter(boolean isToShooter,double speed)
+    public Command transferShooter(boolean isToShooter)
     {
-        if(isToShooter) return new StartEndCommand(() -> setMotor(speed),() -> setMotor(speed),this).until(() -> !isNoteIn()).withTimeout(TRANSFER_TIME_OUT).andThen(() -> stopMotor());
-        return new StartEndCommand(() -> setMotor(-speed),() -> setMotor(-speed),this).until(() -> !isNoteIn()).withTimeout(TRANSFER_TIME_OUT).andThen(() -> stopMotor());
+        return new RunCommand(() -> setMotor(isToShooter ? TRANSFER_SPEED : -TRANSFER_SPEED),this).until(() -> !isNoteIn()).withTimeout(TRANSFER_TIME_OUT).andThen(() -> stopMotor());
     }
 }
