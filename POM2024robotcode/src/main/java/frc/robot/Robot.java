@@ -104,7 +104,7 @@ public class Robot extends TimedRobot {
         // Intake
 
         IsNoteIn = new BooleanLogEntry(log, "Intake/IsNoteIn");
-        IsNoteIn.append(m_robotContainer.intakeRollerSubsystem.isNoteIn());
+        //IsNoteIn.append(m_robotContainer.intakeRollerSubsystem.isNoteIn());
         
 //Leds
         // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());
@@ -207,14 +207,14 @@ public class Robot extends TimedRobot {
 
 
         //Intake Tab
-        SmartDashboard.putNumber("Intake/Color/Red", m_robotContainer.intakeRollerSubsystem.colorSensor.getRed());
+        /*SmartDashboard.putNumber("Intake/Color/Red", m_robotContainer.intakeRollerSubsystem.colorSensor.getRed());
         SmartDashboard.putNumber("Intake/Color/Green", m_robotContainer.intakeRollerSubsystem.colorSensor.getGreen());
         SmartDashboard.putNumber("Intake/Color/Blue", m_robotContainer.intakeRollerSubsystem.colorSensor.getBlue());
         SmartDashboard.putString("Intake/Color/Color",m_robotContainer.intakeRollerSubsystem.colorSensor.getColor().toHexString());
         //SmartDashboard.putNumber("Intake/Color/Dist",));
         SmartDashboard.putNumber("Intake/Color/Dist(no Map)",m_robotContainer.intakeRollerSubsystem.colorSensor.getProximity());
         SmartDashboard.putBoolean("Intake/Color/IsNoteIn",m_robotContainer.intakeRollerSubsystem.isNoteIn());
-
+*/
         // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());        
 
 
