@@ -7,6 +7,8 @@ import static frc.robot.Constants.ShootingConstants.*;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.Subsystems.PomSubsystem;
@@ -30,6 +32,11 @@ public class ShootingSubsystem extends PomSubsystem {
        shooterMotorLeft.follow(shooterMotorRight, true);
        
    }
+   public void periodic(){
+
+    Shuffleboard.getTab("Shooter").addNumber("Shooter Velocity", () -> getRate());
+
+   }
 
     @Override
     public void setMotor(double speed) {
@@ -49,8 +56,9 @@ public class ShootingSubsystem extends PomSubsystem {
     }
     public Command spinWheelsToSpeedCommand(double speed)
     {
-        return new StartEndCommand(() -> setMotor(speed), null, this).until(() -> getRate() >= speed);
+        return new StartEndCommand(() -> setMotor(speed), null, this).until(() -> getRate() >= speed); 
     }
+
         
 
 }
