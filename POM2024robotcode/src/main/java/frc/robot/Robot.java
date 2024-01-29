@@ -207,14 +207,14 @@ public class Robot extends TimedRobot {
 
 
         //Intake Tab
-        /*SmartDashboard.putNumber("Intake/Color/Red", m_robotContainer.intakeRollerSubsystem.colorSensor.getRed());
-        SmartDashboard.putNumber("Intake/Color/Green", m_robotContainer.intakeRollerSubsystem.colorSensor.getGreen());
-        SmartDashboard.putNumber("Intake/Color/Blue", m_robotContainer.intakeRollerSubsystem.colorSensor.getBlue());
-        SmartDashboard.putString("Intake/Color/Color",m_robotContainer.intakeRollerSubsystem.colorSensor.getColor().toHexString());
+        SmartDashboard.putNumber("Transfer/Color/Red", m_robotContainer.transferSubsystem.colorSensor.getRed());
+        SmartDashboard.putNumber("Transfer/Color/Green", m_robotContainer.transferSubsystem.colorSensor.getGreen());
+        SmartDashboard.putNumber("Transfer/Color/Blue", m_robotContainer.transferSubsystem.colorSensor.getBlue());
+        SmartDashboard.putString("Transfer/Color/Color",m_robotContainer.transferSubsystem.colorSensor.getColor().toHexString());
         //SmartDashboard.putNumber("Intake/Color/Dist",));
-        SmartDashboard.putNumber("Intake/Color/Dist(no Map)",m_robotContainer.intakeRollerSubsystem.colorSensor.getProximity());
-        SmartDashboard.putBoolean("Intake/Color/IsNoteIn",m_robotContainer.intakeRollerSubsystem.isNoteIn());
-*/
+        SmartDashboard.putNumber("Transfer/Color/Dist(no Map)",m_robotContainer.transferSubsystem.colorSensor.getProximity());
+        SmartDashboard.putBoolean("Transfer/Color/IsNoteIn",m_robotContainer.transferSubsystem.isNoteIn());
+
         // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());        
 
 
