@@ -54,8 +54,12 @@ public class TransferSubsystem extends PomSubsystem
     {
         return new StartEndCommand(() -> setMotor(TRANSFER_SPEED), () -> stopMotor(), this).until(() -> isNoteIn());
     }
-    public Command transferNote()
+    public Command transferNoteToShooter()
     {
         return new StartEndCommand(() -> setMotor(TRANSFER_SPEED), () -> stopMotor(), this).until(() -> !isNoteIn());
+    }
+    public Command transferToIntake()
+    {
+        return new StartEndCommand(() -> setMotor(-TRANSFER_SPEED),() -> stopMotor(),this).until(() -> !isNoteIn());
     }
 }
