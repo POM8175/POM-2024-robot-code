@@ -71,6 +71,6 @@ public class IntakeRollerSubsystem extends PomSubsystem
     } 
 
     // the subsystems commands
-    public Command intakeNoteCommand = Commands.startEnd(() -> setMotor(1),() -> stopMotor(), this);
-    public Command outakeNoteCommand = Commands.startEnd(() -> setMotor(1), () -> stopMotor(), this);
+    public Command intakeNoteCommand = Commands.startEnd(() -> setMotor(ROLLER_MOTOR_SPEED),() -> stopMotor(), this);
+    public Command outakeNoteCommand = Commands.startEnd(() -> setMotor(-ROLLER_MOTOR_SPEED), () -> stopMotor(), this);
 }

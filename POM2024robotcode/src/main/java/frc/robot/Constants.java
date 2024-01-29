@@ -135,6 +135,8 @@ public class Constants {
        public static final int ROLLER_MOTOR = 10;
        public static final int ROLLER_MOTOR_SLAVE = 11;
 
+       public static final double ROLLER_MOTOR_SPEED = 1;
+
        public static final int LIFT_MOTOR = 12;
 
         public static final int[] ENCODER_PORTS = {0,1};
