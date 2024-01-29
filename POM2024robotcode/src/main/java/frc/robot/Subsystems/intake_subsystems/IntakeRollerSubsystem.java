@@ -9,6 +9,8 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Subsystems.PomSubsystem;
 
 import static frc.robot.Constants.IntakeConstants.*;
@@ -20,7 +22,6 @@ public class IntakeRollerSubsystem extends PomSubsystem
     //------------------------------------------------------------------------------------
     VictorSPX rollerMotor = new VictorSPX(ROLLER_MOTOR);    
     VictorSPX rollerMotorSlave = new VictorSPX(ROLLER_MOTOR_SLAVE);    
-    PIDController rollerPidController;
     //------------------------------------------------------------------------------------
     
     // the power given to the motor
@@ -45,10 +46,6 @@ public class IntakeRollerSubsystem extends PomSubsystem
 
         // setting rollerMotorSlave to follow rollerMotor
         rollerMotorSlave.follow(rollerMotor);
-
-        // setting the values of the PID Controller
-        double kI = 0,KD = 0,kP = 0,kF = 0;
-        rollerPidController = new PIDController(kP, kI, KD);
     }
     // the subsystems functions
 
@@ -56,18 +53,14 @@ public class IntakeRollerSubsystem extends PomSubsystem
     @Override
     public void stopMotor()
     {
-        rollerPidController.setSetpoint(0);
-        motorSet = rollerPidController.calculate(motorSet);
-        rollerMotor.set(VictorSPXControlMode.PercentOutput,motorSet);
+        rollerMotor.set(VictorSPXControlMode.PercentOutput,0);
     }
 
     // setting the motors speed
     @Override
     public void setMotor(double speed)
     {
-        rollerPidController.setSetpoint(speed);
-        motorSet = rollerPidController.calculate(motorSet);
-        rollerMotor.set(VictorSPXControlMode.PercentOutput,motorSet);
+        rollerMotor.set(VictorSPXControlMode.PercentOutput,speed);
     }
 
     // a boolean function that checks if the color sensor sees a note
@@ -76,4 +69,8 @@ public class IntakeRollerSubsystem extends PomSubsystem
         match = m_colorMatcher.matchClosestColor(colorSensor.getColor());
         return match.color == noteColor;
     } 
+
+    // the subsystems commands
+    public Command intakeNoteCommand = Commands.startEnd(() -> setMotor(1),() -> stopMotor(), this);
+    public Command outakeNoteCommand = Commands.startEnd(() -> setMotor(1), () -> stopMotor(), this);
 }
