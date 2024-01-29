@@ -7,11 +7,10 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import static frc.robot.Constants.TransferConstants.*;
 
 public class TransferSubsystem extends PomSubsystem
 {
@@ -24,8 +23,6 @@ public class TransferSubsystem extends PomSubsystem
 
     private final ColorMatch m_colorMatcher = new ColorMatch();
     ColorMatchResult match;
-    final Color noteColor = new Color(130, 98, 26);
-    final Color blueColor = new Color(54, 113, 86);
     //------------------------------------------------------------------------------------
 
     public TransferSubsystem()
@@ -55,10 +52,10 @@ public class TransferSubsystem extends PomSubsystem
 
     public Command getNote()
     {
-        return new StartEndCommand(() -> setMotor(1), () -> stopMotor(), this).until(() -> isNoteIn());
+        return new StartEndCommand(() -> setMotor(TRANSFER_SPEED), () -> stopMotor(), this).until(() -> isNoteIn());
     }
     public Command transferNote()
     {
-        return new StartEndCommand(() -> setMotor(1), () -> stopMotor(), this).until(() -> !isNoteIn());
+        return new StartEndCommand(() -> setMotor(TRANSFER_SPEED), () -> stopMotor(), this).until(() -> !isNoteIn());
     }
 }
