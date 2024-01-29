@@ -134,10 +134,11 @@ public class Constants {
     public static final class TransferConstants
     {
         public static final int TRANSFER_MOTOR = 9;
-        public static final double TRANSFER_SPEED = 1;
 
         public static final Color noteColor = new Color(130, 98, 26);
         public static final Color blueColor = new Color(54, 113, 86);
+
+        public static final double TRANSFER_TIME_OUT = 2;
     }
 
     public static final class IntakeConstants{
