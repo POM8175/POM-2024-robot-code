@@ -138,6 +138,14 @@ public class Constants {
 
         public static final Color noteColor = new Color(130, 98, 26);
         public static final Color blueColor = new Color(54, 113, 86);
+        public static final Color[] notNoteColors = new Color[]{new Color(54, 113, 86),
+            new Color(66, 135, 245),
+            new Color(15, 18, 15),
+            new Color(100,30,70),
+            new Color(255,255,255),
+            new Color(0,0,0),
+            new Color(100,30,255),
+            new Color(189, 183, 170)};
 
         public static final double TRANSFER_TIME_OUT = 2;
     }

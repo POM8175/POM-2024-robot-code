@@ -4,6 +4,7 @@ import static frc.robot.Constants.TransferConstants.TRANSFER_MOTOR;
 import static frc.robot.Constants.TransferConstants.TRANSFER_SPEED;
 import static frc.robot.Constants.TransferConstants.TRANSFER_TIME_OUT;
 import static frc.robot.Constants.TransferConstants.blueColor;
+import static frc.robot.Constants.TransferConstants.notNoteColors;
 import static frc.robot.Constants.TransferConstants.noteColor;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -33,7 +34,7 @@ public class TransferSubsystem extends PomSubsystem
     public TransferSubsystem()
     {
         // adding collors to the dataset of m_colorMatcher
-        m_colorMatcher.addColorMatch(blueColor);
+        for(int i = 0;i<notNoteColors.length;i++) m_colorMatcher.addColorMatch(notNoteColors[i]);
         m_colorMatcher.addColorMatch(noteColor);
     }
 
