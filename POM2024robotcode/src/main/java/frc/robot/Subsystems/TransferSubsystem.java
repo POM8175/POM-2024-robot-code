@@ -62,6 +62,6 @@ public class TransferSubsystem extends PomSubsystem
     }
     public Command transfer(boolean isToShooter)
     {
-        return new StartEndCommand(() -> setMotor(isToShooter ? TRANSFER_SPEED : -TRANSFER_SPEED), null, this).until(() -> !isNoteIn()).andThen(new WaitCommand(TRANSFER_TIME_OUT)).andThen(() -> stopMotor(), this);
+        return new StartEndCommand(() -> setMotor(isToShooter ? TRANSFER_SPEED : -TRANSFER_SPEED), () -> setMotor(isToShooter ? TRANSFER_SPEED : -TRANSFER_SPEED), this).until(() -> !isNoteIn()).andThen(new WaitCommand(TRANSFER_TIME_OUT)).andThen(() -> stopMotor(), this);
     }
 }

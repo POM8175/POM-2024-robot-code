@@ -62,7 +62,7 @@ public class DriveSubsystem extends PomSubsystem {
               mGyro.getRotation2d(), 
               leftEncoder.getPosition(), 
               rightEncoder.getPosition(), 
-              getPose(),
+              new Pose2d(),
               VecBuilder.fill(0.02, 0.02, 0.01),
               VecBuilder.fill(0.1, 0.1, 0.15));
 

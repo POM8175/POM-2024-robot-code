@@ -25,9 +25,9 @@ public class LedSubsystem extends SubsystemBase {
 
     @Override
     public void periodic(){
-        tab.add("Red", 0).getEntry();
-        tab.add("Green", 0).getEntry();
-        tab.add("Blue", 0).getEntry();
+        // tab.add("Red", 0).getEntry();
+        // tab.add("Green", 0).getEntry();
+        // tab.add("Blue", 0).getEntry();
     }
 
     public void setLeds(Color color){
