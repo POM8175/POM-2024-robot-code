@@ -28,6 +28,14 @@ public class IntakeRollerSubsystem extends PomSubsystem
     }
     // the subsystems functions
 
+
+
+    @Override
+    public void periodic(){
+        
+    }
+
+
     // stoping the motor
     @Override
     public void stopMotor()
