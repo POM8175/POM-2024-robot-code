@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class TransferSubsystem extends PomSubsystem
 {
     VictorSPX transferMotor = new VictorSPX(TRANSFER_MOTOR);
-    
     // Color Sensor
     //------------------------------------------------------------------------------------
     public I2C.Port i2cPort =  I2C.Port.kOnboard;
@@ -56,6 +55,7 @@ public class TransferSubsystem extends PomSubsystem
         transferMotor.set(ControlMode.PercentOutput,0);
     }
 
+    // the subsystems commands
     public Command getFromIntake()
     {
         return new StartEndCommand(() -> setMotor(TRANSFER_SPEED), () -> stopMotor()).until(() -> !isNoteIn());
