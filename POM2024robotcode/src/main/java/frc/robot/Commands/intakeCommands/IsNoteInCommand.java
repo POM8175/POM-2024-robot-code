@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Subsystems.LedSubsystem;
 import frc.robot.Subsystems.TransferSubsystem;
-import frc.robot.Subsystems.intake_subsystems.IntakeRollerSubsystem;
 
 public class IsNoteInCommand extends Command
 {

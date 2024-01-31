@@ -12,9 +12,7 @@ public class LedSubsystem extends SubsystemBase {
     AddressableLED m_led;
     public AddressableLEDBuffer m_ledBuffer;
     private int m_rainbowFirstPixelHue;
-    private ShuffleboardTab tab = Shuffleboard.getTab("Intake");
-    Color c = new Color(2,2,2);
-    
+    private ShuffleboardTab tab = Shuffleboard.getTab("Intake");    
     public LedSubsystem(){
         m_led = new AddressableLED(LED_PORT);
         m_ledBuffer = new AddressableLEDBuffer(NUM_LEDS);

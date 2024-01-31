@@ -1,11 +1,6 @@
 package frc.robot.Subsystems;
 
-import static frc.robot.Constants.TransferConstants.TRANSFER_MOTOR;
-import static frc.robot.Constants.TransferConstants.TRANSFER_SPEED;
-import static frc.robot.Constants.TransferConstants.TRANSFER_TIME_OUT;
-import static frc.robot.Constants.TransferConstants.blueColor;
-import static frc.robot.Constants.TransferConstants.notNoteColors;
-import static frc.robot.Constants.TransferConstants.noteColor;
+import static frc.robot.Constants.TransferConstants.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
