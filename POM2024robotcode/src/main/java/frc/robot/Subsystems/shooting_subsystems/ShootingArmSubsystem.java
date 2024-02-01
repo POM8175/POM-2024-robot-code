@@ -16,7 +16,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Subsystems.PomSubsystem;
 
 public class ShootingArmSubsystem extends PomSubsystem{
@@ -164,10 +163,10 @@ public class ShootingArmSubsystem extends PomSubsystem{
 
   public Command goToAngleCommand(TrapezoidProfile.State goal)
   {
-    return new RunCommand(() -> moveWithProfile(goal), this).until(()-> controller.atGoal()).unless(() -> goal.position < INTAKE_CAN_MOVE && intakeIsThere.getAsBoolean());
+    return this.run(() -> moveWithProfile(goal)).until(()-> controller.atGoal()).unless(() -> goal.position < INTAKE_CAN_MOVE && intakeIsThere.getAsBoolean());
   }
   public Command OpenForIntakeCommand()
   {
-    return new RunCommand(() -> moveWithProfile(new TrapezoidProfile.State(INTAKE_CAN_MOVE, 0)), this).until(()-> encoder.getPosition() > INTAKE_CAN_MOVE).andThen(goToAngleCommand(new TrapezoidProfile.State(encoder.getPosition(), 0)));
+    return this.run(() -> moveWithProfile(new TrapezoidProfile.State(INTAKE_CAN_MOVE, 0))).until(()-> encoder.getPosition() > INTAKE_CAN_MOVE).andThen(goToAngleCommand(new TrapezoidProfile.State(encoder.getPosition(), 0)));
   }
 }
