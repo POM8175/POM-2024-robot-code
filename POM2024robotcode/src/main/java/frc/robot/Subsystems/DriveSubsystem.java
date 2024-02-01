@@ -27,7 +27,6 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 /**
  *
  */
@@ -103,8 +102,6 @@ public class DriveSubsystem extends PomSubsystem {
     slaveRightMotor.setIdleMode(IdleMode.kCoast);
     
     mGyro.reset();
-
-    
   }
 
   @Override
@@ -127,12 +124,12 @@ public class DriveSubsystem extends PomSubsystem {
         botPose = NetworkTableInstance.getDefault().getTable("limelight-pom").getEntry("botpose_wpired")
             .getDoubleArray(new double[7]);
       }
-      finally { }
+      finally {
+        poseEstimator.addVisionMeasurement(new Pose2d(botPose[0], botPose[1], Rotation2d.fromDegrees(botPose[5])), Timer.getFPGATimestamp() - (botPose[TL]/1000.0));
+      }
     }
-    //TODO get limelight pose into botpose, make it pose 2d
     odometry.update(mGyro.getRotation2d(), new DifferentialDriveWheelPositions(leftEncoder.getPosition(), rightEncoder.getPosition()));
     poseEstimator.update(mGyro.getRotation2d(), new DifferentialDriveWheelPositions(leftEncoder.getPosition(), rightEncoder.getPosition()));
-    poseEstimator.addVisionMeasurement(new Pose2d(botPose[0], botPose[1], Rotation2d.fromDegrees(botPose[5])), Timer.getFPGATimestamp() - (botPose[TL]/1000.0));
     field.setRobotPose(getPose());
   }
 
@@ -299,7 +296,7 @@ public class DriveSubsystem extends PomSubsystem {
 
   public Command tankDriveCommand(Supplier<Double> left, Supplier<Double> right)
   {
-    return new RunCommand(() -> tankDriveVolts(left.get(), right.get()), this);
+    return this.run(() -> tankDriveVolts(left.get(), right.get()));
   }
 
 
@@ -308,7 +305,7 @@ public class DriveSubsystem extends PomSubsystem {
     SlewRateLimiter rateLimit = new SlewRateLimiter(RATE);
     rateLimit.reset((leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2);
     
-    return new RunCommand(() -> arcadeDrive(rateLimit.calculate(fwd.get()), rot.get()), this);
+    return this.run(() -> arcadeDrive(rateLimit.calculate(fwd.get()), rot.get()));
     
   }
 
