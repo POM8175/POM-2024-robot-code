@@ -52,6 +52,8 @@ public class ShootingArmSubsystem extends PomSubsystem{
     groundMicroSwitch = new DigitalInput(FULL_MICRO_SWITCH_ID);
 
     SmartDashboard.putNumber("arm encoder", encoder.getPosition());
+
+    setDefaultCommand(goToAngleCommand(controller.getGoal()));
   }
 
   @Override

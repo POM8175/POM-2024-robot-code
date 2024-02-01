@@ -19,6 +19,7 @@ public class LedSubsystem extends SubsystemBase {
         m_led.setLength(NUM_LEDS);
         m_led.start();
         setLeds(POM_PURPLE);
+        setDefaultCommand(this.runOnce(() -> setLeds(POM_PURPLE)));
     }
 
     @Override

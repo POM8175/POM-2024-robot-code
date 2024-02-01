@@ -25,6 +25,7 @@ public class IntakeRollerSubsystem extends PomSubsystem
     {
         // setting rollerMotorSlave to follow rollerMotor
         rollerMotorSlave.follow(rollerMotor);
+        setDefaultCommand(this.runOnce(() -> stopMotor()));
     }
     // the subsystems functions
 

@@ -30,6 +30,7 @@ public class TransferSubsystem extends PomSubsystem
         // adding collors to the dataset of m_colorMatcher
         for(int i = 0;i<notNoteColors.length;i++) m_colorMatcher.addColorMatch(notNoteColors[i]);
         m_colorMatcher.addColorMatch(noteColor);
+        setDefaultCommand(this.runOnce(() -> stopMotor()));
     }
 
     public boolean isNoteIn()
@@ -41,7 +42,7 @@ public class TransferSubsystem extends PomSubsystem
     @Override
     public void setMotor(double speed)
     {
-        transferMotor.set(ControlMode.PercentOutput,speed);
+        transferMotor.set(ControlMode.PercentOutput, speed);
     }
 
     @Override
