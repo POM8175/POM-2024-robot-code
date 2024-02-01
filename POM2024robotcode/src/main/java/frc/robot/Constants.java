@@ -143,6 +143,7 @@ public class Constants {
         public static final double SHOOT_TO_WING_SPEED = 0.8;
 
         public static final double INTAKE_CAN_MOVE = 0;
+        public static final double GET_FROM_INTAKE_POS = 0;
 
 
     }
