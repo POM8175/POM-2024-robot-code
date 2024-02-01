@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.TrapezoidProfileSubsystem;
 import frc.robot.Subsystems.PomSubsystem;
 
 public class ShootingArmSubsystem extends PomSubsystem{
@@ -156,6 +155,11 @@ public class ShootingArmSubsystem extends PomSubsystem{
 
   public CANSparkMax getMotor(){
     return liftMotor;
+  }
+
+  public BooleanSupplier intakeCanMove()
+  {
+    return () -> encoder.getPosition() >= INTAKE_CAN_MOVE && controller.getSetpoint().position > INTAKE_CAN_MOVE;
   }
 
   public Command goToAngleCommand(TrapezoidProfile.State goal)

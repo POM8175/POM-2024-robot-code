@@ -2,6 +2,8 @@ package frc.robot.Subsystems.intake_subsystems;
 
 import static frc.robot.Constants.IntakeConstants.*;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -14,6 +16,8 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     WPI_TalonSRX motor;
     Encoder encoder;
     PIDController pid;
+    private BooleanSupplier armIsThere;
+
     public IntakeLiftSubsystem()
     {
         motor = new WPI_TalonSRX(0);
@@ -21,6 +25,16 @@ public class IntakeLiftSubsystem extends PomSubsystem{
         pid = new PIDController(KP, KI, KD);
         pid.setTolerance(TOLERANCE);
         motor.clearStickyFaults();
+    }
+
+    public void setArmSup(BooleanSupplier sup)
+    {
+      armIsThere = sup;
+    }
+
+    public BooleanSupplier armCanMove()
+    {
+        return () -> !((encoder.getDistance() > 0 + TOLERANCE && pid.getSetpoint()  == FOLD) || (encoder.getDistance() < GROUND - TOLERANCE + TOLERANCE && pid.getSetpoint()  == GROUND));
     }
 
     @Override
@@ -50,6 +64,6 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     public Command OpenCloseIntake(boolean open)
     {
         pid.setSetpoint(open ? GROUND : FOLD);
-        return new RunCommand(() -> setMotor(pid.calculate(encoder.getDistance())), this).until(() -> pid.atSetpoint()).andThen(this.runOnce(() -> stopMotor()));
+        return( new RunCommand(() -> setMotor(pid.calculate(encoder.getDistance())), this).until(() -> pid.atSetpoint()).andThen(this.runOnce(() -> stopMotor()))).unless(armIsThere);
     }
 }
