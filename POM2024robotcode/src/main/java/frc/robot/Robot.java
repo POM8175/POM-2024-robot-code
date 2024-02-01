@@ -146,6 +146,12 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         // m_robotContainer.ledSubsystem.setLeds(Shuffleboard.getTab("Intake").getComponents().)
+        m_robotContainer.driveSubsystem.stopMotor();
+        m_robotContainer.intakeLiftSubsystem.stopMotor();
+        m_robotContainer.intakeRollerSubsystem.stopMotor();
+        m_robotContainer.shootingSubsystem.stopMotor();
+        m_robotContainer.shootingArmSubsystem.stopMotor();
+        m_robotContainer.transferSubsystem.stopMotor();
     }
     
     @Override
