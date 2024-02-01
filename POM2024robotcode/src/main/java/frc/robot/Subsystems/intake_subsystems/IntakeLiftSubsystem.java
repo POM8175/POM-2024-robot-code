@@ -25,6 +25,8 @@ public class IntakeLiftSubsystem extends PomSubsystem{
         pid = new PIDController(KP, KI, KD);
         pid.setTolerance(TOLERANCE);
         motor.clearStickyFaults();
+        pid.setSetpoint(FOLD);
+        setDefaultCommand(this.runOnce(() -> stopMotor()));
     }
 
     public void setArmSup(BooleanSupplier sup)
@@ -37,6 +39,14 @@ public class IntakeLiftSubsystem extends PomSubsystem{
         return () -> !((encoder.getDistance() > 0 + TOLERANCE && pid.getSetpoint()  == FOLD) || (encoder.getDistance() < GROUND - TOLERANCE + TOLERANCE && pid.getSetpoint()  == GROUND));
     }
 
+    public boolean isOpen()
+    {
+        return getEncoderPosition() > GROUND / 5 * 4 && pid.getSetpoint() == GROUND;
+    }
+    public boolean isClosed()
+    {
+        return getEncoderPosition() < GROUND / 5 && pid.getSetpoint() == FOLD;
+    }
     @Override
     public void stopMotor()
     {
