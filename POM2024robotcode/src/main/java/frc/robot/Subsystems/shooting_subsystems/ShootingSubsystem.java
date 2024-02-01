@@ -29,7 +29,7 @@ public class ShootingSubsystem extends PomSubsystem {
        rightEncoder.setVelocityConversionFactor(ROTATIONS_TO_METERS);
        leftEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
        shooterMotorLeft.follow(shooterMotorRight, true);
-       
+       setDefaultCommand(this.runOnce(() -> stopMotor()));
    }
    public void periodic(){
 
@@ -56,6 +56,11 @@ public class ShootingSubsystem extends PomSubsystem {
     public Command spinWheelsToSpeedCommand(double speed)
     {
         return new StartEndCommand(() -> setMotor(speed), null, this).until(() -> getRate() >= speed); 
+    }
+
+    public Command stopWheelsCommand()
+    {
+        return this.runOnce(() -> stopMotor());
     }
 
         
