@@ -4,6 +4,7 @@ import static frc.robot.Constants.IntakeConstants.*;
 
 import java.util.function.BooleanSupplier;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -25,6 +26,7 @@ public class IntakeLiftSubsystem extends PomSubsystem{
         pid = new PIDController(KP, KI, KD);
         pid.setTolerance(TOLERANCE);
         motor.clearStickyFaults();
+        motor.setNeutralMode(NeutralMode.Coast);
         pid.setSetpoint(FOLD);
         setDefaultCommand(this.runOnce(() -> stopMotor()));
     }

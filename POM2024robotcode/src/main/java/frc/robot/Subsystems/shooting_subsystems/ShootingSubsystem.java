@@ -6,6 +6,7 @@ import static frc.robot.Constants.ShootingConstants.*;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,6 +30,8 @@ public class ShootingSubsystem extends PomSubsystem {
        rightEncoder.setVelocityConversionFactor(ROTATIONS_TO_METERS);
        leftEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
        shooterMotorLeft.follow(shooterMotorRight, true);
+       shooterMotorLeft.setIdleMode(IdleMode.kCoast);
+       shooterMotorRight.setIdleMode(IdleMode.kCoast);
        setDefaultCommand(this.runOnce(() -> stopMotor()));
    }
    public void periodic(){

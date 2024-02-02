@@ -1,5 +1,6 @@
 package frc.robot.Subsystems.intake_subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,6 +26,8 @@ public class IntakeRollerSubsystem extends PomSubsystem
     {
         // setting rollerMotorSlave to follow rollerMotor
         rollerMotorSlave.follow(rollerMotor);
+        rollerMotor.setNeutralMode(NeutralMode.Brake);
+        rollerMotorSlave.setNeutralMode(NeutralMode.Brake);
         setDefaultCommand(this.runOnce(() -> stopMotor()));
     }
     // the subsystems functions

@@ -9,6 +9,7 @@ import java.util.function.BooleanSupplier;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -50,6 +51,8 @@ public class ShootingArmSubsystem extends PomSubsystem{
     pid.setIZone(KIZONE, 0);
     foldMicroSwitch = new DigitalInput(FOLD_MICRO_SWITCH_ID);
     groundMicroSwitch = new DigitalInput(FULL_MICRO_SWITCH_ID);
+
+    liftMotor.setIdleMode(IdleMode.kBrake); // check
 
     SmartDashboard.putNumber("arm encoder", encoder.getPosition());
 

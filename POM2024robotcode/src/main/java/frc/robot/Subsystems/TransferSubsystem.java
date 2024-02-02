@@ -3,6 +3,7 @@ package frc.robot.Subsystems;
 import static frc.robot.Constants.TransferConstants.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
@@ -30,6 +31,7 @@ public class TransferSubsystem extends PomSubsystem
         // adding collors to the dataset of m_colorMatcher
         for(int i = 0;i<notNoteColors.length;i++) m_colorMatcher.addColorMatch(notNoteColors[i]);
         m_colorMatcher.addColorMatch(noteColor);
+        transferMotor.setNeutralMode(NeutralMode.Brake);
         setDefaultCommand(this.runOnce(() -> stopMotor()));
     }
 
