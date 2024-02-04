@@ -143,9 +143,10 @@ public class Constants {
         public static final double SHOOT_TO_WING_SPEED = 0.8;
 
         public static final double INTAKE_CAN_MOVE = 0;
-        public static final double GET_FROM_INTAKE_POS = 0;
-
-
+        public static final double GET_FROM_INTAKE_POS = 1;
+        public static final double SHOOT_SUB_POS = 2;
+        public static final double SHOOT_PODIUM_POS = 3;
+        public static final double SHOOT_AMP_POS = 4;
     }
 
     public static final class TransferConstants
