@@ -112,7 +112,7 @@ public class Constants {
         
         public static final int SHOOTER_ARM_MOTOR = 7;
         public static final int FOLD_MICRO_SWITCH_ID = 3;
-        public static final int FULL_MICRO_SWITCH_ID = 40;
+        public static final int FULL_MICRO_SWITCH_ID = 4;
         
         public static final double KP = 0.0124;
         public static final double KI = 0.0;
