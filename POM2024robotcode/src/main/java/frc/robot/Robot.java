@@ -47,17 +47,32 @@ public class Robot extends TimedRobot {
      * Converts a raw optical inverse-square reading into a fitted, calibrated linear reading in
      * INCHES.
      */
+    
 
+    //Field Log Entries
     DoubleLogEntry Xpose;
     DoubleLogEntry Ypose;
     DoubleLogEntry Rotpose;
     DoubleArrayLogEntry pose;
     double[] posearr = new double[3];
+    
+
+    //Drive Log Entries
+    DoubleLogEntry leftEncoderVelocity;
+    DoubleLogEntry leftEncoderPosition;
+    DoubleLogEntry rightEncoderVelocity;
+    DoubleLogEntry rightEncoderPosition;
+
+    //Intake Log Entries
+    BooleanLogEntry NoteIn;
+    DoubleLogEntry Red;    
+    DoubleLogEntry Green;    
+    DoubleLogEntry Blue;    
+    
 
     BooleanLogEntry Abutton;
     private Command m_autonomousCommand;
 
-    BooleanLogEntry IsNoteIn;
 
     private RobotContainer m_robotContainer;
     DataLog log = DataLogManager.getLog();
@@ -95,6 +110,13 @@ public class Robot extends TimedRobot {
         posearr[1] = m_robotContainer.driveSubsystem.getPose().getY();
         posearr[2] = m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees();
 
+        //Drive
+        leftEncoderVelocity = new DoubleLogEntry(log, "Drive/Encoder/LeftEncoder/Velocity");
+        leftEncoderPosition = new DoubleLogEntry(log, "Drive/Encoder/LeftEncoder/Position");
+        rightEncoderVelocity = new DoubleLogEntry(log, "Drive/Encoder/RightEncoder/Velocity");
+        rightEncoderPosition = new DoubleLogEntry(log, "Drive/Encoder/RightEncoder/Position");
+
+
         //Joystick
         Abutton = new BooleanLogEntry(log,"Abtn");
         Abutton.append(m_robotContainer.operateJoystick.getRawButton(A));
@@ -103,8 +125,10 @@ public class Robot extends TimedRobot {
         
         // Intake
 
-        IsNoteIn = new BooleanLogEntry(log, "Intake/IsNoteIn");
-        //IsNoteIn.append(m_robotContainer.intakeRollerSubsystem.isNoteIn());
+        NoteIn = new BooleanLogEntry(log, "Intake/IsNoteIn");
+        Red = new DoubleLogEntry(log, "Intake/Color/Red");
+        Green= new DoubleLogEntry(log, "Intake/Color/Green");
+        Blue= new DoubleLogEntry(log, "Intake/Color/Blue");
         
 //Leds
         // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());
@@ -116,13 +140,6 @@ public class Robot extends TimedRobot {
     }
 
 
-    ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        Runnable task = () -> {
-            posearr[0] = m_robotContainer.driveSubsystem.getPose().getX();
-            posearr[1] = m_robotContainer.driveSubsystem.getPose().getY();
-            posearr[2] = m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees();
-            pose.append(posearr);
-        };
     /**
     * This function is called every robot packet, no matter the mode. Use this for items like
     * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
@@ -187,7 +204,6 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {  
             m_autonomousCommand.cancel();
         }
-        executor.scheduleAtFixedRate(task, 0, 3, TimeUnit.SECONDS);
     }
 
     /**
@@ -198,18 +214,26 @@ public class Robot extends TimedRobot {
         // Uncomment This To GO RAINBOW
         // m_robotContainer.ledSubsystem.rainbow();
 
-        //Pose Tab
-        SmartDashboard.putNumber("Pose/Pose X Value", m_robotContainer.driveSubsystem.getPose().getX());
-        SmartDashboard.putNumber("Pose/Pose Y Value", m_robotContainer.driveSubsystem.getPose().getY());
-        SmartDashboard.putNumber("Pose/Pose Rotation Value", m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees());
+        //Field
+        SmartDashboard.putNumber("Field/Pose X Value", m_robotContainer.driveSubsystem.getPose().getX());
+        SmartDashboard.putNumber("Field/Pose Y Value", m_robotContainer.driveSubsystem.getPose().getY());
+        SmartDashboard.putNumber("Field/Pose Rotation Value", m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees());
 
-
-        //Encoder Tab
+        posearr[0] = m_robotContainer.driveSubsystem.getPose().getX();
+        posearr[1] = m_robotContainer.driveSubsystem.getPose().getY();
+        posearr[2] = m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees();
+        pose.append(posearr);
+        //Drive
         SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Velocity",m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity());
         SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Velocity",m_robotContainer.driveSubsystem.getRightEncoder().getVelocity());
         SmartDashboard.putNumber("Drive/Encoder/LeftEncoder", m_robotContainer.driveSubsystem.getLeftEncoder().getPosition());
         SmartDashboard.putNumber("Drive/Encoder/RightEncoder", m_robotContainer.driveSubsystem.getRightEncoder().getPosition());
         SmartDashboard.putNumber("Drive/Encoder", m_robotContainer.driveSubsystem.getEncoderPosition());
+        
+        leftEncoderVelocity.append(m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity()); 
+        rightEncoderVelocity.append(m_robotContainer.driveSubsystem.getRightEncoder().getVelocity());
+        leftEncoderPosition.append(m_robotContainer.driveSubsystem.getLeftEncoder().getPosition());
+        rightEncoderPosition.append(m_robotContainer.driveSubsystem.getRightEncoder().getPosition());
 
 
         //Intake Tab
@@ -217,9 +241,11 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Transfer/Color/Green", m_robotContainer.transferSubsystem.colorSensor.getGreen());
         SmartDashboard.putNumber("Transfer/Color/Blue", m_robotContainer.transferSubsystem.colorSensor.getBlue());
         SmartDashboard.putString("Transfer/Color/Color",m_robotContainer.transferSubsystem.colorSensor.getColor().toHexString());
-        //SmartDashboard.putNumber("Intake/Color/Dist",));
-        SmartDashboard.putNumber("Transfer/Color/Dist(no Map)",m_robotContainer.transferSubsystem.colorSensor.getProximity());
         SmartDashboard.putBoolean("Transfer/Color/IsNoteIn",m_robotContainer.transferSubsystem.isNoteIn());
+        NoteIn.append(m_robotContainer.transferSubsystem.isNoteIn());
+        Red.append(m_robotContainer.transferSubsystem.colorSensor.getRed());
+        Green.append(m_robotContainer.transferSubsystem.colorSensor.getGreen());
+        Blue.append(m_robotContainer.transferSubsystem.colorSensor.getBlue());
 
         // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());        
 

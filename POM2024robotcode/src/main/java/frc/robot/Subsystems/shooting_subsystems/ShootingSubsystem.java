@@ -34,17 +34,14 @@ public class ShootingSubsystem extends PomSubsystem {
        shooterMotorRight.setIdleMode(IdleMode.kCoast);
        setDefaultCommand(this.runOnce(() -> stopMotor()));
    }
-   public void periodic(){
-
-    Shuffleboard.getTab("Shooter").addNumber("Shooter Velocity", () -> getRate());
-
-   }
+   
 
     @Override
     public void setMotor(double speed) {
         shooterMotorRight.set(speed);
     }
 
+    
     public double getRate() {
 
         return (rightEncoder.getVelocity()+leftEncoder.getVelocity())/2;
@@ -54,11 +51,11 @@ public class ShootingSubsystem extends PomSubsystem {
 
     public Command spinWheelsCommand()
     {
-        return new StartEndCommand(() -> setMotor(SHOOT_SPEED), null, this).until(() -> getRate() >= SHOOT_SPEED);
+        return new StartEndCommand(() -> setMotor(SHOOT_SPEED), () -> {}, this).until(() -> getRate() >= SHOOT_SPEED);
     }
     public Command spinWheelsToSpeedCommand(double speed)
     {
-        return new StartEndCommand(() -> setMotor(speed), null, this).until(() -> getRate() >= speed); 
+        return new StartEndCommand(() -> setMotor(speed), () -> {}, this).until(() -> getRate() >= speed); 
     }
 
     public Command stopWheelsCommand()
