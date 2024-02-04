@@ -18,6 +18,7 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     Encoder encoder;
     PIDController pid;
     private BooleanSupplier armIsThere;
+    boolean open = false;
 
     public IntakeLiftSubsystem()
     {
@@ -29,6 +30,16 @@ public class IntakeLiftSubsystem extends PomSubsystem{
         motor.setNeutralMode(NeutralMode.Coast);
         pid.setSetpoint(FOLD);
         setDefaultCommand(this.runOnce(() -> stopMotor()));
+    }
+
+    public boolean isIntakeOpen()
+    {
+        return open;
+    }
+
+    public boolean atSetpoint()
+    {
+        return pid.atSetpoint();
     }
 
     public void setArmSup(BooleanSupplier sup)
@@ -75,6 +86,7 @@ public class IntakeLiftSubsystem extends PomSubsystem{
 
     public Command OpenCloseIntake(boolean open)
     {
+        this.open = open;
         pid.setSetpoint(open ? GROUND : FOLD);
         return( new RunCommand(() -> setMotor(pid.calculate(encoder.getDistance())), this).until(() -> pid.atSetpoint()).andThen(this.runOnce(() -> stopMotor()))).unless(armIsThere);
     }
