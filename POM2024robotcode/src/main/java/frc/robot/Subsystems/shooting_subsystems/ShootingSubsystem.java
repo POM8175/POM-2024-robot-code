@@ -40,6 +40,11 @@ public class ShootingSubsystem extends PomSubsystem {
 
    }
 
+   public boolean atWantedSpeed()
+   {
+    return getRate() >= shooterMotorLeft.getAppliedOutput();
+   }
+
     @Override
     public void setMotor(double speed) {
         shooterMotorRight.set(speed);
