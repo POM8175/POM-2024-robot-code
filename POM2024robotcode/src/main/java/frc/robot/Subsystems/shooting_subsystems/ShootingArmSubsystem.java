@@ -20,6 +20,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Subsystems.PomSubsystem;
 
 public class ShootingArmSubsystem extends PomSubsystem{
+
+  enum State{
+    OpenForIntake,
+    TakeFromIntake,
+    AutoForShoot,
+    AMP,
+    ShootFromSub,
+    ShootFromPodium,
+    Unkown
+  }
+
+    private State state = State.Unkown;
     private final CANSparkMax liftMotor;
     private final RelativeEncoder encoder;
     private SparkPIDController pid;
@@ -74,6 +86,27 @@ public class ShootingArmSubsystem extends PomSubsystem{
     {
       //liftMotor.getEncoder().setPosition(GROUND);
     }
+
+    switch ((int)controller.getSetpoint().position) {
+      case (int)INTAKE_CAN_MOVE:
+        state = State.OpenForIntake;
+        break;
+      case (int)GET_FROM_INTAKE_POS:
+        state = State.TakeFromIntake;
+        break;
+      case (int)SHOOT_SUB_POS:
+        state = State.ShootFromSub;
+        break;
+      case (int)SHOOT_PODIUM_POS:
+        state = State.ShootFromPodium;
+        break;
+      case (int)SHOOT_AMP_POS:
+        state = State.AMP;
+        break;
+      default:
+        state = State.Unkown;
+        break;
+    }
   }
 
   public void setIntakeSup(BooleanSupplier sup)
@@ -93,6 +126,16 @@ public class ShootingArmSubsystem extends PomSubsystem{
    */
   public boolean isGroundSwitchPressed(){
     return !groundMicroSwitch.get();
+  }
+
+  public State getState()
+  {
+    return state;
+  }
+
+  public boolean atSetpoint()
+  {
+    return controller.atSetpoint();
   }
 
   /** Resets the encoder to currently read a position of 0. */
