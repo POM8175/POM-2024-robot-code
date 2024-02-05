@@ -15,11 +15,7 @@ package frc.robot;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 
-import static frc.robot.Constants.JoystickConstants.A;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -49,28 +45,8 @@ public class Robot extends TimedRobot {
      */
     
 
-    //Field Log Entries
-    DoubleLogEntry Xpose;
-    DoubleLogEntry Ypose;
-    DoubleLogEntry Rotpose;
-    DoubleArrayLogEntry pose;
-    double[] posearr = new double[3];
     
 
-    //Drive Log Entries
-    DoubleLogEntry leftEncoderVelocity;
-    DoubleLogEntry leftEncoderPosition;
-    DoubleLogEntry rightEncoderVelocity;
-    DoubleLogEntry rightEncoderPosition;
-
-    //Intake Log Entries
-    BooleanLogEntry NoteIn;
-    DoubleLogEntry Red;    
-    DoubleLogEntry Green;    
-    DoubleLogEntry Blue;    
-    
-
-    BooleanLogEntry Abutton;
     private Command m_autonomousCommand;
 
 
@@ -78,14 +54,6 @@ public class Robot extends TimedRobot {
     DataLog log = DataLogManager.getLog();
     
 
-    // Color Sensor
-    // public I2C.Port i2cPort =  I2C.Port.kOnboard;
-    // public  ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
-
-    // private final ColorMatch m_colorMatcher = new ColorMatch();
-    // ColorMatchResult match;
-    // final Color noteColor = new Color(130, 98, 26);
-    // final Color blueColor = new Color(54, 113, 86);
 
     public void robotInit() {
 
@@ -98,44 +66,7 @@ public class Robot extends TimedRobot {
         // colorSensor.configureColorSensor(ColorSensorResolution.kColorSensorRes20bit, ColorSensorMeasurementRate.kColorRate25ms, GainFactor.kGain9x);
                 DataLogManager.start();
 
-        // Pose
-        Xpose = new DoubleLogEntry(log, "/Pose/X");
-        Ypose = new DoubleLogEntry(log, "/Pose/Y");
-        Rotpose = new DoubleLogEntry(log, "/Pose/Rot");
-        pose = new DoubleArrayLogEntry(log, "Pose");
-        Xpose.append(m_robotContainer.driveSubsystem.getPose().getX());
-        Ypose.append(m_robotContainer.driveSubsystem.getPose().getY());
-        Rotpose.append(m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees());
-        posearr[0] = m_robotContainer.driveSubsystem.getPose().getX();
-        posearr[1] = m_robotContainer.driveSubsystem.getPose().getY();
-        posearr[2] = m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees();
 
-        //Drive
-        leftEncoderVelocity = new DoubleLogEntry(log, "Drive/Encoder/LeftEncoder/Velocity");
-        leftEncoderPosition = new DoubleLogEntry(log, "Drive/Encoder/LeftEncoder/Position");
-        rightEncoderVelocity = new DoubleLogEntry(log, "Drive/Encoder/RightEncoder/Velocity");
-        rightEncoderPosition = new DoubleLogEntry(log, "Drive/Encoder/RightEncoder/Position");
-
-
-        //Joystick
-        Abutton = new BooleanLogEntry(log,"Abtn");
-        Abutton.append(m_robotContainer.operateJoystick.getRawButton(A));
-
-        pose.append(posearr);
-        
-        // Intake
-
-        NoteIn = new BooleanLogEntry(log, "Intake/IsNoteIn");
-        Red = new DoubleLogEntry(log, "Intake/Color/Red");
-        Green= new DoubleLogEntry(log, "Intake/Color/Green");
-        Blue= new DoubleLogEntry(log, "Intake/Color/Blue");
-        
-//Leds
-        // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());
-        
-
-        
-        // Color Sensor
         
     }
 
@@ -214,15 +145,15 @@ public class Robot extends TimedRobot {
         // Uncomment This To GO RAINBOW
         // m_robotContainer.ledSubsystem.rainbow();
 
+        
+       
+
         //Field
         SmartDashboard.putNumber("Field/Pose X Value", m_robotContainer.driveSubsystem.getPose().getX());
         SmartDashboard.putNumber("Field/Pose Y Value", m_robotContainer.driveSubsystem.getPose().getY());
         SmartDashboard.putNumber("Field/Pose Rotation Value", m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees());
 
-        posearr[0] = m_robotContainer.driveSubsystem.getPose().getX();
-        posearr[1] = m_robotContainer.driveSubsystem.getPose().getY();
-        posearr[2] = m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees();
-        pose.append(posearr);
+
         //Drive
         SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Velocity",m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity());
         SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Velocity",m_robotContainer.driveSubsystem.getRightEncoder().getVelocity());
@@ -230,10 +161,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Drive/Encoder/RightEncoder", m_robotContainer.driveSubsystem.getRightEncoder().getPosition());
         SmartDashboard.putNumber("Drive/Encoder", m_robotContainer.driveSubsystem.getEncoderPosition());
         
-        leftEncoderVelocity.append(m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity()); 
-        rightEncoderVelocity.append(m_robotContainer.driveSubsystem.getRightEncoder().getVelocity());
-        leftEncoderPosition.append(m_robotContainer.driveSubsystem.getLeftEncoder().getPosition());
-        rightEncoderPosition.append(m_robotContainer.driveSubsystem.getRightEncoder().getPosition());
+      
 
 
         //Intake Tab
@@ -242,10 +170,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Transfer/Color/Blue", m_robotContainer.transferSubsystem.colorSensor.getBlue());
         SmartDashboard.putString("Transfer/Color/Color",m_robotContainer.transferSubsystem.colorSensor.getColor().toHexString());
         SmartDashboard.putBoolean("Transfer/Color/IsNoteIn",m_robotContainer.transferSubsystem.isNoteIn());
-        NoteIn.append(m_robotContainer.transferSubsystem.isNoteIn());
-        Red.append(m_robotContainer.transferSubsystem.colorSensor.getRed());
-        Green.append(m_robotContainer.transferSubsystem.colorSensor.getGreen());
-        Blue.append(m_robotContainer.transferSubsystem.colorSensor.getBlue());
+
 
         // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());        
 
