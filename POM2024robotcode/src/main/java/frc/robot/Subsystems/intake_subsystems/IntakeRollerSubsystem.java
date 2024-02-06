@@ -54,6 +54,9 @@ public class IntakeRollerSubsystem extends PomSubsystem
         rollerMotor.set(VictorSPXControlMode.PercentOutput,speed);
     }
 
+
+    
+
     // a boolean function that checks if the color sensor sees a note
 
     // the subsystems commands

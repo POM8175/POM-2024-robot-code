@@ -21,6 +21,7 @@ import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.util.datalog.*;
@@ -104,6 +105,9 @@ public class Robot extends TimedRobot {
     
     @Override
     public void disabledPeriodic() {
+
+
+
     }
     
     /**
@@ -170,8 +174,13 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Transfer/Color/Blue", m_robotContainer.transferSubsystem.colorSensor.getBlue());
         SmartDashboard.putString("Transfer/Color/Color",m_robotContainer.transferSubsystem.colorSensor.getColor().toHexString());
         SmartDashboard.putBoolean("Transfer/Color/IsNoteIn",m_robotContainer.transferSubsystem.isNoteIn());
+        SmartDashboard.putNumber("Intake/Lift/Encoder Position", m_robotContainer.intakeLiftSubsystem.getEncoderPosition());
 
 
+        //Shooting Tab
+        SmartDashboard.putNumber("Arm/Encoder Position", m_robotContainer.shootingArmSubsystem.getEncoderPosition());
+        SmartDashboard.putBoolean("Arm/Intake Can Move", m_robotContainer.shootingArmSubsystem.intakeCanMove().getAsBoolean());
+        SmartDashboard.putBoolean("Arm/Intake Can Move", m_robotContainer.shootingArmSubsystem.intakeCanMove().getAsBoolean());
         // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());        
 
 

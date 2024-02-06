@@ -14,6 +14,14 @@
       "ypos": "45"
     }
   },
+  "Table": {
+    "0xE56EC1C2,4": {
+      "Column 0  Weight": "1.0000",
+      "Column 1  Weight": "1.0000",
+      "Column 2  Weight": "1.0000",
+      "Column 3  Weight": "1.0000"
+    }
+  },
   "Window": {
     "###Addressable LEDs": {
       "Collapsed": "0",
@@ -22,8 +30,8 @@
     },
     "###FMS": {
       "Collapsed": "0",
-      "Pos": "90,770",
-      "Size": "235,244"
+      "Pos": "58,775",
+      "Size": "388,176"
     },
     "###Joysticks": {
       "Collapsed": "0",
@@ -37,7 +45,7 @@
     },
     "###NetworkTables Info": {
       "Collapsed": "0",
-      "Pos": "345,73",
+      "Pos": "345,76",
       "Size": "1125,186"
     },
     "###Other Devices": {
