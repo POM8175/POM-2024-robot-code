@@ -1,7 +1,6 @@
 package frc.robot.Subsystems.shooting_subsystems;
 
 
-import static frc.robot.Constants.DriveConstants.ROTATIONS_TO_METERS;
 import static frc.robot.Constants.ShootingConstants.*;
 
 import com.revrobotics.CANSparkMax;
@@ -9,7 +8,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.Subsystems.PomSubsystem;
 
 public class ShootingSubsystem extends PomSubsystem {
@@ -26,8 +24,8 @@ public class ShootingSubsystem extends PomSubsystem {
 
 
    public ShootingSubsystem(){
-       rightEncoder.setVelocityConversionFactor(ROTATIONS_TO_METERS);
-       leftEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
+       rightEncoder.setVelocityConversionFactor(1);
+       leftEncoder.setPositionConversionFactor(1);
        shooterMotorLeft.follow(shooterMotorRight, true);
        shooterMotorLeft.setIdleMode(IdleMode.kCoast);
        shooterMotorRight.setIdleMode(IdleMode.kCoast);
@@ -55,11 +53,11 @@ public class ShootingSubsystem extends PomSubsystem {
 
     public Command spinWheelsCommand()
     {
-        return new StartEndCommand(() -> setMotor(SHOOT_SPEED), () -> {}, this).until(() -> getRate() >= SHOOT_SPEED);
+        return this.startEnd(() -> setMotor(SHOOT_SPEED), () -> {}).until(() -> getRate() >= SHOOT_SPEED - SHOOT_SPEED_TOLERANCE);
     }
     public Command spinWheelsToSpeedCommand(double speed)
     {
-        return new StartEndCommand(() -> setMotor(speed), () -> {}, this).until(() -> getRate() >= speed); 
+        return this.startEnd(() -> setMotor(speed), () -> {}).until(() -> getRate() >= speed - SHOOT_SPEED_TOLERANCE); 
     }
 
     public Command stopWheelsCommand()
