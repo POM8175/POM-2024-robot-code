@@ -102,6 +102,8 @@ public class Constants {
 
         public static final int TL = 6;
         public static final int BOT_POSE_LEN = 7;
+        public static final double SPEAKER_Y = 5.5;
+        public static final double FIELD_X = 16;
         
     }
 
