@@ -1,18 +1,20 @@
 package frc.robot.Subsystems.shooting_subsystems;
 
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import static frc.robot.Constants.ShootingConstants.*;
 
-import java.util.function.BooleanSupplier;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
+
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,7 +28,6 @@ public class ShootingArmSubsystem extends PomSubsystem{
     TakeFromIntake,
     AutoForShoot,
     AMP,
-    ShootFromSub,
     ShootFromPodium,
     Unkown
   }
@@ -36,7 +37,6 @@ public class ShootingArmSubsystem extends PomSubsystem{
     private final RelativeEncoder encoder;
     private SparkPIDController pid;
     private DigitalInput foldMicroSwitch;
-    private DigitalInput groundMicroSwitch;
     private BooleanSupplier intakeIsThere;
     //ShuffleboardTab liftTab = Shuffleboard.getTab("lift");
       private final ArmFeedforward m_feedforward =
@@ -62,7 +62,6 @@ public class ShootingArmSubsystem extends PomSubsystem{
     pid.setD(KD, 0);
     pid.setIZone(KIZONE, 0);
     foldMicroSwitch = new DigitalInput(FOLD_MICRO_SWITCH_ID);
-    groundMicroSwitch = new DigitalInput(FULL_MICRO_SWITCH_ID);
 
     liftMotor.setIdleMode(IdleMode.kBrake); // check
 
@@ -77,25 +76,18 @@ public class ShootingArmSubsystem extends PomSubsystem{
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("arm encoder", liftMotor.getEncoder().getPosition());
     SmartDashboard.putBoolean("arm fold limit switch", isFoldSwitchPressed());
-    SmartDashboard.putBoolean("arm ground limit switch", isGroundSwitchPressed());
     if(isFoldSwitchPressed())
     {
       resetEncoder();
     }
-    if(isGroundSwitchPressed())
-    {
-      //liftMotor.getEncoder().setPosition(GROUND);
-    }
+
 
     switch ((int)controller.getSetpoint().position) {
       case (int)INTAKE_CAN_MOVE:
         state = State.OpenForIntake;
         break;
-      case (int)GET_FROM_INTAKE_POS:
+      case (int)SUB_INTAKE_POS:
         state = State.TakeFromIntake;
-        break;
-      case (int)SHOOT_SUB_POS:
-        state = State.ShootFromSub;
         break;
       case (int)SHOOT_PODIUM_POS:
         state = State.ShootFromPodium;
@@ -119,13 +111,6 @@ public class ShootingArmSubsystem extends PomSubsystem{
    */
   public boolean isFoldSwitchPressed(){
     return !foldMicroSwitch.get();
-  }
-
-    /** returns is the ground switch pressed
-   * @return the ground limit switch value
-   */
-  public boolean isGroundSwitchPressed(){
-    return !groundMicroSwitch.get();
   }
 
   public State getState()
@@ -209,9 +194,18 @@ public class ShootingArmSubsystem extends PomSubsystem{
     return () -> encoder.getPosition() >= INTAKE_CAN_MOVE && controller.getSetpoint().position > INTAKE_CAN_MOVE;
   }
 
+  public double calcArmPosForShoot(Supplier<Pose2d> curr)
+  {
+    return 0;
+  }
+
   public Command goToAngleCommand(TrapezoidProfile.State goal)
   {
     return this.run(() -> moveWithProfile(goal)).until(()-> controller.atGoal()).unless(() -> goal.position < INTAKE_CAN_MOVE && intakeIsThere.getAsBoolean());
+  }
+  public Command goToAngleCommand(double goal)
+  {
+    return goToAngleCommand(new TrapezoidProfile.State(goal, 0));
   }
   public Command OpenForIntakeCommand()
   {
