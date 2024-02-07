@@ -86,7 +86,7 @@ public class Constants {
         public static final double KD = 0;
     
         public static final double KP_DRIVE_VEL = 0.002;
-        public static final double KTRACK_WIDTH_METERS = 0.54;
+        public static final double KTRACK_WIDTH_METERS = 0.555;
         public static final DifferentialDriveKinematics DRIVE_KINEMATICS =
             new DifferentialDriveKinematics(KTRACK_WIDTH_METERS);
     
