@@ -66,6 +66,7 @@ public class DriveSubsystem extends PomSubsystem {
               VecBuilder.fill(0.1, 0.1, 0.15));
 
   double [] botPose = new double[BOT_POSE_LEN];
+
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
 
@@ -309,5 +310,11 @@ public class DriveSubsystem extends PomSubsystem {
     
   }
 
+
+  public double calcAngleToSpeaker()
+  {
+      return Math.atan((getPose().getY() - SPEAKER_Y) / 
+      (DriverStation.getAlliance().get() == Alliance.Red ? getPose().getX() : FIELD_X - getPose().getX()));
+  }
 }
 
