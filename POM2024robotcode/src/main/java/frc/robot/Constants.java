@@ -86,7 +86,7 @@ public class Constants {
         public static final double KD = 0;
     
         public static final double KP_DRIVE_VEL = 0.002;
-        public static final double KTRACK_WIDTH_METERS = 0.54;
+        public static final double KTRACK_WIDTH_METERS = 0.555;
         public static final DifferentialDriveKinematics DRIVE_KINEMATICS =
             new DifferentialDriveKinematics(KTRACK_WIDTH_METERS);
     
@@ -102,6 +102,8 @@ public class Constants {
 
         public static final int TL = 6;
         public static final int BOT_POSE_LEN = 7;
+        public static final double SPEAKER_Y = 5.5;
+        public static final double FIELD_X = 16;
         
     }
 
@@ -140,11 +142,11 @@ public class Constants {
         public static final double TOLERANCE = 0;
         
         public static final double SHOOT_SPEED = 0.5;
+        public static final double SHOOT_SPEED_TOLERANCE = 0.05;
         public static final double SHOOT_TO_WING_SPEED = 0.8;
 
         public static final double INTAKE_CAN_MOVE = 0;
-        public static final double GET_FROM_INTAKE_POS = 1;
-        public static final double SHOOT_SUB_POS = 2;
+        public static final double SUB_INTAKE_POS = 1;
         public static final double SHOOT_PODIUM_POS = 3;
         public static final double SHOOT_AMP_POS = 4;
     }

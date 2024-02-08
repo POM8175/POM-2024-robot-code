@@ -11,7 +11,6 @@ import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class TransferSubsystem extends PomSubsystem
@@ -56,10 +55,10 @@ public class TransferSubsystem extends PomSubsystem
     // the subsystems commands
     public Command getFromIntake()
     {
-        return new StartEndCommand(() -> setMotor(TRANSFER_SPEED), () -> stopMotor()).until(() -> !isNoteIn());
+        return this.startEnd(() -> setMotor(TRANSFER_SPEED), () -> stopMotor()).until(() -> isNoteIn());
     }
     public Command transfer(boolean isToShooter)
     {
-        return new StartEndCommand(() -> setMotor(isToShooter ? TRANSFER_SPEED : -TRANSFER_SPEED), () -> setMotor(isToShooter ? TRANSFER_SPEED : -TRANSFER_SPEED), this).until(() -> !isNoteIn()).andThen(new WaitCommand(TRANSFER_TIME_OUT)).andThen(() -> stopMotor(), this);
+        return this.startEnd(() -> setMotor(isToShooter ? TRANSFER_SPEED : -TRANSFER_SPEED), () -> setMotor(isToShooter ? TRANSFER_SPEED : -TRANSFER_SPEED)).until(() -> !isNoteIn()).andThen(new WaitCommand(TRANSFER_TIME_OUT)).andThen(() -> stopMotor(), this);
     }
 }
