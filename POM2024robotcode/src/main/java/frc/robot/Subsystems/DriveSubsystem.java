@@ -1,12 +1,27 @@
 package frc.robot.Subsystems;
 
-import static frc.robot.Constants.DriveConstants.*;
+import static frc.robot.Constants.DriveConstants.BOT_POSE_LEN;
+import static frc.robot.Constants.DriveConstants.DRIVE_KINEMATICS;
+import static frc.robot.Constants.DriveConstants.FIELD_X;
+import static frc.robot.Constants.DriveConstants.GYRO_ID;
+import static frc.robot.Constants.DriveConstants.KD;
+import static frc.robot.Constants.DriveConstants.KI;
+import static frc.robot.Constants.DriveConstants.KP;
+import static frc.robot.Constants.DriveConstants.LEFT_MOTOR_LEAD;
+import static frc.robot.Constants.DriveConstants.LEFT_MOTOR_SLAVE;
+import static frc.robot.Constants.DriveConstants.RATE;
+import static frc.robot.Constants.DriveConstants.RIGHT_MOTOR_LEAD;
+import static frc.robot.Constants.DriveConstants.RIGHT_MOTOR_SLAVE;
+import static frc.robot.Constants.DriveConstants.ROTATIONS_TO_METERS;
+import static frc.robot.Constants.DriveConstants.SPEAKER_Y;
+import static frc.robot.Constants.DriveConstants.TL;
 
+import java.util.ArrayList;
 import java.util.function.Supplier;
 
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -16,9 +31,12 @@ import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelPositions;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -27,6 +45,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Commands.TrajectoryFactory;
 /**
  *
  */
@@ -55,6 +74,10 @@ public class DriveSubsystem extends PomSubsystem {
                                           leftEncoder.getPosition(), 
                                           rightEncoder.getPosition()
                                           );
+
+
+  double x = 0,y = 0;
+  boolean isNote = false;
 
   private final DifferentialDrivePoseEstimator poseEstimator = new DifferentialDrivePoseEstimator
               (DRIVE_KINEMATICS, 
@@ -132,6 +155,21 @@ public class DriveSubsystem extends PomSubsystem {
     odometry.update(mGyro.getRotation2d(), new DifferentialDriveWheelPositions(leftEncoder.getPosition(), rightEncoder.getPosition()));
     poseEstimator.update(mGyro.getRotation2d(), new DifferentialDriveWheelPositions(leftEncoder.getPosition(), rightEncoder.getPosition()));
     field.setRobotPose(getPose());
+
+    x = NetworkTableInstance.getDefault().getTable("Vision").getEntry("x").getDouble(0);
+    y = NetworkTableInstance.getDefault().getTable("Vision").getEntry("y").getDouble(0);
+    isNote = NetworkTableInstance.getDefault().getTable("Vision").getEntry("See?").getBoolean(false);
+    if(isNote)
+    {
+        Pose2d notePose = getPose().transformBy(new Transform2d(x,y, new Rotation2d(-Math.atan(x/y))));
+        field.getObject("note").setPose(notePose);
+    }
+    else{
+      x = 0;
+      y = 0;
+      field.getObject("note").setPose(new Pose2d(-100, -100, Rotation2d.fromDegrees(0)));
+    }
+
   }
 
   @Override
@@ -315,6 +353,17 @@ public class DriveSubsystem extends PomSubsystem {
   {
       return Math.atan((getPose().getY() - SPEAKER_Y) / 
       (DriverStation.getAlliance().get() == Alliance.Red ? getPose().getX() : FIELD_X - getPose().getX()));
+  }
+
+  public Trajectory driveToNoteTrajectory()
+  {
+
+    Pose2d notePose = getPose().transformBy(new Transform2d(x,y, new Rotation2d(-Math.atan(x/y))));
+    field.getObject("note").setPose(notePose);
+
+    Trajectory t = TrajectoryFactory.trajectoryFactory(getPose(), new ArrayList<Translation2d>(), notePose, false);
+    field.getObject("traj").setTrajectory(t);
+    return t;
   }
 }
 
