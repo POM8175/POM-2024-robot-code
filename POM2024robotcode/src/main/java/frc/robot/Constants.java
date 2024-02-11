@@ -159,6 +159,8 @@ public class Constants {
         public static final Color noteColor = new Color(130, 98, 26);
         public static final Color blueColor = new Color(54, 113, 86);
         public static final Color[] notNoteColors = new Color[]{new Color(54, 113, 86),
+            new Color(142, 110, 28),
+            new Color(118, 86, 14),
             new Color(66, 135, 245),
             new Color(15, 18, 15),
             new Color(100,30,70),
@@ -196,8 +198,8 @@ public class Constants {
         public static final int pRED = 0;
         public static final int pGREEN = 1;
         public static final int pBLUE = 2;
-        public static final int NUM_LEDS = 90;
-        public static final int LEFT_LED_PORT = 9;
+        public static final int NUM_LEDS = 180;
+        public static final int LED_PORT = 9;
         public static final int RIGHT_LED_PORT = 8;
         public static final Color POM_PURPLE = new Color(148, 0, 211);
     }

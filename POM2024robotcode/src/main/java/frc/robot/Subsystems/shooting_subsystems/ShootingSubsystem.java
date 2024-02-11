@@ -8,6 +8,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.GeneralFunctions;
 import frc.robot.Subsystems.PomSubsystem;
 
 public class ShootingSubsystem extends PomSubsystem {
@@ -35,7 +36,7 @@ public class ShootingSubsystem extends PomSubsystem {
 
    public boolean atWantedSpeed()
    {
-    return getRate() >= shooterMotorLeft.getAppliedOutput();
+    return GeneralFunctions.allowedError( getRate(), shooterMotorLeft.getAppliedOutput(), TOLERANCE);
    }
 
     @Override
