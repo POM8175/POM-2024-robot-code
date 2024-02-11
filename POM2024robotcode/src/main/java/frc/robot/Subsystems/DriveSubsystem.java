@@ -155,7 +155,7 @@ public class DriveSubsystem extends PomSubsystem {
     odometry.update(mGyro.getRotation2d(), new DifferentialDriveWheelPositions(leftEncoder.getPosition(), rightEncoder.getPosition()));
     poseEstimator.update(mGyro.getRotation2d(), new DifferentialDriveWheelPositions(leftEncoder.getPosition(), rightEncoder.getPosition()));
     field.setRobotPose(getPose());
-
+    
     x = NetworkTableInstance.getDefault().getTable("Vision").getEntry("x").getDouble(0);
     y = NetworkTableInstance.getDefault().getTable("Vision").getEntry("y").getDouble(0);
     isNote = NetworkTableInstance.getDefault().getTable("Vision").getEntry("See?").getBoolean(false);
@@ -351,8 +351,15 @@ public class DriveSubsystem extends PomSubsystem {
 
   public double calcAngleToSpeaker()
   {
+    try{
       return Math.atan((getPose().getY() - SPEAKER_Y) / 
       (DriverStation.getAlliance().get() == Alliance.Red ? getPose().getX() : FIELD_X - getPose().getX()));
+    }
+    catch(Exception e)
+    {
+      return 0;
+
+    }
   }
 
   public Trajectory driveToNoteTrajectory()

@@ -15,7 +15,7 @@ package frc.robot;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 
-
+import static frc.robot.Constants.DriveConstants.ANGLE_TOLERANCE;
 
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Subsystems.shooting_subsystems.ShootingArmSubsystem;
 import edu.wpi.first.util.datalog.*;
 
 
@@ -160,10 +161,10 @@ public class Robot extends TimedRobot {
         //Drive
         SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Velocity",m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity());
         SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Velocity",m_robotContainer.driveSubsystem.getRightEncoder().getVelocity());
-        SmartDashboard.putNumber("Drive/Encoder/LeftEncoder", m_robotContainer.driveSubsystem.getLeftEncoder().getPosition());
-        SmartDashboard.putNumber("Drive/Encoder/RightEncoder", m_robotContainer.driveSubsystem.getRightEncoder().getPosition());
-        SmartDashboard.putNumber("Drive/Encoder", m_robotContainer.driveSubsystem.getEncoderPosition());
-        
+        SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Position", m_robotContainer.driveSubsystem.getLeftEncoder().getPosition());
+        SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Position", m_robotContainer.driveSubsystem.getRightEncoder().getPosition());
+        SmartDashboard.putNumber("Drive/Encoder/Average Speed", (m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity() + m_robotContainer.driveSubsystem.getRightEncoder().getVelocity())/2);
+        SmartDashboard.putBoolean("Drive/Is Angle To Speaker", (m_robotContainer.driveSubsystem.calcAngleToSpeaker() < ANGLE_TOLERANCE));
       
 
 
@@ -178,8 +179,11 @@ public class Robot extends TimedRobot {
 
         //Shooting Tab
         SmartDashboard.putNumber("Arm/Encoder Position", m_robotContainer.shootingArmSubsystem.getEncoderPosition());
+        SmartDashboard.putNumber("Arm/Speed", m_robotContainer.shootingArmSubsystem.getEncoder().getVelocity());
         SmartDashboard.putBoolean("Arm/Intake Can Move", m_robotContainer.shootingArmSubsystem.intakeCanMove().getAsBoolean());
-        SmartDashboard.putBoolean("Arm/Intake Can Move", m_robotContainer.shootingArmSubsystem.intakeCanMove().getAsBoolean());
+        SmartDashboard.putBoolean("Arm/Limit Switch", m_robotContainer.shootingArmSubsystem.isFoldSwitchPressed());
+        SmartDashboard.putNumber("Shooting/Speed", m_robotContainer.shootingSubsystem.getRate());
+        SmartDashboard.putBoolean("Shooting/Is At Wanted Speed", isAutonomous());
         // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());        
 
 

@@ -17,7 +17,6 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Subsystems.PomSubsystem;
 
@@ -65,7 +64,6 @@ public class ShootingArmSubsystem extends PomSubsystem{
 
     liftMotor.setIdleMode(IdleMode.kBrake); // check
 
-    SmartDashboard.putNumber("arm encoder", encoder.getPosition());
 
     setDefaultCommand(goToAngleCommand(controller.getGoal()));
   }
@@ -74,8 +72,6 @@ public class ShootingArmSubsystem extends PomSubsystem{
   public void periodic() {
     //liftTab.add("arm encoder", liftMotor.getEncoder().getPosition()).withPosition(0, 0).withSize(1, 1).withWidget(BuiltInWidgets.kNumberSlider);
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("arm encoder", liftMotor.getEncoder().getPosition());
-    SmartDashboard.putBoolean("arm fold limit switch", isFoldSwitchPressed());
     if(isFoldSwitchPressed())
     {
       resetEncoder();

@@ -5,9 +5,11 @@
         "visible": true
       }
     },
-    "PWM Outputs": {
-      "window": {
-        "visible": true
+    "Other Devices": {
+      "SPARK MAX [1]": {
+        "header": {
+          "open": true
+        }
       }
     }
   },
