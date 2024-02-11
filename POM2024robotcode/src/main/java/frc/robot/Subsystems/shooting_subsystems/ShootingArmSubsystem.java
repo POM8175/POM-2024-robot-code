@@ -1,7 +1,28 @@
 package frc.robot.Subsystems.shooting_subsystems;
 
-import static frc.robot.Constants.ShootingConstants.*;
-
+import static edu.wpi.first.units.MutableMeasure.mutable;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+import static frc.robot.Constants.ShootingConstants.FOLD_MICRO_SWITCH_ID;
+import static frc.robot.Constants.ShootingConstants.INTAKE_CAN_MOVE;
+import static frc.robot.Constants.ShootingConstants.KA_VOLTS_SECOND_SQUARED_PER_RAD;
+import static frc.robot.Constants.ShootingConstants.KD;
+import static frc.robot.Constants.ShootingConstants.KG_VOLTS;
+import static frc.robot.Constants.ShootingConstants.KI;
+import static frc.robot.Constants.ShootingConstants.KIZONE;
+import static frc.robot.Constants.ShootingConstants.KP;
+import static frc.robot.Constants.ShootingConstants.KS_VOLTS;
+import static frc.robot.Constants.ShootingConstants.KV_VOLTS_SECOND_PER_RAD;
+import static frc.robot.Constants.ShootingConstants.MAX_ACCELERATION_RAD_PER_SECOND_SQUARED;
+import static frc.robot.Constants.ShootingConstants.MAX_VELOCITY_RAD_PER_SECOND;
+import static frc.robot.Constants.ShootingConstants.POSITON_FACTOR;
+import static frc.robot.Constants.ShootingConstants.SHOOTER_ARM_MOTOR;
+import static frc.robot.Constants.ShootingConstants.SHOOT_AMP_POS;
+import static frc.robot.Constants.ShootingConstants.SHOOT_PODIUM_POS;
+import static frc.robot.Constants.ShootingConstants.SUB_INTAKE_POS;
+import static frc.robot.Constants.ShootingConstants.TOLERANCE;
+import static frc.robot.Constants.ShootingConstants.VELOCITY_FACTOR;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
@@ -16,8 +37,15 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Subsystems.PomSubsystem;
 
 public class ShootingArmSubsystem extends PomSubsystem{
@@ -68,6 +96,15 @@ public class ShootingArmSubsystem extends PomSubsystem{
     setDefaultCommand(goToAngleCommand(controller.getGoal()));
   }
 
+
+
+    // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
+  private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
+  // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
+  private final MutableMeasure<Angle> m_angle = mutable(Rotations.of(0));
+  // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
+  private final MutableMeasure<Velocity<Angle>> m_velocity = mutable(RotationsPerSecond.of(0));
+
   @Override
   public void periodic() {
     //liftTab.add("arm encoder", liftMotor.getEncoder().getPosition()).withPosition(0, 0).withSize(1, 1).withWidget(BuiltInWidgets.kNumberSlider);
@@ -76,6 +113,12 @@ public class ShootingArmSubsystem extends PomSubsystem{
     {
       resetEncoder();
     }
+
+
+    
+
+
+
 
 
     switch ((int)controller.getSetpoint().position) {
@@ -96,6 +139,15 @@ public class ShootingArmSubsystem extends PomSubsystem{
         break;
     }
   }
+
+
+  private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
+      new SysIdRoutine.Config(),
+      new SysIdRoutine.Mechanism((final Measure<Voltage> volts) -> {
+        liftMotor.setVoltage(volts.in(Volts));
+      },log ->{ log.motor("lift").voltage(m_appliedVoltage.mut_replace(liftMotor.get() * RobotController.getBatteryVoltage(), Volts)).angularPosition(m_angle.mut_replace(liftMotor.getEncoder().getPosition(), Rotations)).angularVelocity(m_velocity.mut_replace(liftMotor.getEncoder().getVelocity(), RotationsPerSecond));}, this));
+    
+
 
   public void setIntakeSup(BooleanSupplier sup)
   {
@@ -207,4 +259,10 @@ public class ShootingArmSubsystem extends PomSubsystem{
   {
     return this.run(() -> moveWithProfile(new TrapezoidProfile.State(INTAKE_CAN_MOVE, 0))).until(()-> encoder.getPosition() > INTAKE_CAN_MOVE).andThen(goToAngleCommand(new TrapezoidProfile.State(encoder.getPosition(), 0)));
   }
+
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return m_sysIdRoutine.quasistatic(direction);
+  }
+
+
 }
