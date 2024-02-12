@@ -46,4 +46,14 @@ public class PIComunicator extends SubsystemBase
         
         return new int[]{x,y};
     }
+
+    public void close()
+    {
+        try {
+            piSocket.close();
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
