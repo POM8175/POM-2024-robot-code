@@ -66,6 +66,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
 
 
     setDefaultCommand(goToAngleCommand(controller.getGoal()));
+    resetEncoder();
   }
 
   @Override
@@ -122,7 +123,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
   /** Resets the encoder to currently read a position of 0. */
   @Override
   public void resetEncoder() {
-    liftMotor.getEncoder().setPosition(0);
+    liftMotor.getEncoder().setPosition(ARM_OFFSET);
   }
 
   /** returns the value of the alternate encoder
@@ -193,6 +194,10 @@ public class ShootingArmSubsystem extends PomSubsystem{
   public double calcArmPosForShoot(Supplier<Pose2d> curr)
   {
     Pose2d pose = curr.get();
+    if(pose.getX() > OTHER_SIDE)
+    {
+      return ARM_OFFSET;
+    }
     double k = Math.sqrt(Math.pow(pose.getX(), 2.0) + Math.pow(pose.getY() - SPEAKER_Y_OFFSET, 2.0));
     double alpha = SHOOTER_ANGLE_TO_ARM + 
                   Math.asin(
@@ -200,7 +205,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
                     (Math.sqrt(k*k + Math.pow(SPEAKER_HEIGT_WANTED - ARM_HEIGT_FROM_FLOOR, 2)))
                     ) - 
                   Math.atan((SPEAKER_HEIGT_WANTED - ARM_HEIGT_FROM_FLOOR) / k);
-    return alpha;
+    return alpha + ARM_OFFSET;
   }
 
   public Command goToAngleCommand(TrapezoidProfile.State goal)
@@ -210,6 +215,10 @@ public class ShootingArmSubsystem extends PomSubsystem{
   public Command goToAngleCommand(double goal)
   {
     return goToAngleCommand(new TrapezoidProfile.State(goal, 0));
+  }
+  public Command goToAngleCommand(Supplier<Pose2d> poseSup)
+  {
+    return this.run(() -> moveWithProfile(new TrapezoidProfile.State(calcArmPosForShoot(poseSup), 0))).until(()-> controller.atGoal()).unless(() -> calcArmPosForShoot(poseSup) < INTAKE_CAN_MOVE && intakeIsThere.getAsBoolean());
   }
   public Command OpenForIntakeCommand()
   {

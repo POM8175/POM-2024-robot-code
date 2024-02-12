@@ -158,6 +158,9 @@ public class Constants {
         public static final double ARM_HEIGT_FROM_FLOOR = 0.4135;
         public static final double ARM_LENGTH = 0.535;
         public static final double SHOOTER_ANGLE_TO_ARM = Math.toRadians(55.34);
+        public static final double OTHER_SIDE = 10;
+        
+        public static final double ARM_OFFSET = Math.PI / 2;
 
     }
     
