@@ -192,7 +192,15 @@ public class ShootingArmSubsystem extends PomSubsystem{
 
   public double calcArmPosForShoot(Supplier<Pose2d> curr)
   {
-    return 0;
+    Pose2d pose = curr.get();
+    double k = Math.sqrt(Math.pow(pose.getX(), 2.0) + Math.pow(pose.getY() - SPEAKER_Y_OFFSET, 2.0));
+    double alpha = SHOOTER_ANGLE_TO_ARM + 
+                  Math.asin(
+                    (ARM_LENGTH * Math.sin(SHOOTER_ANGLE_TO_ARM)) /
+                    (Math.sqrt(k*k + Math.pow(SPEAKER_HEIGT_WANTED - ARM_HEIGT_FROM_FLOOR, 2)))
+                    ) - 
+                  Math.atan((SPEAKER_HEIGT_WANTED - ARM_HEIGT_FROM_FLOOR) / k);
+    return alpha;
   }
 
   public Command goToAngleCommand(TrapezoidProfile.State goal)

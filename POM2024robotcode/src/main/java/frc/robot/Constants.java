@@ -149,7 +149,18 @@ public class Constants {
         public static final double SUB_INTAKE_POS = 1;
         public static final double SHOOT_PODIUM_POS = 3;
         public static final double SHOOT_AMP_POS = 4;
+
+
+
+        public static final double SPEAKER_Y_OFFSET = 5.5;
+        // public static final double SPEAKER_X_OFFSET = 0.2915;
+        public static final double SPEAKER_HEIGT_WANTED = 2.02;
+        public static final double ARM_HEIGT_FROM_FLOOR = 0.4135;
+        public static final double ARM_LENGTH = 0.535;
+        public static final double SHOOTER_ANGLE_TO_ARM = Math.toRadians(55.34);
+
     }
+    
 
     public static final class TransferConstants
     {
