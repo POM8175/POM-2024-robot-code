@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PIComunicator extends SubsystemBase
 {
-    int port = 10101;
+    int port = 12253;
     ServerSocket serverSocket;
     Socket piSocket;
     BufferedReader in;
