@@ -201,7 +201,8 @@ public class Constants {
         public static final int NUM_LEDS = 180;
         public static final int LED_PORT = 9;
         public static final int RIGHT_LED_PORT = 8;
-        public static final Color POM_PURPLE = new Color(148, 0, 211);
+        public static final Color POM_PURPLE = new Color(98, 0, 151);
+        public static final double WAIT_REPEAT = 0.1;
     }
 
     public static final class GeneralFunctions{

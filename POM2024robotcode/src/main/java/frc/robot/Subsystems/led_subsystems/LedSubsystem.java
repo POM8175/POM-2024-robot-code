@@ -40,8 +40,25 @@ public class LedSubsystem extends SubsystemBase {
             m_ledBuffer.setLED(i + (m_ledBuffer.getLength() / 2),color2);
             
         }
-        m_led.setData(m_ledBuffer);
+            m_led.setData(m_ledBuffer);    
         
+    }
+
+    public void setThreeLeds(Color color1, Color color2, Color color3){
+        for(int i =0; i < m_ledBuffer.getLength()/3; i++){
+            m_ledBuffer.setLED(i, color1);//0
+            m_ledBuffer.setLED(i + (m_ledBuffer.getLength() / 3), color2);//60
+            m_ledBuffer.setLED(i + (2*(m_ledBuffer.getLength() / 3)), color3);//120
+            
+        }
+        m_led.setData(m_ledBuffer);
+    }
+
+    public void setThirdLed(Color color, int third){
+        for (int i = 60*third; i>(m_ledBuffer.getLength() - m_ledBuffer.getLength()/third); i--){
+            m_ledBuffer.setLED(i, color);
+        } 
+        m_led.setData(m_ledBuffer);
     }
 
 
@@ -64,13 +81,24 @@ public class LedSubsystem extends SubsystemBase {
         return this.runOnce(() -> setLeds(color));
     }
 
-    public Command halfHalfCommand(Color color1, Color color2){
+    public Command TwoLedCommand(Color color1, Color color2){
         return this.runOnce(() -> {
             sethalfLeds(color1, color2);
             
         });
     }
 
+    public Command ThreeLedCommand(Color color1, Color color2, Color color3){
+        return this.runOnce(() ->{
+            setThreeLeds(color1, color2, color3);
+        });
+    }
+
+    public Command thirdLeCommand(Color color, int third){
+        return this.runOnce((()-> {
+            setThirdLed(color, third);
+        }));
+    }
     
 }
 
