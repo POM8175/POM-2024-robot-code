@@ -194,7 +194,8 @@ public class Constants {
 
        public static final int LIFT_MOTOR = 12;
 
-        public static final int[] ENCODER_PORTS = {0,1};
+        public static final int POTEN_PORTS = 1;
+        public static final double POTEN_OFFSET = 0;
 
         public static final double KP = 0.8;
         public static final double KI = 0.02;
@@ -203,7 +204,7 @@ public class Constants {
         public static final double FOLD = 0;
         public static final double GROUND = 0;
         public static final double TOLERANCE = 2.0;
-
+        
 
 
     }
