@@ -5,7 +5,7 @@ import static frc.robot.Constants.IntakeConstants.*;
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Subsystems.PomSubsystem;
 
 public class IntakeLiftSubsystem extends PomSubsystem{
-    WPI_TalonSRX motor;
+    WPI_VictorSPX motor;
     AnalogPotentiometer potentiometer;
     PIDController pid;
     private BooleanSupplier armIsThere;
@@ -23,11 +23,11 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     public IntakeLiftSubsystem()
     {
         potentiometer = new AnalogPotentiometer(POTEN_PORTS);
-        motor = new WPI_TalonSRX(0);
+        motor = new WPI_VictorSPX(LIFT_MOTOR);
         pid = new PIDController(KP, KI, KD);
         pid.setTolerance(TOLERANCE);
         motor.clearStickyFaults();
-        motor.setNeutralMode(NeutralMode.Coast);
+        motor.setNeutralMode(NeutralMode.Brake);
         pid.setSetpoint(FOLD);
         setDefaultCommand(this.runOnce(() -> stopMotor()));
     }
