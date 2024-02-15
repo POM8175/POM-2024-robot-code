@@ -118,8 +118,8 @@ public class RobotContainer {
     ledSubsystem.setDefaultCommand(
       new ConditionalCommand(
         new ConditionalCommand(ledSubsystem.thirdLeCommand(Color.kRed, 1),ledSubsystem.thirdLeCommand(Color.kOrange, 1) , () -> driveSubsystem.calcAngleToSpeaker() < ANGLE_TOLERANCE)
-        .andThen(new ConditionalCommand(ledSubsystem.thirdLeCommand(Color.kGreen, 2), ledSubsystem.thirdLeCommand(Color.kOrange, 2),() ->shootingSubsystem.atWantedSpeed() ))
-        .andThen(new ConditionalCommand(ledSubsystem.thirdLeCommand(Color.kYellow, 3),ledSubsystem.thirdLeCommand(Color.kOrange, 3) , () -> shootingArmSubsystem.atSetpoint())),
+         .andThen(new ConditionalCommand(ledSubsystem.thirdLeCommand(Color.kGreen, 2), ledSubsystem.thirdLeCommand(Color.kOrange, 2),() ->shootingSubsystem.atWantedSpeed() ))
+       .andThen(new ConditionalCommand(ledSubsystem.thirdLeCommand(Color.kYellow, 3),ledSubsystem.thirdLeCommand(Color.kOrange, 3) , () -> shootingArmSubsystem.atSetpoint())),
     ledSubsystem.setLedCommand(POM_PURPLE), () -> transferSubsystem.isNoteIn()
     ).andThen(new WaitCommand(WAIT_REPEAT)).repeatedly());   
      
