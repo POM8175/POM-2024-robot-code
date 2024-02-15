@@ -66,10 +66,10 @@ public class Constants {
 
     public static final class DriveConstants
     {
-        public static final int LEFT_MOTOR_LEAD = 1;
-        public static final int LEFT_MOTOR_SLAVE = 2;
-        public static final int RIGHT_MOTOR_LEAD = 3;
-        public static final int RIGHT_MOTOR_SLAVE = 4;
+        public static final int LEFT_MOTOR_LEAD = 3;
+        public static final int LEFT_MOTOR_SLAVE = 4;
+        public static final int RIGHT_MOTOR_LEAD = 1;
+        public static final int RIGHT_MOTOR_SLAVE = 2;
 
         public static final int GYRO_ID = 13;
 
@@ -114,7 +114,6 @@ public class Constants {
         
         public static final int SHOOTER_ARM_MOTOR = 7;
         public static final int FOLD_MICRO_SWITCH_ID = 3;
-        public static final int FULL_MICRO_SWITCH_ID = 4;
         
         public static final double KP = 0.0124;
         public static final double KI = 0.0;
@@ -167,7 +166,7 @@ public class Constants {
 
     public static final class TransferConstants
     {
-        public static final int TRANSFER_MOTOR = 9;
+        public static final int TRANSFER_MOTOR = 8;
         public static final double TRANSFER_SPEED = 1;
 
         public static final Color noteColor = new Color(130, 98, 26);
