@@ -155,7 +155,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Field/Pose X Value", m_robotContainer.driveSubsystem.getPose().getX());
         SmartDashboard.putNumber("Field/Pose Y Value", m_robotContainer.driveSubsystem.getPose().getY());
         SmartDashboard.putNumber("Field/Pose Rotation Value", m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees());
-
+        
 
         //Drive
         SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Velocity",m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity());
@@ -184,9 +184,6 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Shooting/Speed", m_robotContainer.shootingSubsystem.getRate());
         SmartDashboard.putBoolean("Shooting/Is At Wanted Speed", isAutonomous());
         // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());        
-
-
-
        
 
     }   

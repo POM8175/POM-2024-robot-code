@@ -11,12 +11,13 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class TransferSubsystem extends PomSubsystem
 {
-    CANSparkMax transferMotor = new CANSparkMax(TRANSFER_MOTOR, MotorType.kBrushless);
+    PWMSparkMax transferMotor = new PWMSparkMax(TRANSFER_MOTOR);
     // Color Sensor
     //------------------------------------------------------------------------------------
     public I2C.Port i2cPort =  I2C.Port.kOnboard;
@@ -31,7 +32,7 @@ public class TransferSubsystem extends PomSubsystem
         // adding collors to the dataset of m_colorMatcher
         for(int i = 0;i<notNoteColors.length;i++) m_colorMatcher.addColorMatch(notNoteColors[i]);
         m_colorMatcher.addColorMatch(noteColor);
-        transferMotor.setIdleMode(IdleMode.kBrake);
+        // transferMotor.(IdleMode.kBrake);
         setDefaultCommand(this.runOnce(() -> stopMotor()));
     }
     @Override
