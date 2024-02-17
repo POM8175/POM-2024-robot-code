@@ -95,10 +95,10 @@ public class Robot extends TimedRobot {
     public void disabledInit() {
         // m_robotContainer.ledSubsystem.setLeds(Shuffleboard.getTab("Intake").getComponents().)
         m_robotContainer.driveSubsystem.stopMotor();
-        m_robotContainer.intakeLiftSubsystem.stopMotor();
+        // m_robotContainer.intakeLiftSubsystem.stopMotor();
         m_robotContainer.intakeRollerSubsystem.stopMotor();
         m_robotContainer.shootingSubsystem.stopMotor();
-        m_robotContainer.shootingArmSubsystem.stopMotor();
+        // m_robotContainer.shootingArmSubsystem.stopMotor();
         m_robotContainer.transferSubsystem.stopMotor();
     }
     
@@ -173,14 +173,14 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Transfer/Color/Blue", m_robotContainer.transferSubsystem.colorSensor.getBlue());
         SmartDashboard.putString("Transfer/Color/Color",m_robotContainer.transferSubsystem.colorSensor.getColor().toHexString());
         SmartDashboard.putBoolean("Transfer/Color/IsNoteIn",m_robotContainer.transferSubsystem.isNoteIn());
-        SmartDashboard.putNumber("Intake/Lift/Encoder Position", m_robotContainer.intakeLiftSubsystem.getEncoderPosition());
+        // SmartDashboard.putNumber("Intake/Lift/Encoder Position", m_robotContainer.intakeLiftSubsystem.getEncoderPosition());
 
 
         //Shooting Tab
-        SmartDashboard.putNumber("Arm/Encoder Position", m_robotContainer.shootingArmSubsystem.getEncoderPosition());
-        SmartDashboard.putNumber("Arm/Speed", m_robotContainer.shootingArmSubsystem.getEncoder().getVelocity());
-        SmartDashboard.putBoolean("Arm/Intake Can Move", m_robotContainer.shootingArmSubsystem.intakeCanMove().getAsBoolean());
-        SmartDashboard.putBoolean("Arm/Limit Switch", m_robotContainer.shootingArmSubsystem.isFoldSwitchPressed());
+        // SmartDashboard.putNumber("Arm/Encoder Position", m_robotContainer.shootingArmSubsystem.getEncoderPosition());
+        // SmartDashboard.putNumber("Arm/Speed", m_robotContainer.shootingArmSubsystem.getEncoder().getVelocity());
+        // SmartDashboard.putBoolean("Arm/Intake Can Move", m_robotContainer.shootingArmSubsystem.intakeCanMove().getAsBoolean());
+        // SmartDashboard.putBoolean("Arm/Limit Switch", m_robotContainer.shootingArmSubsystem.isFoldSwitchPressed());
         SmartDashboard.putNumber("Shooting/Speed", m_robotContainer.shootingSubsystem.getRate());
         SmartDashboard.putBoolean("Shooting/Is At Wanted Speed", isAutonomous());
         // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());        

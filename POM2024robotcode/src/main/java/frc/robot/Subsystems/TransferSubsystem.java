@@ -59,7 +59,7 @@ public class TransferSubsystem extends PomSubsystem
     // the subsystems commands
     public Command getFromIntake()
     {
-        return this.startEnd(() -> setMotor(TRANSFER_SPEED), () -> stopMotor()).until(() -> isNoteIn());
+        return this.startEnd(() -> setMotor(0.35), () -> stopMotor()).until(() -> isNoteIn());
     }
     public Command transfer(boolean isToShooter)
     {

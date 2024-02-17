@@ -140,7 +140,7 @@ public class Constants {
 
         public static final double TOLERANCE = 0;
         
-        public static final double SHOOT_SPEED = 0.5;
+        public static final double SHOOT_SPEED = 0.65;
         public static final double SHOOT_SPEED_TOLERANCE = 0.05;
         public static final double SHOOT_TO_WING_SPEED = 0.8;
 
@@ -167,7 +167,7 @@ public class Constants {
     public static final class TransferConstants
     {
         public static final int TRANSFER_MOTOR = 8;
-        public static final double TRANSFER_SPEED = 1;
+        public static final double TRANSFER_SPEED = 0.95;
 
         public static final Color noteColor = new Color(130, 98, 26);
         public static final Color blueColor = new Color(54, 113, 86);
@@ -182,14 +182,14 @@ public class Constants {
             new Color(100,30,255),
             new Color(189, 183, 170)};
 
-        public static final double TRANSFER_TIME_OUT = 2;
+        public static final double TRANSFER_TIME_OUT = 1;
     }
 
     public static final class IntakeConstants{
        public static final int ROLLER_MOTOR = 10;
        public static final int ROLLER_MOTOR_SLAVE = 11;
 
-       public static final double ROLLER_MOTOR_SPEED = 1;
+       public static final double ROLLER_MOTOR_SPEED = 0.5;
 
        public static final int LIFT_MOTOR = 12;
 
