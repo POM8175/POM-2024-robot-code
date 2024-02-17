@@ -122,8 +122,8 @@ public class Constants {
         public static final double KD = 0.0;
 
         //trpezoid contraits, need to be found using sysid
-        public static final double MAX_VELOCITY_RAD_PER_SECOND = 0;
-        public static final double MAX_ACCELERATION_RAD_PER_SECOND_SQUARED = 0;
+        public static final double MAX_VELOCITY_RAD_PER_SECOND = Math.PI/2;
+        public static final double MAX_ACCELERATION_RAD_PER_SECOND_SQUARED = Math.PI/2;
         public static final double STARTING_OFFSET_RAD = 0;
 
         //arm feed forward gains, need to be found
@@ -133,7 +133,7 @@ public class Constants {
         public static final double KA_VOLTS_SECOND_SQUARED_PER_RAD = 0;
 
         //calculate factors to rads and rads per second
-        public static final double POSITON_FACTOR = 0;
+        public static final double POSITON_FACTOR = 1 / /*versa*/50 / /*to radian*/(2 * Math.PI) ;
         public static final double VELOCITY_FACTOR = 0;
 
 

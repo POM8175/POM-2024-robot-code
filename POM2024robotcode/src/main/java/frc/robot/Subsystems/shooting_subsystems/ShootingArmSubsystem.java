@@ -60,7 +60,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
   }
 
     private State state = State.Unkown;
-    private final CANSparkMax liftMotor;
+    private final CANSparkMax liftMotor = new CANSparkMax(SHOOTER_ARM_MOTOR, MotorType.kBrushless);;
     private final RelativeEncoder encoder;
     private SparkPIDController pid;
     private DigitalInput foldMicroSwitch;
@@ -75,10 +75,8 @@ public class ShootingArmSubsystem extends PomSubsystem{
   /** Creates a new LiftSubsystem. */
   public ShootingArmSubsystem() {
     controller = new ProfiledPIDController (KP, KI, KD, 
-        new TrapezoidProfile.Constraints(MAX_VELOCITY_RAD_PER_SECOND, MAX_ACCELERATION_RAD_PER_SECOND_SQUARED), 0.02);
+        new TrapezoidProfile.Constraints(MAX_VELOCITY_RAD_PER_SECOND, MAX_ACCELERATION_RAD_PER_SECOND_SQUARED));
     controller.setTolerance(TOLERANCE);
-
-    liftMotor = new CANSparkMax(SHOOTER_ARM_MOTOR, MotorType.kBrushless);
     encoder = liftMotor.getEncoder();
     pid = liftMotor.getPIDController();
     
