@@ -142,8 +142,14 @@ public class ShootingArmSubsystem extends PomSubsystem{
 
   public void moveWithProfile(TrapezoidProfile.State goal)
   {
-    setVoltage(controller.calculate(encoder.getPosition(), goal) 
-      + m_feedforward.calculate(controller.getSetpoint().position, controller.getSetpoint().velocity));
+    if(isFoldSwitchPressed() && state == State.TakeFromIntake)
+    {
+      stopMotor();
+    }
+    else{
+      setVoltage(controller.calculate(encoder.getPosition(), goal) 
+        + m_feedforward.calculate(controller.getSetpoint().position, controller.getSetpoint().velocity));
+    }
   }
 
   /** set the motors to go to a specified position.
