@@ -55,7 +55,8 @@ public class LedSubsystem extends SubsystemBase {
     }
 
     public void setThirdLed(Color color, int third){
-        for (int i = 60*third; i>(m_ledBuffer.getLength() - m_ledBuffer.getLength()/third); i--){
+        
+        for (int i = 60*third - 1; i>(m_ledBuffer.getLength() - m_ledBuffer.getLength()/3 *third); i--){
             m_ledBuffer.setLED(i, color);
         } 
         m_led.setData(m_ledBuffer);
