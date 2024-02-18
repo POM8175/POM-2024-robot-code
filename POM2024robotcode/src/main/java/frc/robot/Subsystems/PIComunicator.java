@@ -22,31 +22,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class PIComunicator extends SubsystemBase
 {
     HttpRequest request;
-        
-    HttpClient client;
-    HttpResponse<String> response;
-
-    ObjectMapper mapper = new ObjectMapper();
-    JsonNode jsonNode;
+        HttpResponse<String> response;
+        JsonNode json;
+        ObjectMapper map = new ObjectMapper();
 
     public PIComunicator()
     {
         try{
+            //TODO: put the correct URI
         request = HttpRequest.newBuilder()
-            .uri(new URI("http://pi/getMyBloodyNote"))
+            .uri(new URI("http://192.168.55.225:8001/getMyBloodyNote"))
             .GET()
             .build();
 
-        client = HttpClient.newBuilder()
-            .version(Version.HTTP_1_1)
-            .followRedirects(Redirect.NORMAL)
-            .connectTimeout(Duration.ofSeconds(20))
-            .proxy(ProxySelector.of(new InetSocketAddress("proxy.example.com", 80)))
-            .authenticator(Authenticator.getDefault())
-            .build();
 
-        response = client.send(request, BodyHandlers.ofString());
-        }catch(IOException | URISyntaxException | InterruptedException e){
+        }catch(URISyntaxException e){
             e.printStackTrace();
         }
     }
@@ -55,21 +45,18 @@ public class PIComunicator extends SubsystemBase
     {
         int left = 0,right = 0,top = 0,buttom = 0;
         try{
-            response = client.send(request, BodyHandlers.ofString());
-            jsonNode = mapper.readTree(response.body());
-            left = jsonNode.get("left").asInt();
-            right = jsonNode.get("right").asInt();
-            top = jsonNode.get("top").asInt();
-            buttom = jsonNode.get("buttom").asInt();
-        }catch(IOException | InterruptedException e){
+            response = HttpClient.newHttpClient().send(request,HttpResponse.BodyHandlers.ofString());
+                System.out.println("response is: " + response.body());
+                json = map.readTree(response.body());
+                
+                left = json.get("left").asInt();
+                right = json.get("right").asInt();
+                top = json.get("top").asInt();
+                buttom = json.get("buttom").asInt();
+            }catch(IOException | InterruptedException e){
             e.printStackTrace();
         }
 
         return new int[]{left,right,top,buttom};
-    }
-
-    public void close()
-    {
-       
     }
 }
