@@ -140,7 +140,7 @@ public class Constants {
 
         public static final double TOLERANCE = 0;
         
-        public static final double SHOOT_SPEED = 0.65;
+        public static final double SHOOT_SPEED = 0.40;
         public static final double SHOOT_SPEED_TOLERANCE = 0.05;
         public static final double SHOOT_TO_WING_SPEED = 0.8;
 
