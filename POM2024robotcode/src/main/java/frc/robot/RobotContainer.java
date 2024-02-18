@@ -76,6 +76,7 @@ public class RobotContainer {
     // shootingArmSubsystem.setIntakeSup(intakeLiftSubsystem.armCanMove());
     // Smartdashboard Subsystems
     driveSubsystem.setDefaultCommand(driveSubsystem.arcadeDriveCommand(() -> driverCommandJoystick.getRawAxis(RIGHT_JOYSTICK_Y), () -> driverCommandJoystick.getRawAxis(LEFT_TRIGGER) - driverCommandJoystick.getRawAxis(RIGHT_TRIGGER)));
+    // transferSubsystem.setDefaultCommand(transferSubsystem.joystickShootCommand(()->operateCommandJoystick.getRawAxis(LEFT_JOYSTICK_Y)));
     // shootingSubsystem.setDefaultCommand(shootingSubsystem.smartdashShootCommand());
     // ledSubsystem.setDefaultCommand(
     //   (new ConditionalCommand(
@@ -149,7 +150,8 @@ public class RobotContainer {
     new Trigger(operateCommandJoystick.axisGreaterThan(RIGHT_TRIGGER, THRESHOLD)).onTrue(shootingSubsystem.spinWheelsCommand());
     new Trigger(operateCommandJoystick.button(RB)).onTrue(shootingSubsystem.stopWheelsCommand());
     new Trigger(operateCommandJoystick.button(Y)).onTrue(transferSubsystem.transfer(false).raceWith(intakeRollerSubsystem.outakeNoteCommand()));
-    new Trigger(operateCommandJoystick.axisGreaterThan(LEFT_TRIGGER, THRESHOLD)).onTrue(transferSubsystem.transfer(true).andThen(shootingSubsystem.stopWheelsCommand()));
+    // new Trigger(operateCommandJoystick.axisGreaterThan(LEFT_TRIGGER, THRESHOLD)).onTrue(transferSubsystem.transfer(true).andThen(shootingSubsystem.stopWheelsCommand()));
+    new Trigger(operateCommandJoystick.axisGreaterThan(LEFT_TRIGGER, THRESHOLD)).onTrue(transferSubsystem.transfer(true));
 
     // new Trigger(operateCommandJoystick.button(Y).onTrue(ledSubsystem.halfHalfCommand(Color.kYellow, POM_PURPLE)));
     // new Trigger(driverCommandJoystick.button(X)).onTrue(new TurnToSpeaker(driveSubsystem).andThen(ledSubsystem.setLedCommand(Color.kKhaki).until(() -> !transferSubsystem.isNoteIn() || driverCommandJoystick.button(B).getAsBoolean())));

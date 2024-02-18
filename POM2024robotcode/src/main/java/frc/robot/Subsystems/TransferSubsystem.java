@@ -12,7 +12,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -42,7 +41,6 @@ public class TransferSubsystem extends PomSubsystem
     public void periodic()
     {
         SmartDashboard.putNumber("transfer current speed", transferMotor.get());
-        SmartDashboard.putNumber("transfer current speed", transferMotor.get());
     }
 
     public boolean isNoteIn()
@@ -68,7 +66,7 @@ public class TransferSubsystem extends PomSubsystem
     // the subsystems commands
     public Command getFromIntake()
     {
-        return this.startEnd(() -> setMotor(0.2), () -> stopMotor()).until(() -> isNoteIn());
+        return this.startEnd(() -> setMotor(-0.25), () -> stopMotor()).until(() -> isNoteIn());
     }
     public Command transfer(boolean isToShooter)
     {
