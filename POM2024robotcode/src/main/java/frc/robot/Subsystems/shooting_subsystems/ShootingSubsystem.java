@@ -7,9 +7,11 @@ import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.GeneralFunctions;
@@ -25,24 +27,26 @@ public class ShootingSubsystem extends PomSubsystem {
     private final RelativeEncoder rightEncoder = shooterMotorRight.getEncoder();
     private final RelativeEncoder leftEncoder = shooterMotorLeft.getEncoder();
 
-    private BangBangController bangbang = new BangBangController();
-
+    private SparkPIDController leftPID = shooterMotorLeft.getPIDController();
+    private SparkPIDController rightPID = shooterMotorRight.getPIDController();
 
 
    public ShootingSubsystem(){
        rightEncoder.setVelocityConversionFactor(1);
        leftEncoder.setPositionConversionFactor(1);
-    //    shooterMotorLeft.follow(shooterMotorRight, true);
        shooterMotorLeft.setIdleMode(IdleMode.kCoast);
        shooterMotorRight.setIdleMode(IdleMode.kCoast);
        setDefaultCommand(this.runOnce(() -> stopMotor()));
        SmartDashboard.putNumber("wanted speed", 0);
+       leftPID.setP(0.5);
+       rightPID.setP(0.5);
    }
 
    @Override
    public void periodic() {
        SmartDashboard.putNumber("Shooting/Left Motor Speed", leftEncoder.getVelocity());
        SmartDashboard.putNumber("Shooting/Right Motor Speed", rightEncoder.getVelocity());
+       SmartDashboard.putBoolean("Shooting/Is Follower", shooterMotorLeft.isFollower());
    }
    
 
@@ -52,13 +56,14 @@ public class ShootingSubsystem extends PomSubsystem {
    }
 
     @Override
-    public void setMotor(double speed) {
-        shooterMotorRight.set(bangbang.calculate(speed, shooterMotorRight.getEncoder().getVelocity()));
-        shooterMotorLeft.set(bangbang.calculate(0.8 * speed, shooterMotorLeft.getEncoder().getVelocity()));
-    }
+    public void setMotor(double speed) {;
+        shooterMotorRight.set(rightPID.setReference(speed, CANSparkMax.ControlType.kVelocity).value);
+        shooterMotorLeft.set(leftPID.setReference(0.8 * speed, CANSparkMax.ControlType.kVelocity).value);
+        }
     @Override
     public void stopMotor() {
         shooterMotorRight.set(0);
+        shooterMotorLeft.set(0);
     }
 
     
