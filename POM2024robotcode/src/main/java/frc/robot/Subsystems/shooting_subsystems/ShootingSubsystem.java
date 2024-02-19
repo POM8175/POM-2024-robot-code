@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.GeneralFunctions;
@@ -24,13 +25,14 @@ public class ShootingSubsystem extends PomSubsystem {
     private final RelativeEncoder rightEncoder = shooterMotorRight.getEncoder();
     private final RelativeEncoder leftEncoder = shooterMotorLeft.getEncoder();
 
+    private BangBangController bangbang = new BangBangController();
 
 
 
    public ShootingSubsystem(){
        rightEncoder.setVelocityConversionFactor(1);
        leftEncoder.setPositionConversionFactor(1);
-       shooterMotorLeft.follow(shooterMotorRight, true);
+    //    shooterMotorLeft.follow(shooterMotorRight, true);
        shooterMotorLeft.setIdleMode(IdleMode.kCoast);
        shooterMotorRight.setIdleMode(IdleMode.kCoast);
        setDefaultCommand(this.runOnce(() -> stopMotor()));
@@ -51,7 +53,8 @@ public class ShootingSubsystem extends PomSubsystem {
 
     @Override
     public void setMotor(double speed) {
-        shooterMotorRight.set(speed);
+        shooterMotorRight.set(bangbang.calculate(speed, shooterMotorRight.getEncoder().getVelocity()));
+        shooterMotorLeft.set(bangbang.calculate(0.8 * speed, shooterMotorLeft.getEncoder().getVelocity()));
     }
     @Override
     public void stopMotor() {
