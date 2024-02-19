@@ -206,8 +206,8 @@ public class DriveSubsystem extends PomSubsystem {
 
   public void myArcadeDrive(double fwd, double rot)
   {
-    double l = (((fwd + Math.abs(fwd) * rot) + (fwd + rot)) / 2) * MAX_RPM;
-    double r = (((fwd - Math.abs(fwd) * rot) + (fwd - rot)) / 2) * MAX_RPM;
+    double l = (((fwd + Math.abs(fwd) * rot) + (fwd + rot)) / 2);
+    double r = (((fwd - Math.abs(fwd) * rot) + (fwd - rot)) / 2);
 
     double m = Math.max(Math.abs(fwd), Math.abs(rot));
 
@@ -216,8 +216,8 @@ public class DriveSubsystem extends PomSubsystem {
       l /= m;
       r /= m;
     }
-    leftPid.setReference(l, ControlType.kVelocity, VEL_SLOT);
-    rightPid.setReference(r, ControlType.kVelocity, VEL_SLOT);
+    leftPid.setReference(l * MAX_RPM, ControlType.kVelocity, VEL_SLOT);
+    rightPid.setReference(r * MAX_RPM, ControlType.kVelocity, VEL_SLOT);
   }
 
   /** returns the current pitch of the robot from gyro
