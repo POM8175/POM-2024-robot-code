@@ -104,6 +104,12 @@ public class Constants {
         public static final int BOT_POSE_LEN = 7;
         public static final double SPEAKER_Y = 5.5;
         public static final double FIELD_X = 16;
+
+        public static final int VEL_SLOT = 1;
+        public static final double VEL_P = 0.01;
+        public static final double MAX_RPM = 5500;
+
+
         
     }
 

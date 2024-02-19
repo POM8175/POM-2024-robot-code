@@ -1,6 +1,6 @@
 package frc.robot.Subsystems;
 
-import static frc.robot.Constants.DriveConstants.BOT_POSE_LEN;
+import static frc.robot.Constants.DriveConstants.*;
 import static frc.robot.Constants.DriveConstants.DRIVE_KINEMATICS;
 import static frc.robot.Constants.DriveConstants.FIELD_X;
 import static frc.robot.Constants.DriveConstants.GYRO_ID;
@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -100,6 +101,14 @@ public class DriveSubsystem extends PomSubsystem {
     rightPid.setP(KP);
     rightPid.setI(KI);
     rightPid.setD(KD);
+
+    leftPid.setP(VEL_P, VEL_SLOT);
+    rightPid.setP(VEL_P, VEL_SLOT);
+
+    leftPid.setOutputRange(-MAX_RPM, MAX_RPM);
+    rightPid.setOutputRange(-MAX_RPM, MAX_RPM);
+    leftPid.setOutputRange(-MAX_RPM, MAX_RPM, VEL_SLOT);
+    rightPid.setOutputRange(-MAX_RPM, MAX_RPM, VEL_SLOT);
 
     zeroHeading();
 
@@ -192,6 +201,23 @@ public class DriveSubsystem extends PomSubsystem {
   public void setSetPoint(double distance) {
     leftPid.setReference(getLeftEncoder().getPosition() + distance, CANSparkMax.ControlType.kPosition);
     rightPid.setReference(getLeftEncoder().getPosition() + distance, CANSparkMax.ControlType.kPosition);
+  }
+
+
+  public void myArcadeDrive(double fwd, double rot)
+  {
+    double l = (((fwd + Math.abs(fwd) * rot) + (fwd + rot)) / 2) * MAX_RPM;
+    double r = (((fwd - Math.abs(fwd) * rot) + (fwd - rot)) / 2) * MAX_RPM;
+
+    double m = Math.max(Math.abs(fwd), Math.abs(rot));
+
+    if (m > 1.0)
+    {
+      l /= m;
+      r /= m;
+    }
+    leftPid.setReference(l, ControlType.kVelocity, VEL_SLOT);
+    rightPid.setReference(r, ControlType.kVelocity, VEL_SLOT);
   }
 
   /** returns the current pitch of the robot from gyro
@@ -345,6 +371,11 @@ public class DriveSubsystem extends PomSubsystem {
     rateLimit.reset((leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2);
     
     return this.run(() -> arcadeDrive(rateLimit.calculate(fwd.get()), rot.get()));
+    
+  }
+    public Command myArcadeDriveCommand(Supplier<Double> fwd, Supplier<Double> rot)
+  {
+    return this.run(() -> myArcadeDrive(fwd.get(), rot.get()));
     
   }
 
