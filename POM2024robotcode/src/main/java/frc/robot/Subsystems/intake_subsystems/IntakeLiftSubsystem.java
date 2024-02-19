@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Subsystems.PomSubsystem;
@@ -30,6 +31,15 @@ public class IntakeLiftSubsystem extends PomSubsystem{
         motor.setNeutralMode(NeutralMode.Brake);
         pid.setSetpoint(FOLD);
         setDefaultCommand(this.runOnce(() -> stopMotor()));
+    }
+
+
+    @Override
+    public void periodic() {
+        
+        SmartDashboard.putNumber("Intake/Lift/Encoder Position", getEncoderPosition());
+
+
     }
 
     public boolean isIntakeOpen()

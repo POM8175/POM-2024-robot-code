@@ -12,12 +12,13 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class TransferSubsystem extends PomSubsystem
 {
-    PWMSparkMax transferMotor = new PWMSparkMax(TRANSFER_MOTOR);
+    CANSparkMax transferMotor = new CANSparkMax(TRANSFER_MOTOR, MotorType.kBrushless);
     // Color Sensor
     //------------------------------------------------------------------------------------
     public I2C.Port i2cPort =  I2C.Port.kOnboard;
@@ -38,6 +39,13 @@ public class TransferSubsystem extends PomSubsystem
     @Override
     public void periodic()
     {
+        
+        SmartDashboard.putNumber("Transfer/Color/Red", colorSensor.getRed());
+        SmartDashboard.putNumber("Transfer/Color/Green",colorSensor.getGreen());
+        SmartDashboard.putNumber("Transfer/Color/Blue", colorSensor.getBlue());
+        SmartDashboard.putString("Transfer/Color/Color",colorSensor.getColor().toHexString());
+        SmartDashboard.putBoolean("Transfer/Color/IsNoteIn",isNoteIn());
+        SmartDashboard.putNumber("Transfer/Velocity",getRate());
     }
 
     public boolean isNoteIn()
@@ -50,6 +58,11 @@ public class TransferSubsystem extends PomSubsystem
     public void setMotor(double speed)
     {
         transferMotor.set(speed);
+    }
+
+    
+    public double getRate(){
+        return transferMotor.getEncoder().getVelocity();
     }
 
     @Override
