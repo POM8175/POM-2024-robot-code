@@ -74,9 +74,9 @@ public class ShootingSubsystem extends PomSubsystem {
 
     }
 
-    public Command spinWheelsCommand()
+   public Command spinWheelsCommand()
     {
-        return this.startEnd(() -> setMotor(SHOOT_SPEED), () -> {});
+        return this.startEnd(() -> setMotor(SHOOT_SPEED), () -> {}).until(() -> getRate() >= SHOOT_SPEED - SHOOT_SPEED_TOLERANCE);
     }
     public Command spinWheelsToSpeedCommand(double speed)
     {

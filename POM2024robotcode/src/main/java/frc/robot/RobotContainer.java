@@ -151,7 +151,7 @@ public class RobotContainer {
     new Trigger(operateCommandJoystick.button(RB)).onTrue(shootingSubsystem.stopWheelsCommand());
     new Trigger(operateCommandJoystick.button(Y)).onTrue(transferSubsystem.transfer(false).raceWith(intakeRollerSubsystem.outakeNoteCommand()));
     // new Trigger(operateCommandJoystick.axisGreaterThan(LEFT_TRIGGER, THRESHOLD)).onTrue(transferSubsystem.transfer(true).andThen(shootingSubsystem.stopWheelsCommand()));
-    new Trigger(operateCommandJoystick.axisGreaterThan(LEFT_TRIGGER, THRESHOLD)).onTrue(transferSubsystem.transfer(true));
+    new Trigger(operateCommandJoystick.axisGreaterThan(LEFT_TRIGGER, THRESHOLD)).onTrue(transferSubsystem.transfer(true).andThen(shootingSubsystem.stopWheelsCommand()));
 
     // new Trigger(operateCommandJoystick.button(Y).onTrue(ledSubsystem.halfHalfCommand(Color.kYellow, POM_PURPLE)));
     // new Trigger(driverCommandJoystick.button(X)).onTrue(new TurnToSpeaker(driveSubsystem).andThen(ledSubsystem.setLedCommand(Color.kKhaki).until(() -> !transferSubsystem.isNoteIn() || driverCommandJoystick.button(B).getAsBoolean())));
