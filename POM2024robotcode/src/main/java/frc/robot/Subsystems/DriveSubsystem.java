@@ -1,20 +1,6 @@
 package frc.robot.Subsystems;
 
-import static frc.robot.Constants.DriveConstants.BOT_POSE_LEN;
-import static frc.robot.Constants.DriveConstants.DRIVE_KINEMATICS;
-import static frc.robot.Constants.DriveConstants.FIELD_X;
-import static frc.robot.Constants.DriveConstants.GYRO_ID;
-import static frc.robot.Constants.DriveConstants.KD;
-import static frc.robot.Constants.DriveConstants.KI;
-import static frc.robot.Constants.DriveConstants.KP;
-import static frc.robot.Constants.DriveConstants.LEFT_MOTOR_LEAD;
-import static frc.robot.Constants.DriveConstants.LEFT_MOTOR_SLAVE;
-import static frc.robot.Constants.DriveConstants.RATE;
-import static frc.robot.Constants.DriveConstants.RIGHT_MOTOR_LEAD;
-import static frc.robot.Constants.DriveConstants.RIGHT_MOTOR_SLAVE;
-import static frc.robot.Constants.DriveConstants.ROTATIONS_TO_METERS;
-import static frc.robot.Constants.DriveConstants.SPEAKER_Y;
-import static frc.robot.Constants.DriveConstants.TL;
+import static frc.robot.Constants.DriveConstants.*;
 
 import java.util.ArrayList;
 import java.util.function.DoubleSupplier;
@@ -124,6 +110,9 @@ public class DriveSubsystem extends PomSubsystem {
     
     leftEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
     rightEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
+
+    leftEncoder.setVelocityConversionFactor(ROTATIONS_TO_METERS / 60);
+    rightEncoder.setVelocityConversionFactor(ROTATIONS_TO_METERS / 60);
 
     field = new Field2d();
 
