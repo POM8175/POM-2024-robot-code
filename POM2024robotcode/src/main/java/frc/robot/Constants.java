@@ -203,8 +203,8 @@ public class Constants {
         public static final int POTEN_PORTS = 0;
         public static final double POTEN_OFFSET = 0;
 
-        public static final double KP = 0.8;
-        public static final double KI = 0.02;
+        public static final double KP = 0.01;
+        public static final double KI = 0.0;
         public static final double KD = 0;
 
         public static final double FOLD = 0;

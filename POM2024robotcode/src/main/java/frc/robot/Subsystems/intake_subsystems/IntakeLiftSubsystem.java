@@ -7,6 +7,7 @@ import java.util.function.BooleanSupplier;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,22 +22,24 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     private BooleanSupplier armIsThere;
     boolean open = false;
 
+    ArmFeedforward feedforward = new ArmFeedforward(0, 0.1, 0);
     public IntakeLiftSubsystem()
     {
-        potentiometer = new AnalogPotentiometer(POTEN_PORTS, 2 * Math.PI);
+        potentiometer = new AnalogPotentiometer(POTEN_PORTS, 2 * Math.PI, -1.335);
         motor = new WPI_VictorSPX(LIFT_MOTOR);
         pid = new PIDController(KP, KI, KD);
         pid.setTolerance(TOLERANCE);
         motor.clearStickyFaults();
         motor.setNeutralMode(NeutralMode.Brake);
         pid.setSetpoint(FOLD);
-        setDefaultCommand(this.runOnce(() -> stopMotor()));
+        setDefaultCommand(stayInPlace());
     }
 
     @Override
     public void periodic()
     {
         SmartDashboard.putNumber("Potentiometer", potentiometer.get());
+        SmartDashboard.putNumber("intake arm motor", motor.get());
     }
     
     public boolean isIntakeOpen()
@@ -79,7 +82,11 @@ public class IntakeLiftSubsystem extends PomSubsystem{
         motor.set(speed);
     }
 
-  
+  @Override
+  public void setSetPoint(double target) {
+    pid.setSetpoint(target);
+    motor.set(pid.calculate(potentiometer.get()) + feedforward.calculate(target, 0));
+  }
 
     @Override
     public double getEncoderPosition()
@@ -92,5 +99,14 @@ public class IntakeLiftSubsystem extends PomSubsystem{
         this.open = open;
         pid.setSetpoint(open ? GROUND : FOLD);
         return( new RunCommand(() -> setMotor(pid.calculate(getEncoderPosition())), this).until(() -> pid.atSetpoint()).andThen(this.runOnce(() -> stopMotor()))).unless(armIsThere);
+    }
+
+    public Command stayInPlace()
+    {
+        return run(() -> setMotor(feedforward.calculate (potentiometer.get(), 0)));
+    }
+    public Command goToCommand(double to)
+    {
+        return run(() -> setSetPoint(to));
     }
 }
