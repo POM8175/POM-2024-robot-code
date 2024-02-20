@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Subsystems.PomSubsystem;
@@ -22,7 +23,7 @@ public class IntakeLiftSubsystem extends PomSubsystem{
 
     public IntakeLiftSubsystem()
     {
-        potentiometer = new AnalogPotentiometer(POTEN_PORTS);
+        potentiometer = new AnalogPotentiometer(POTEN_PORTS, 2 * Math.PI);
         motor = new WPI_VictorSPX(LIFT_MOTOR);
         pid = new PIDController(KP, KI, KD);
         pid.setTolerance(TOLERANCE);
@@ -32,6 +33,12 @@ public class IntakeLiftSubsystem extends PomSubsystem{
         setDefaultCommand(this.runOnce(() -> stopMotor()));
     }
 
+    @Override
+    public void periodic()
+    {
+        SmartDashboard.putNumber("Potentiometer", potentiometer.get());
+    }
+    
     public boolean isIntakeOpen()
     {
         return open;

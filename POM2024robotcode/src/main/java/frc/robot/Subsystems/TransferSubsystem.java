@@ -66,15 +66,24 @@ public class TransferSubsystem extends PomSubsystem
     // the subsystems commands
     public Command getFromIntake()
     {
-        return this.startEnd(() -> setMotor(-0.15), () -> stopMotor()).until(() -> isNoteIn());
+        return this.startEnd(() -> setMotor(-0.3), () -> stopMotor()).until(() -> isNoteIn());
     }
     public Command transfer(boolean isToShooter)
     {
         return this.startEnd(() -> setMotor(isToShooter ? TRANSFER_SPEED : -TRANSFER_SPEED), () -> setMotor(isToShooter ? TRANSFER_SPEED : -TRANSFER_SPEED)).until(() -> !isNoteIn()).andThen(new WaitCommand(TRANSFER_TIME_OUT)).andThen(() -> stopMotor(), this);
     }
 
+    public Command amp()
+    {
+         return this.startEnd(() -> setMotor(-0.5), () -> {}).until(() -> !isNoteIn()).andThen(new WaitCommand(TRANSFER_TIME_OUT)).andThen(() -> stopMotor(), this);
+    }
     public Command joystickShootCommand(DoubleSupplier sup)
     {
         return run(() -> setMotor(sup.getAsDouble()));
+    }
+
+    public Command stopWheelsCommand()
+    {
+        return this.runOnce(() -> stopMotor());
     }
 }

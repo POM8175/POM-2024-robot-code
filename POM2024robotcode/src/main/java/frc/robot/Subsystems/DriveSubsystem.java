@@ -1,6 +1,6 @@
 package frc.robot.Subsystems;
 
-import static frc.robot.Constants.DriveConstants.BOT_POSE_LEN;
+import static frc.robot.Constants.DriveConstants.*;
 import static frc.robot.Constants.DriveConstants.DRIVE_KINEMATICS;
 import static frc.robot.Constants.DriveConstants.FIELD_X;
 import static frc.robot.Constants.DriveConstants.GYRO_ID;
@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -101,6 +102,14 @@ public class DriveSubsystem extends PomSubsystem {
     rightPid.setI(KI);
     rightPid.setD(KD);
 
+    leftPid.setP(VEL_P, VEL_SLOT);
+    rightPid.setP(VEL_P, VEL_SLOT);
+
+    leftPid.setOutputRange(-1, 1);
+    rightPid.setOutputRange(-1, 1);
+    leftPid.setOutputRange(-1, 1, VEL_SLOT);
+    rightPid.setOutputRange(-1, 1, VEL_SLOT);
+
     zeroHeading();
 
     // We need to invert one side of the drivetrain so that positive voltages
@@ -108,6 +117,8 @@ public class DriveSubsystem extends PomSubsystem {
     // gearbox is constructed, you might have to invert the left side instead.
     masterRightMotor.setInverted(true);
     slaveRightMotor.setInverted(true);
+    masterLeftMotor.setInverted(false);
+    slaveLeftMotor.setInverted(false);
     
     leftEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
     rightEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
@@ -154,7 +165,7 @@ public class DriveSubsystem extends PomSubsystem {
     }
     odometry.update(mGyro.getRotation2d(), new DifferentialDriveWheelPositions(leftEncoder.getPosition(), rightEncoder.getPosition()));
     poseEstimator.update(mGyro.getRotation2d(), new DifferentialDriveWheelPositions(leftEncoder.getPosition(), rightEncoder.getPosition()));
-    field.setRobotPose(getPose());
+    field.setRobotPose(getPoseOdometry());
     
     x = NetworkTableInstance.getDefault().getTable("Vision").getEntry("x").getDouble(0);
     y = NetworkTableInstance.getDefault().getTable("Vision").getEntry("y").getDouble(0);
@@ -192,6 +203,23 @@ public class DriveSubsystem extends PomSubsystem {
   public void setSetPoint(double distance) {
     leftPid.setReference(getLeftEncoder().getPosition() + distance, CANSparkMax.ControlType.kPosition);
     rightPid.setReference(getLeftEncoder().getPosition() + distance, CANSparkMax.ControlType.kPosition);
+  }
+
+
+  public void myArcadeDrive(double fwd, double rot)
+  {
+    double l = (((fwd + Math.abs(fwd) * rot) + (fwd + rot)) / 2);
+    double r = (((fwd - Math.abs(fwd) * rot) + (fwd - rot)) / 2);
+
+    double m = Math.max(Math.abs(fwd), Math.abs(rot));
+
+    if (m > 1.0)
+    {
+      l /= m;
+      r /= m;
+    }
+    leftPid.setReference(l * MAX_RPM, ControlType.kVelocity, VEL_SLOT);
+    rightPid.setReference(r * MAX_RPM, ControlType.kVelocity, VEL_SLOT);
   }
 
   /** returns the current pitch of the robot from gyro
@@ -248,7 +276,8 @@ public class DriveSubsystem extends PomSubsystem {
     // } else if (output - fwd > RATE) {
     //   output -= RATE;
     // }
-
+    SmartDashboard.putNumber("fwd", fwd);
+    SmartDashboard.putNumber("rot", rot);
     mDrive.arcadeDrive(fwd, rot);
   }
 
@@ -342,9 +371,15 @@ public class DriveSubsystem extends PomSubsystem {
     public Command arcadeDriveCommand(Supplier<Double> fwd, Supplier<Double> rot)
   {
     SlewRateLimiter rateLimit = new SlewRateLimiter(RATE);
+    SlewRateLimiter turnRateLimit = new SlewRateLimiter(RATE);
     rateLimit.reset((leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2);
     
-    return this.run(() -> arcadeDrive(rateLimit.calculate(fwd.get()), rot.get()));
+    return this.run(() -> arcadeDrive(rateLimit.calculate(-fwd.get()), turnRateLimit.calculate(rot.get())));
+    
+  }
+    public Command myArcadeDriveCommand(Supplier<Double> fwd, Supplier<Double> rot)
+  {
+    return this.run(() -> myArcadeDrive(fwd.get(), rot.get()));
     
   }
 

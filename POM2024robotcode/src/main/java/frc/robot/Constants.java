@@ -93,7 +93,7 @@ public class Constants {
         public static final double MAX_SPEED_METER_PER_SECOND = 2;
         public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 2;
 
-        public static final double RATE = 1.3; //Check!
+        public static final double RATE = 0.7; 
         public static final double ANGLE_TOLERANCE = 2;
 
         // const values we dont need to calculate
@@ -104,6 +104,12 @@ public class Constants {
         public static final int BOT_POSE_LEN = 7;
         public static final double SPEAKER_Y = 5.5;
         public static final double FIELD_X = 16;
+
+        public static final int VEL_SLOT = 1;
+        public static final double VEL_P = 0.0003;
+        public static final double MAX_RPM = 5500;
+
+
         
     }
 
@@ -140,7 +146,8 @@ public class Constants {
 
         public static final double TOLERANCE = 0;
         
-        public static final double SHOOT_SPEED = 0.85;
+        public static final double SHOOT_SPEED = 8500;
+        public static final double SHOOT_AMP_SPEED = 1200;
         public static final double SHOOT_SPEED_TOLERANCE = 0.05;
         public static final double SHOOT_TO_WING_SPEED = 0.8;
 
@@ -167,7 +174,7 @@ public class Constants {
     public static final class TransferConstants
     {
         public static final int TRANSFER_MOTOR = 8;
-        public static final double TRANSFER_SPEED =-0.97;
+        public static final double TRANSFER_SPEED =-0.95;
 
         public static final Color noteColor = new Color(130, 98, 26);
         public static final Color blueColor = new Color(54, 113, 86);
@@ -193,7 +200,7 @@ public class Constants {
 
        public static final int LIFT_MOTOR = 12;
 
-        public static final int POTEN_PORTS = 1;
+        public static final int POTEN_PORTS = 0;
         public static final double POTEN_OFFSET = 0;
 
         public static final double KP = 0.8;
