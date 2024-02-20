@@ -1,20 +1,21 @@
 package frc.robot.Commands.DriveCommands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Subsystems.DriveSubsystem;
 import frc.robot.Subsystems.PIComunicator;
 
-public class DriveToNotoCommand extends Command
+public class DriveToNoteCommand extends Command
 {
     // the subsystems
     PIComunicator piComunicator;
     DriveSubsystem driveSubsystem;
     
     int[] note = new int[]{};
-
     int noteYPos = 0,noteXPos = 0;
 
-    public DriveToNotoCommand(PIComunicator piComunicator, DriveSubsystem driveSubsystem)
+    public DriveToNoteCommand(PIComunicator piComunicator, DriveSubsystem driveSubsystem)
     {
         this.driveSubsystem = driveSubsystem;
         this.piComunicator = piComunicator;
