@@ -371,9 +371,10 @@ public class DriveSubsystem extends PomSubsystem {
     public Command arcadeDriveCommand(Supplier<Double> fwd, Supplier<Double> rot)
   {
     SlewRateLimiter rateLimit = new SlewRateLimiter(RATE);
+    SlewRateLimiter turnRateLimit = new SlewRateLimiter(RATE);
     rateLimit.reset((leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2);
     
-    return this.run(() -> arcadeDrive(rateLimit.calculate(fwd.get()), rot.get()));
+    return this.run(() -> arcadeDrive(rateLimit.calculate(-fwd.get()), turnRateLimit.calculate(rot.get())));
     
   }
     public Command myArcadeDriveCommand(Supplier<Double> fwd, Supplier<Double> rot)

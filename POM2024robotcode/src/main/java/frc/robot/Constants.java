@@ -93,7 +93,7 @@ public class Constants {
         public static final double MAX_SPEED_METER_PER_SECOND = 2;
         public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 2;
 
-        public static final double RATE = 1.3; //Check!
+        public static final double RATE = 0.7; 
         public static final double ANGLE_TOLERANCE = 2;
 
         // const values we dont need to calculate
@@ -106,7 +106,7 @@ public class Constants {
         public static final double FIELD_X = 16;
 
         public static final int VEL_SLOT = 1;
-        public static final double VEL_P = 0.01;
+        public static final double VEL_P = 0.0003;
         public static final double MAX_RPM = 5500;
 
 
