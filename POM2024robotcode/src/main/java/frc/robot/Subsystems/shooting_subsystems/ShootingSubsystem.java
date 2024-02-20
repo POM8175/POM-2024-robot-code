@@ -38,8 +38,9 @@ public class ShootingSubsystem extends PomSubsystem {
        shooterMotorRight.setIdleMode(IdleMode.kCoast);
        setDefaultCommand(this.runOnce(() -> stopMotor()));
        SmartDashboard.putNumber("wanted speed", 0);
-       leftPID.setP(0.5);
-       rightPID.setP(0.5);
+       leftPID.setP(0.0003);
+       rightPID.setP(0.0003);
+
    }
 
    @Override
@@ -57,8 +58,8 @@ public class ShootingSubsystem extends PomSubsystem {
 
     @Override
     public void setMotor(double speed) {;
-        shooterMotorRight.set(rightPID.setReference(speed, CANSparkMax.ControlType.kVelocity).value);
-        shooterMotorLeft.set(leftPID.setReference(0.8 * speed, CANSparkMax.ControlType.kVelocity).value);
+        rightPID.setReference(speed, CANSparkMax.ControlType.kVelocity);
+        leftPID.setReference(0.72 * speed, CANSparkMax.ControlType.kVelocity);
         }
     @Override
     public void stopMotor() {

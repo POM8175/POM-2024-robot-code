@@ -105,10 +105,10 @@ public class DriveSubsystem extends PomSubsystem {
     leftPid.setP(VEL_P, VEL_SLOT);
     rightPid.setP(VEL_P, VEL_SLOT);
 
-    leftPid.setOutputRange(-MAX_RPM, MAX_RPM);
-    rightPid.setOutputRange(-MAX_RPM, MAX_RPM);
-    leftPid.setOutputRange(-MAX_RPM, MAX_RPM, VEL_SLOT);
-    rightPid.setOutputRange(-MAX_RPM, MAX_RPM, VEL_SLOT);
+    leftPid.setOutputRange(-1, 1);
+    rightPid.setOutputRange(-1, 1);
+    leftPid.setOutputRange(-1, 1, VEL_SLOT);
+    rightPid.setOutputRange(-1, 1, VEL_SLOT);
 
     zeroHeading();
 
@@ -117,6 +117,8 @@ public class DriveSubsystem extends PomSubsystem {
     // gearbox is constructed, you might have to invert the left side instead.
     masterRightMotor.setInverted(true);
     slaveRightMotor.setInverted(true);
+    masterLeftMotor.setInverted(false);
+    slaveLeftMotor.setInverted(false);
     
     leftEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
     rightEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
@@ -163,7 +165,7 @@ public class DriveSubsystem extends PomSubsystem {
     }
     odometry.update(mGyro.getRotation2d(), new DifferentialDriveWheelPositions(leftEncoder.getPosition(), rightEncoder.getPosition()));
     poseEstimator.update(mGyro.getRotation2d(), new DifferentialDriveWheelPositions(leftEncoder.getPosition(), rightEncoder.getPosition()));
-    field.setRobotPose(getPose());
+    field.setRobotPose(getPoseOdometry());
     
     x = NetworkTableInstance.getDefault().getTable("Vision").getEntry("x").getDouble(0);
     y = NetworkTableInstance.getDefault().getTable("Vision").getEntry("y").getDouble(0);
@@ -274,7 +276,8 @@ public class DriveSubsystem extends PomSubsystem {
     // } else if (output - fwd > RATE) {
     //   output -= RATE;
     // }
-
+    SmartDashboard.putNumber("fwd", fwd);
+    SmartDashboard.putNumber("rot", rot);
     mDrive.arcadeDrive(fwd, rot);
   }
 
