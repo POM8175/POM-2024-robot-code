@@ -1,20 +1,6 @@
 package frc.robot.Subsystems;
 
 import static frc.robot.Constants.DriveConstants.*;
-import static frc.robot.Constants.DriveConstants.DRIVE_KINEMATICS;
-import static frc.robot.Constants.DriveConstants.FIELD_X;
-import static frc.robot.Constants.DriveConstants.GYRO_ID;
-import static frc.robot.Constants.DriveConstants.KD;
-import static frc.robot.Constants.DriveConstants.KI;
-import static frc.robot.Constants.DriveConstants.KP;
-import static frc.robot.Constants.DriveConstants.LEFT_MOTOR_LEAD;
-import static frc.robot.Constants.DriveConstants.LEFT_MOTOR_SLAVE;
-import static frc.robot.Constants.DriveConstants.RATE;
-import static frc.robot.Constants.DriveConstants.RIGHT_MOTOR_LEAD;
-import static frc.robot.Constants.DriveConstants.RIGHT_MOTOR_SLAVE;
-import static frc.robot.Constants.DriveConstants.ROTATIONS_TO_METERS;
-import static frc.robot.Constants.DriveConstants.SPEAKER_Y;
-import static frc.robot.Constants.DriveConstants.TL;
 
 import java.util.ArrayList;
 import java.util.function.Supplier;
@@ -63,31 +49,20 @@ public class DriveSubsystem extends PomSubsystem {
   private final SparkPIDController leftPid = masterLeftMotor.getPIDController();
   private final SparkPIDController rightPid = masterRightMotor.getPIDController();
 
-  private final RelativeEncoder leftEncoder = masterLeftMotor.getEncoder();
-  private final RelativeEncoder rightEncoder = masterRightMotor.getEncoder();
+  private final RelativeEncoder leftEncoder;
+  private final RelativeEncoder rightEncoder;
 
   private final DifferentialDrive mDrive = new DifferentialDrive(masterLeftMotor, masterRightMotor);
 
   private final WPI_PigeonIMU mGyro = new WPI_PigeonIMU(GYRO_ID);
 
-  private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(
-                                            mGyro.getRotation2d(),
-                                          leftEncoder.getPosition(), 
-                                          rightEncoder.getPosition()
-                                          );
+  private final DifferentialDriveOdometry odometry;
 
 
   double x = 0,y = 0;
   boolean isNote = false;
 
-  private final DifferentialDrivePoseEstimator poseEstimator = new DifferentialDrivePoseEstimator
-              (DRIVE_KINEMATICS, 
-              mGyro.getRotation2d(), 
-              leftEncoder.getPosition(), 
-              rightEncoder.getPosition(), 
-              new Pose2d(),
-              VecBuilder.fill(0.02, 0.02, 0.01),
-              VecBuilder.fill(0.1, 0.1, 0.15));
+  private final DifferentialDrivePoseEstimator poseEstimator;
 
   double [] botPose = new double[BOT_POSE_LEN];
 
@@ -120,9 +95,24 @@ public class DriveSubsystem extends PomSubsystem {
     masterLeftMotor.setInverted(false);
     slaveLeftMotor.setInverted(false);
     
+    leftEncoder = masterLeftMotor.getEncoder();
+    rightEncoder = masterRightMotor.getEncoder();
     leftEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
     rightEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
 
+    odometry = new DifferentialDriveOdometry(
+                                            mGyro.getRotation2d(),
+                                          leftEncoder.getPosition(), 
+                                          rightEncoder.getPosition()
+                                          );
+    poseEstimator = new DifferentialDrivePoseEstimator
+              (DRIVE_KINEMATICS, 
+              mGyro.getRotation2d(), 
+              leftEncoder.getPosition(), 
+              rightEncoder.getPosition(), 
+              new Pose2d(),
+              VecBuilder.fill(0.02, 0.02, 0.01),
+              VecBuilder.fill(0.1, 0.1, 0.15));
     field = new Field2d();
 
 
@@ -316,7 +306,7 @@ public class DriveSubsystem extends PomSubsystem {
    * @return the left drive encoder
    */
   public RelativeEncoder getLeftEncoder() {
-    return masterRightMotor.getEncoder();
+    return masterLeftMotor.getEncoder();
   }
 
   /**
