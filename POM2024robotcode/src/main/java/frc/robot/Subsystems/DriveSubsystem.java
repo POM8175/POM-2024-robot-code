@@ -337,7 +337,7 @@ public class DriveSubsystem extends PomSubsystem {
    * @return the left drive encoder
    */
   public RelativeEncoder getLeftEncoder() {
-    return masterRightMotor.getEncoder();
+    return masterLeftMotor.getEncoder();
   }
 
   /**
