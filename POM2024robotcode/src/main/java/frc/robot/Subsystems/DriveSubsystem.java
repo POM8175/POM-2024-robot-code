@@ -99,6 +99,8 @@ public class DriveSubsystem extends PomSubsystem {
     rightEncoder = masterRightMotor.getEncoder();
     leftEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
     rightEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
+    leftEncoder.setVelocityConversionFactor(ROTATIONS_TO_METERS / 60);
+    rightEncoder.setVelocityConversionFactor(ROTATIONS_TO_METERS/ 60);
 
     odometry = new DifferentialDriveOdometry(
                                             mGyro.getRotation2d(),
