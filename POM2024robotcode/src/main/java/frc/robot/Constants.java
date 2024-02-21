@@ -203,13 +203,13 @@ public class Constants {
         public static final int POTEN_PORTS = 0;
         public static final double POTEN_OFFSET = 0;
 
-        public static final double KP = 0.01;
-        public static final double KI = 0.0;
+        public static final double KP = 0.1;
+        public static final double KI = 0.018;
         public static final double KD = 0;
 
         public static final double FOLD = 0;
-        public static final double GROUND = 0;
-        public static final double TOLERANCE = 2.0;
+        public static final double GROUND = 4.38;
+        public static final double TOLERANCE = 0.15;
         
 
 

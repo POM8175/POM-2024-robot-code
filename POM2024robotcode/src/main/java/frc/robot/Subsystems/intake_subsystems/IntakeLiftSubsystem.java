@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Subsystems.PomSubsystem;
 
 public class IntakeLiftSubsystem extends PomSubsystem{
@@ -32,7 +33,8 @@ public class IntakeLiftSubsystem extends PomSubsystem{
         motor.clearStickyFaults();
         motor.setNeutralMode(NeutralMode.Brake);
         pid.setSetpoint(FOLD);
-        setDefaultCommand(stayInPlace());
+        pid.setTolerance(TOLERANCE);
+        setDefaultCommand(runOnce(() -> stopMotor()).andThen(new WaitCommand(0.1)));
     }
 
     @Override
@@ -85,7 +87,9 @@ public class IntakeLiftSubsystem extends PomSubsystem{
   @Override
   public void setSetPoint(double target) {
     pid.setSetpoint(target);
-    motor.set(pid.calculate(potentiometer.get()) + feedforward.calculate(target, 0));
+    SmartDashboard.putNumber("intake setpoint", pid.getSetpoint());
+    SmartDashboard.putNumber("intake pid val", pid.calculate(potentiometer.get()));
+    motor.set(pid.calculate(potentiometer.get()) + feedforward.calculate(potentiometer.get(), 0));
   }
 
     @Override
@@ -107,6 +111,7 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     }
     public Command goToCommand(double to)
     {
-        return run(() -> setSetPoint(to));
+        pid.reset();
+        return run(() -> setSetPoint(to)).until(() -> pid.atSetpoint());
     }
 }
