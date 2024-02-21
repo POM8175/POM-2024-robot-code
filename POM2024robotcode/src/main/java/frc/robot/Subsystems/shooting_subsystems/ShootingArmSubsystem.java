@@ -78,6 +78,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
     SmartDashboard.putNumber("arm encoder", getEncoderPosition());
     SmartDashboard.putNumber("arm motor", liftMotor.get());
     SmartDashboard.putBoolean("arm micro switch", isFoldSwitchPressed());
+    SmartDashboard.putBoolean("arm can move", intakeIsThere.getAsBoolean());
     
     if (controller.getSetpoint().position == INTAKE_CAN_MOVE)
       state = State.OpenForIntake;
@@ -159,6 +160,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
   @Override
   public void setMotor(double speed)
   {
+    SmartDashboard.putBoolean("Enteredd", true);
     liftMotor.set(speed);
   }
 
@@ -201,7 +203,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
 
   public Command goToAngleCommand(TrapezoidProfile.State goal)
   {
-    return runOnce(() -> controller.reset(getEncoderPosition())).andThen(this.run(() -> moveWithProfile(goal)).until(()-> controller.atGoal()).unless(() -> goal.position < INTAKE_CAN_MOVE && intakeIsThere.getAsBoolean()));
+    return runOnce(() -> controller.reset(getEncoderPosition())).andThen(this.run(() -> moveWithProfile(goal)).until(()-> controller.atGoal()));//.unless(() -> goal.position < INTAKE_CAN_MOVE && intakeIsThere.getAsBoolean()));
   }
   public Command goToAngleCommand(double goal)
   {
@@ -215,9 +217,12 @@ public class ShootingArmSubsystem extends PomSubsystem{
   {
     return runOnce(() -> controller.reset(getEncoderPosition())).andThen(this.run(() -> moveWithProfile(new TrapezoidProfile.State(INTAKE_CAN_MOVE, 0))).until(()-> encoder.getPosition() > INTAKE_CAN_MOVE).andThen(goToAngleCommand(new TrapezoidProfile.State(encoder.getPosition(), 0))));
   }
-
   public Command testtt(double goal)
   {
     return runOnce(() -> controller.reset(getEncoderPosition())).andThen(this.run(() -> moveWithProfile(new TrapezoidProfile.State(goal, 0))));
+  }
+  public Command OpenSlow()
+  {
+    return this.run(() -> setMotor(0.08));
   }
 }
