@@ -127,7 +127,6 @@ public class DriveSubsystem extends PomSubsystem {
     masterRightMotor.setIdleMode(IdleMode.kCoast);
     slaveLeftMotor.setIdleMode(IdleMode.kCoast);
     slaveRightMotor.setIdleMode(IdleMode.kCoast);
-    
     mGyro.reset();
   }
 
@@ -252,6 +251,7 @@ public class DriveSubsystem extends PomSubsystem {
         masterRightMotor.getEncoder().getVelocity());
   }
 
+  double output;
   /**
    * Drives the robot using arcade controls.
    *
@@ -260,17 +260,17 @@ public class DriveSubsystem extends PomSubsystem {
    */
   public void arcadeDrive(double fwd, double rot) {
     //restroe if slew rate doesnt work properly
-    // if (Math.abs(output) < Math.abs(fwd / 2)) {
-    //   output = fwd / 2;
-    // }
-    // if (fwd - output > RATE) {
-    //   output += RATE;
-    // } else if (output - fwd > RATE) {
-    //   output -= RATE;
-    // }
+    if (Math.abs(output) < Math.abs(fwd / 2)) {
+      output = fwd / 2;
+    }
+    if (fwd - output > RATE) {
+      output += RATE;
+    } else if (output - fwd > RATE) {
+      output -= RATE;
+    }
     SmartDashboard.putNumber("fwd", fwd);
     SmartDashboard.putNumber("rot", rot);
-    mDrive.arcadeDrive(fwd, rot);
+    mDrive.arcadeDrive(output, rot);
   }
 
   /**
@@ -362,11 +362,12 @@ public class DriveSubsystem extends PomSubsystem {
 
     public Command arcadeDriveCommand(Supplier<Double> fwd, Supplier<Double> rot)
   {
-    SlewRateLimiter rateLimit = new SlewRateLimiter(RATE);
-    SlewRateLimiter turnRateLimit = new SlewRateLimiter(RATE);
-    rateLimit.reset((leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2);
+    // SlewRateLimiter rateLimit = new SlewRateLimiter(RATE);
+    // SlewRateLimiter turnRateLimit = new SlewRateLimiter(RATE);
+    // rateLimit.reset((leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2);
     
-    return this.run(() -> arcadeDrive(rateLimit.calculate(-fwd.get()), turnRateLimit.calculate(rot.get())));
+    // return this.run(() -> arcadeDrive(rateLimit.calculate(-fwd.get()), turnRateLimit.calculate(rot.get())));
+    return this.run(() -> arcadeDrive((-fwd.get()), (rot.get())));
     
   }
     public Command myArcadeDriveCommand(Supplier<Double> fwd, Supplier<Double> rot)
