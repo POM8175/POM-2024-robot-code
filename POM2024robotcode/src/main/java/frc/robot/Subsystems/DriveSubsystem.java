@@ -107,12 +107,13 @@ public class DriveSubsystem extends PomSubsystem {
     // gearbox is constructed, you might have to invert the left side instead.
     masterRightMotor.setInverted(true);
     slaveRightMotor.setInverted(true);
+    masterLeftMotor.setInverted(false);
+    slaveLeftMotor.setInverted(false);
     
     leftEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
     rightEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
-
     leftEncoder.setVelocityConversionFactor(ROTATIONS_TO_METERS / 60);
-    rightEncoder.setVelocityConversionFactor(ROTATIONS_TO_METERS / 60);
+    rightEncoder.setVelocityConversionFactor(ROTATIONS_TO_METERS/ 60);
 
     field = new Field2d();
 
