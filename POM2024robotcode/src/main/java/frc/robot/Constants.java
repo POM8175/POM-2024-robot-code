@@ -121,14 +121,14 @@ public class Constants {
         public static final int SHOOTER_ARM_MOTOR = 7;
         public static final int FOLD_MICRO_SWITCH_ID = 3;
         
-        public static final double KP = 0.0124;
-        public static final double KI = 0.0;
+        public static final double KP = 0.65;
+        public static final double KI = 0.03;
         public static final double KIZONE = 0;
         public static final double KD = 0.0;
 
         //trpezoid contraits, need to be found using sysid
-        public static final double MAX_VELOCITY_RAD_PER_SECOND = 0;
-        public static final double MAX_ACCELERATION_RAD_PER_SECOND_SQUARED = 0;
+        public static final double MAX_VELOCITY_RAD_PER_SECOND = Math.PI;
+        public static final double MAX_ACCELERATION_RAD_PER_SECOND_SQUARED = Math.PI;
         public static final double STARTING_OFFSET_RAD = 0;
 
         //arm feed forward gains, need to be found
@@ -138,23 +138,23 @@ public class Constants {
         public static final double KA_VOLTS_SECOND_SQUARED_PER_RAD = 0;
 
         //calculate factors to rads and rads per second
-        public static final double POSITON_FACTOR = 0;
-        public static final double VELOCITY_FACTOR = 0;
+        public static final double POSITON_FACTOR = /*gears*/ 13.0/37 *  /*to rads*/2 * Math.PI /*versa*/ /50;
+        public static final double VELOCITY_FACTOR = POSITON_FACTOR / 60;
 
 
         public static final double NONE = -1;
 
-        public static final double TOLERANCE = 0;
+        public static final double TOLERANCE = 0.05;
         
         public static final double SHOOT_SPEED = 8500;
         public static final double SHOOT_AMP_SPEED = 1200;
         public static final double SHOOT_SPEED_TOLERANCE = 0.05;
         public static final double SHOOT_TO_WING_SPEED = 0.8;
 
-        public static final double INTAKE_CAN_MOVE = 0;
-        public static final double SUB_INTAKE_POS = 1;
-        public static final double SHOOT_PODIUM_POS = 3;
-        public static final double SHOOT_AMP_POS = 4;
+        public static final double INTAKE_CAN_MOVE = 0.5;
+        public static final double SUB_INTAKE_POS = 0;
+        public static final double SHOOT_PODIUM_POS = 0.1;
+        public static final double SHOOT_AMP_POS = 0.85;
 
 
 
@@ -166,7 +166,7 @@ public class Constants {
         public static final double SHOOTER_ANGLE_TO_ARM = Math.toRadians(55.34);
         public static final double OTHER_SIDE = 10;
         
-        public static final double ARM_OFFSET = Math.PI / 2;
+        public static final double ARM_OFFSET = 0;
 
     }
     
@@ -174,7 +174,7 @@ public class Constants {
     public static final class TransferConstants
     {
         public static final int TRANSFER_MOTOR = 8;
-        public static final double TRANSFER_SPEED =-0.95;
+        public static final double TRANSFER_SPEED =-0.6;
 
         public static final Color noteColor = new Color(130, 98, 26);
         public static final Color blueColor = new Color(54, 113, 86);

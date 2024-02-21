@@ -10,58 +10,56 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.GeneralFunctions;
 import frc.robot.Subsystems.DriveSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class TurnByDegreeCommand extends Command {
+public class DriveMeasured extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveSubsystem driveSubsystem;
-  private final PIDController anglePidController;
-  private Rotation2d mSetPoint;
-  private double mDelta;
+  private final PIDController pid;
+  private double meters;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public  TurnByDegreeCommand(DriveSubsystem subsystem, double delta) {
+  public  DriveMeasured(DriveSubsystem subsystem, double meters) {
     driveSubsystem = subsystem;    
+    this.meters = meters;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
 
-    mDelta = delta;
-    SmartDashboard.putNumber("angle kp", KP);
-    SmartDashboard.putNumber("angle ki", KI);
-    SmartDashboard.putNumber("angle kd", KD);
-    SmartDashboard.putNumber("mDelta", KD);
-    
-    
-    anglePidController = new PIDController(KP, KI, KD);
-    anglePidController.enableContinuousInput(-180, 180);
-    anglePidController.setTolerance(ANGLE_TOLERANCE);
+    pid = new PIDController(meters, meters, meters);
+    SmartDashboard.putNumber("fwd kp", KP);
+    SmartDashboard.putNumber("fwd ki", KI);
+    SmartDashboard.putNumber("fwd kd", KD);
+    SmartDashboard.putNumber("fwd meters", KD);
+    pid.setTolerance(0.05);
   }
-  
-  double KP = 0;
-  double KI = 0.0;
+  double lEncoder;
+  double KP = 0.5;
+  double KI = 0.23;
   double KD = 0.0;
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    KP = SmartDashboard.getNumber("angle kp", KP);
-    KI = SmartDashboard.getNumber("angle ki", KI);
-    KD = SmartDashboard.getNumber("angle kd", KD);
-    anglePidController.reset();
-    mDelta = SmartDashboard.getNumber("mDelta", 0);
-    mSetPoint =  Rotation2d.fromDegrees(((int)driveSubsystem.getHeading()) % 360).plus(Rotation2d.fromDegrees(mDelta));
+    pid.reset();
+    KP = SmartDashboard.getNumber("fwd kp", KP);
+    KI = SmartDashboard.getNumber("fwd ki", KI);
+    KD = SmartDashboard.getNumber("fwd kd", KD);
+    meters = SmartDashboard.getNumber("fwd meters", 0);
+    lEncoder = driveSubsystem.getLeftEncoder().getPosition();
+    pid.setPID(KP, KI, KD);
+    pid.setSetpoint(meters + lEncoder);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    anglePidController.setSetpoint(mSetPoint.getDegrees());
-    double r = anglePidController.calculate(((int)driveSubsystem.getHeading()) % 360);
-    driveSubsystem.arcadeDrive(0, r > 0.5 ? 0.5 : r);
+  public void execute()
+  {
+    double x = pid.calculate(driveSubsystem.getLeftEncoder().getPosition());
+    driveSubsystem.arcadeDrive(x > 0.5 ? 0.5 : x, 0);
   }
 
   // Called once the command ends or is interrupted.
@@ -73,6 +71,6 @@ public class TurnByDegreeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return anglePidController.atSetpoint();
+    return pid.atSetpoint();
   }
 }

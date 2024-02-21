@@ -15,7 +15,6 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -171,6 +170,8 @@ public class DriveSubsystem extends PomSubsystem {
       y = 0;
       field.getObject("note").setPose(new Pose2d(-100, -100, Rotation2d.fromDegrees(0)));
     }
+    SmartDashboard.putNumber("left Drive", masterLeftMotor.get());
+    SmartDashboard.putNumber("right Drive", masterRightMotor.get());
 
   }
 
@@ -196,6 +197,16 @@ public class DriveSubsystem extends PomSubsystem {
     rightPid.setReference(getLeftEncoder().getPosition() + distance, CANSparkMax.ControlType.kPosition);
   }
 
+  public void setPid(double kp, double ki, double kd)
+  {
+    leftPid.setP(kp);
+    leftPid.setI(ki);
+    leftPid.setD(kd);
+    rightPid.setP(kp);
+    rightPid.setI(ki);
+    rightPid.setD(kd);
+    
+  }
 
   public void myArcadeDrive(double fwd, double rot)
   {

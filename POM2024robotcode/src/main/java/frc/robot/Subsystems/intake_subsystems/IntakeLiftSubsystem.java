@@ -101,8 +101,7 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     public Command OpenCloseIntake(boolean open)
     {
         this.open = open;
-        pid.setSetpoint(open ? GROUND : FOLD);
-        return( new RunCommand(() -> setMotor(pid.calculate(getEncoderPosition())), this).until(() -> pid.atSetpoint()).andThen(this.runOnce(() -> stopMotor()))).unless(armIsThere);
+        return (runOnce(() -> pid.reset()).andThen(run(() -> setSetPoint(open ? GROUND : FOLD))).until(() -> pid.atSetpoint()).andThen(this.runOnce(() -> stopMotor()))).unless(armIsThere);
     }
 
     public Command stayInPlace()
