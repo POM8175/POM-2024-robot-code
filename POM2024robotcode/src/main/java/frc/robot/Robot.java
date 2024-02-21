@@ -85,6 +85,48 @@ public class Robot extends TimedRobot {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+
+
+        
+        //Field
+        SmartDashboard.putNumber("Field/Pose X Value", m_robotContainer.driveSubsystem.getPose().getX());
+        SmartDashboard.putNumber("Field/Pose Y Value", m_robotContainer.driveSubsystem.getPose().getY());
+        SmartDashboard.putNumber("Field/Pose Rotation Value", m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees());
+        SmartDashboard.putNumber("Field/Yaw", m_robotContainer.driveSubsystem.getHeading());
+
+        //Drive
+        SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Velocity",m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity());
+        SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Velocity",m_robotContainer.driveSubsystem.getRightEncoder().getVelocity());
+        SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Position", m_robotContainer.driveSubsystem.getLeftEncoder().getPosition());
+        SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Position", m_robotContainer.driveSubsystem.getRightEncoder().getPosition());
+        SmartDashboard.putNumber("Drive/Encoder/Average Speed", (m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity() + m_robotContainer.driveSubsystem.getRightEncoder().getVelocity())/2);
+        SmartDashboard.putBoolean("Drive/Is Angle To Speaker", (m_robotContainer.driveSubsystem.calcAngleToSpeaker() < ANGLE_TOLERANCE));
+      
+
+
+        //Intake Tab
+        SmartDashboard.putNumber("Transfer/Color/Red", m_robotContainer.transferSubsystem.colorSensor.getRed());
+        SmartDashboard.putNumber("Transfer/Color/Green", m_robotContainer.transferSubsystem.colorSensor.getGreen());
+        SmartDashboard.putNumber("Transfer/Color/Blue", m_robotContainer.transferSubsystem.colorSensor.getBlue());
+        SmartDashboard.putString("Transfer/Color/Color",m_robotContainer.transferSubsystem.colorSensor.getColor().toHexString());
+        SmartDashboard.putBoolean("Transfer/Color/IsNoteIn",m_robotContainer.transferSubsystem.isNoteIn());
+        // SmartDashboard.putNumber("Intake/Lift/Encoder Position", m_robotContainer.intakeLiftSubsystem.getEncoderPosition());
+
+
+        //Shooting Tab
+        // SmartDashboard.putNumber("Arm/Encoder Position", m_robotContainer.shootingArmSubsystem.getEncoderPosition());
+        // SmartDashboard.putNumber("Arm/Speed", m_robotContainer.shootingArmSubsystem.getEncoder().getVelocity());
+        // SmartDashboard.putBoolean("Arm/Intake Can Move", m_robotContainer.shootingArmSubsystem.intakeCanMove().getAsBoolean());
+        // SmartDashboard.putBoolean("Arm/Limit Switch", m_robotContainer.shootingArmSubsystem.isFoldSwitchPressed());
+        SmartDashboard.putNumber("Shooting/Speed", m_robotContainer.shootingSubsystem.getRate());
+        SmartDashboard.putBoolean("Shooting/Is At Wanted Speed", isAutonomous());
+        // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());        
+
+
+
+       
+
+
     }
     
     
@@ -150,45 +192,6 @@ public class Robot extends TimedRobot {
 
         
        
-
-        //Field
-        SmartDashboard.putNumber("Field/Pose X Value", m_robotContainer.driveSubsystem.getPose().getX());
-        SmartDashboard.putNumber("Field/Pose Y Value", m_robotContainer.driveSubsystem.getPose().getY());
-        SmartDashboard.putNumber("Field/Pose Rotation Value", m_robotContainer.driveSubsystem.getPose().getRotation().getDegrees());
-
-
-        //Drive
-        SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Velocity",m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity());
-        SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Velocity",m_robotContainer.driveSubsystem.getRightEncoder().getVelocity());
-        SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Position", m_robotContainer.driveSubsystem.getLeftEncoder().getPosition());
-        SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Position", m_robotContainer.driveSubsystem.getRightEncoder().getPosition());
-        SmartDashboard.putNumber("Drive/Encoder/Average Speed", (m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity() + m_robotContainer.driveSubsystem.getRightEncoder().getVelocity())/2);
-        SmartDashboard.putBoolean("Drive/Is Angle To Speaker", (m_robotContainer.driveSubsystem.calcAngleToSpeaker() < ANGLE_TOLERANCE));
-      
-
-
-        //Intake Tab
-        SmartDashboard.putNumber("Transfer/Color/Red", m_robotContainer.transferSubsystem.colorSensor.getRed());
-        SmartDashboard.putNumber("Transfer/Color/Green", m_robotContainer.transferSubsystem.colorSensor.getGreen());
-        SmartDashboard.putNumber("Transfer/Color/Blue", m_robotContainer.transferSubsystem.colorSensor.getBlue());
-        SmartDashboard.putString("Transfer/Color/Color",m_robotContainer.transferSubsystem.colorSensor.getColor().toHexString());
-        SmartDashboard.putBoolean("Transfer/Color/IsNoteIn",m_robotContainer.transferSubsystem.isNoteIn());
-        // SmartDashboard.putNumber("Intake/Lift/Encoder Position", m_robotContainer.intakeLiftSubsystem.getEncoderPosition());
-
-
-        //Shooting Tab
-        // SmartDashboard.putNumber("Arm/Encoder Position", m_robotContainer.shootingArmSubsystem.getEncoderPosition());
-        // SmartDashboard.putNumber("Arm/Speed", m_robotContainer.shootingArmSubsystem.getEncoder().getVelocity());
-        // SmartDashboard.putBoolean("Arm/Intake Can Move", m_robotContainer.shootingArmSubsystem.intakeCanMove().getAsBoolean());
-        // SmartDashboard.putBoolean("Arm/Limit Switch", m_robotContainer.shootingArmSubsystem.isFoldSwitchPressed());
-        SmartDashboard.putNumber("Shooting/Speed", m_robotContainer.shootingSubsystem.getRate());
-        SmartDashboard.putBoolean("Shooting/Is At Wanted Speed", isAutonomous());
-        // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());        
-
-
-
-       
-
     }   
 
     @Override

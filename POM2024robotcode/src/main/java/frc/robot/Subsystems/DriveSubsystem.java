@@ -157,7 +157,7 @@ public class DriveSubsystem extends PomSubsystem {
     }
     odometry.update(mGyro.getRotation2d(), new DifferentialDriveWheelPositions(leftEncoder.getPosition(), rightEncoder.getPosition()));
     poseEstimator.update(mGyro.getRotation2d(), new DifferentialDriveWheelPositions(leftEncoder.getPosition(), rightEncoder.getPosition()));
-    field.setRobotPose(getPoseOdometry());
+    field.setRobotPose(getPose());
     
     x = NetworkTableInstance.getDefault().getTable("Vision").getEntry("x").getDouble(0);
     y = NetworkTableInstance.getDefault().getTable("Vision").getEntry("y").getDouble(0);
@@ -341,7 +341,7 @@ public class DriveSubsystem extends PomSubsystem {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return mGyro.getFusedHeading();
+    return mGyro.getFusedHeading() % 360;
   }
 
   /**

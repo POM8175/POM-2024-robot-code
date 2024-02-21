@@ -111,7 +111,7 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     }
     public Command goToCommand(double to)
     {
-        pid.reset();
-        return run(() -> setSetPoint(to)).until(() -> pid.atSetpoint());
+        
+        return runOnce(() -> pid.reset()).andThen(run(() -> setSetPoint(to)).until(() -> pid.atSetpoint()));
     }
 }
