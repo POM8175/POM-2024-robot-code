@@ -120,6 +120,7 @@ public class Constants {
         
         public static final int SHOOTER_ARM_MOTOR = 7;
         public static final int FOLD_MICRO_SWITCH_ID = 3;
+        public static final int BRAKE_MICRO_SWITCH_ID = 9;
         
         public static final double KP = 0.65;
         public static final double KI = 0.03;
@@ -138,13 +139,13 @@ public class Constants {
         public static final double KA_VOLTS_SECOND_SQUARED_PER_RAD = 0;
 
         //calculate factors to rads and rads per second
-        public static final double POSITON_FACTOR = /*gears*/ 13.0/37 *  /*to rads*/2 * Math.PI /*versa*/ /50;
+        public static final double POSITON_FACTOR = /*gears*/ 0.25 /*to rads*/ * 2 * Math.PI /*versa*/ /50;
         public static final double VELOCITY_FACTOR = POSITON_FACTOR / 60;
 
 
         public static final double NONE = -1;
 
-        public static final double TOLERANCE = 0.05;
+        public static final double TOLERANCE = 0.017;
         
         public static final double SHOOT_SPEED = 8500;
         public static final double SHOOT_AMP_SPEED = 1200;
@@ -154,7 +155,7 @@ public class Constants {
         public static final double INTAKE_CAN_MOVE = 0.5;
         public static final double SUB_INTAKE_POS = 0;
         public static final double SHOOT_PODIUM_POS = 0.1;
-        public static final double SHOOT_AMP_POS = 0.85;
+        public static final double SHOOT_AMP_POS = 0.87;
 
 
 
@@ -209,7 +210,7 @@ public class Constants {
 
         public static final double FOLD = 0;
         public static final double GROUND = 4.38;
-        public static final double TOLERANCE = 0.15;
+        public static final double TOLERANCE = 0.08;
         
 
 

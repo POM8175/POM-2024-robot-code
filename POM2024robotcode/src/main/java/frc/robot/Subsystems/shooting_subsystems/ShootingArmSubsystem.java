@@ -23,12 +23,18 @@ import frc.robot.Subsystems.PomSubsystem;
 public class ShootingArmSubsystem extends PomSubsystem{
 
   enum State{
-    OpenForIntake,
-    TakeFromIntake,
-    AutoForShoot,
-    AMP,
-    ShootFromPodium,
-    Unkown
+    TakeFromIntake(0),
+    OpenForIntake(1),
+    AutoForShoot(2),
+    AMP(3),
+    ShootFromPodium(4),
+    Unkown(5);
+    public final int value;
+
+    State(int value) {
+      this.value = value;
+    }
+  
   }
 
     private State state = State.Unkown;
@@ -36,6 +42,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
     private final RelativeEncoder encoder;
     private SparkPIDController pid;
     private DigitalInput foldMicroSwitch;
+    private DigitalInput brakeMicroSwitch;
     private BooleanSupplier intakeIsThere;
 
     private final ProfiledPIDController controller;
@@ -57,18 +64,18 @@ public class ShootingArmSubsystem extends PomSubsystem{
     pid.setD(KD, 0);
     pid.setIZone(KIZONE, 0);
     foldMicroSwitch = new DigitalInput(FOLD_MICRO_SWITCH_ID);
+    brakeMicroSwitch = new DigitalInput(BRAKE_MICRO_SWITCH_ID);
 
-    liftMotor.setIdleMode(IdleMode.kCoast); // check
+    liftMotor.setIdleMode(IdleMode.kBrake); // check
 
 
-    setDefaultCommand(goToAngleCommand(controller.getGoal()));
-    // setDefaultCommand(runOnce(() -> stopMotor()));
-    resetEncoder();
+    // setDefaultCommand(stayInPlaceCommand());
+    setDefaultCommand(runOnce(() -> stopMotor()));
+    // resetEncoder();
   }
 
   @Override
   public void periodic() {
-    //liftTab.add("arm encoder", liftMotor.getEncoder().getPosition()).withPosition(0, 0).withSize(1, 1).withWidget(BuiltInWidgets.kNumberSlider);
     // This method will be called once per scheduler run
     if(isFoldSwitchPressed())
     {
@@ -77,8 +84,10 @@ public class ShootingArmSubsystem extends PomSubsystem{
 
     SmartDashboard.putNumber("arm encoder", getEncoderPosition());
     SmartDashboard.putNumber("arm motor", liftMotor.get());
+    SmartDashboard.putNumber("arm set point", controller.getGoal().position);
     SmartDashboard.putBoolean("arm micro switch", isFoldSwitchPressed());
-    SmartDashboard.putBoolean("arm can move", intakeIsThere.getAsBoolean());
+    SmartDashboard.putBoolean("arm can't move", intakeIsThere.getAsBoolean());
+    SmartDashboard.putBoolean("brake switch", !brakeMicroSwitch.get());
     
     if (controller.getSetpoint().position == INTAKE_CAN_MOVE)
       state = State.OpenForIntake;
@@ -90,7 +99,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
       state = State.AMP;
     else
       state = State.Unkown;
-    
+    liftMotor.setIdleMode(brakeMicroSwitch.get() ? IdleMode.kBrake : IdleMode.kCoast);
   }
 
   public void setIntakeSup(BooleanSupplier sup)
@@ -137,12 +146,15 @@ public class ShootingArmSubsystem extends PomSubsystem{
 
   public void moveWithProfile(TrapezoidProfile.State goal)
   {
-    if(isFoldSwitchPressed() && state == State.TakeFromIntake)
+    controller.setGoal(goal);
+    if(isFoldSwitchPressed() && goal.position == SUB_INTAKE_POS)
     {
       stopMotor();
+      SmartDashboard.putBoolean("Enteredd", false);
     }
     else{
-      setMotor(controller.calculate(encoder.getPosition(), goal));
+      SmartDashboard.putBoolean("Enteredd", true);
+      setMotor(controller.calculate(encoder.getPosition()));
     }
   }
 
@@ -160,7 +172,6 @@ public class ShootingArmSubsystem extends PomSubsystem{
   @Override
   public void setMotor(double speed)
   {
-    SmartDashboard.putBoolean("Enteredd", true);
     liftMotor.set(speed);
   }
 
@@ -179,9 +190,9 @@ public class ShootingArmSubsystem extends PomSubsystem{
     return liftMotor;
   }
 
-  public BooleanSupplier intakeCanMove()
+  public BooleanSupplier intakeCantMove()
   {
-    return () -> encoder.getPosition() >= INTAKE_CAN_MOVE && controller.getSetpoint().position > INTAKE_CAN_MOVE;
+    return () -> !(encoder.getPosition() >= INTAKE_CAN_MOVE && controller.getSetpoint().position > INTAKE_CAN_MOVE);
   }
 
   public double calcArmPosForShoot(Supplier<Pose2d> curr)
@@ -203,7 +214,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
 
   public Command goToAngleCommand(TrapezoidProfile.State goal)
   {
-    return runOnce(() -> controller.reset(getEncoderPosition())).andThen(this.run(() -> moveWithProfile(goal)).until(()-> controller.atGoal()));//.unless(() -> goal.position < INTAKE_CAN_MOVE && intakeIsThere.getAsBoolean()));
+    return runOnce(() -> controller.reset(getEncoderPosition())).andThen((this.run(() -> moveWithProfile(goal)).until(()-> controller.atGoal())).unless(() -> goal.position < INTAKE_CAN_MOVE && intakeIsThere.getAsBoolean()));
   }
   public Command goToAngleCommand(double goal)
   {
@@ -213,16 +224,16 @@ public class ShootingArmSubsystem extends PomSubsystem{
   {
     return runOnce(() -> controller.reset(getEncoderPosition())).andThen(this.run(() -> moveWithProfile(new TrapezoidProfile.State(calcArmPosForShoot(poseSup), 0))).until(()-> controller.atGoal()).unless(() -> calcArmPosForShoot(poseSup) < INTAKE_CAN_MOVE && intakeIsThere.getAsBoolean()));
   }
+    public Command stayInPlaceCommand()
+  {
+    return runOnce(() -> controller.reset(getEncoderPosition())).andThen((this.run(() -> moveWithProfile(controller.getGoal())).until(()-> controller.atGoal())));
+  }
   public Command OpenForIntakeCommand()
   {
-    return runOnce(() -> controller.reset(getEncoderPosition())).andThen(this.run(() -> moveWithProfile(new TrapezoidProfile.State(INTAKE_CAN_MOVE, 0))).until(()-> encoder.getPosition() > INTAKE_CAN_MOVE).andThen(goToAngleCommand(new TrapezoidProfile.State(encoder.getPosition(), 0))));
+    return runOnce(() -> controller.reset(getEncoderPosition())).andThen(this.run(() -> moveWithProfile(new TrapezoidProfile.State(INTAKE_CAN_MOVE + 0.1, 0))).until(()-> encoder.getPosition() > INTAKE_CAN_MOVE).andThen(() -> stopMotor()));
   }
-  public Command testtt(double goal)
+  public Command closeSlow()
   {
-    return runOnce(() -> controller.reset(getEncoderPosition())).andThen(this.run(() -> moveWithProfile(new TrapezoidProfile.State(goal, 0))));
-  }
-  public Command OpenSlow()
-  {
-    return this.run(() -> setMotor(0.08));
+      return run(() -> setMotor(-0.07)).until(()-> isFoldSwitchPressed());
   }
 }

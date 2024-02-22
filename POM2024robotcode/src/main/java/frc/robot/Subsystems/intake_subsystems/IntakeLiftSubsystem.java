@@ -12,7 +12,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Subsystems.PomSubsystem;
 
@@ -31,7 +30,7 @@ public class IntakeLiftSubsystem extends PomSubsystem{
         pid = new PIDController(KP, KI, KD);
         pid.setTolerance(TOLERANCE);
         motor.clearStickyFaults();
-        motor.setNeutralMode(NeutralMode.Brake);
+        motor.setNeutralMode(NeutralMode.Coast);
         pid.setSetpoint(FOLD);
         pid.setTolerance(TOLERANCE);
         setDefaultCommand(runOnce(() -> stopMotor()).andThen(new WaitCommand(0.1)));
@@ -42,6 +41,7 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     {
         SmartDashboard.putNumber("Potentiometer", potentiometer.get());
         SmartDashboard.putNumber("intake arm motor", motor.get());
+        SmartDashboard.putBoolean("arm is there", armIsThere.getAsBoolean());
     }
     
     public boolean isIntakeOpen()
@@ -59,9 +59,9 @@ public class IntakeLiftSubsystem extends PomSubsystem{
       armIsThere = sup;
     }
 
-    public BooleanSupplier armCanMove()
+    public BooleanSupplier armCantMove()
     {
-        return () -> !((potentiometer.get() > 0 + TOLERANCE && pid.getSetpoint()  == FOLD) || (potentiometer.get() < GROUND - TOLERANCE + TOLERANCE && pid.getSetpoint()  == GROUND));
+        return () -> ((potentiometer.get() > 0 + TOLERANCE && pid.getSetpoint()  == FOLD) || (potentiometer.get() < GROUND - TOLERANCE + TOLERANCE && pid.getSetpoint()  == GROUND));
     }
 
     public boolean isOpen()
