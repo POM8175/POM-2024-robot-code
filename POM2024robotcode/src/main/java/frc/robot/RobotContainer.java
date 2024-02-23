@@ -98,7 +98,8 @@ public class RobotContainer {
     driveSubsystem.setDefaultCommand(driveSubsystem.arcadeDriveCommand(() -> driverCommandJoystick.getRawAxis(RIGHT_JOYSTICK_Y), () -> driverCommandJoystick.getRawAxis(LEFT_TRIGGER) - driverCommandJoystick.getRawAxis(RIGHT_TRIGGER)));
 
     m_chooser.setDefaultOption("none", new InstantCommand());
-    m_chooser.addOption("shoot move Out", autonomousCommands.shootMoveOut());
+    m_chooser.addOption("shoot", autonomousCommands.shoot());
+    m_chooser.addOption("shoot try collect", autonomousCommands.shootMoveOut());
     m_chooser.addOption("shoot collect shoot", autonomousCommands.shootCollectShoot());
     // transferSubsystem.setDefaultCommand(transferSubsystem.joystickShootCommand(()->operateCommandJoystick.getRawAxis(LEFT_JOYSTICK_Y)));
     // shootingSubsystem.setDefaultCommand(shootingSubsystem.smartdashShootCommand());
@@ -167,10 +168,11 @@ public class RobotContainer {
     new Trigger(operateCommandJoystick.button(A)).onTrue(intakeNoteCommand());
     new Trigger(operateCommandJoystick.button(X)).onTrue(closeIntakeCommand());
     new Trigger(operateCommandJoystick.axisGreaterThan(RIGHT_TRIGGER, THRESHOLD)).onTrue(shootingSubsystem.spinWheelsCommand());
+    new Trigger(operateCommandJoystick.axisLessThan(LEFT_JOYSTICK_Y, -THRESHOLD)).onTrue(intakeRollerSubsystem.intakeNoteCommand().raceWith(transferSubsystem.getFromIntake()).until(operateCommandJoystick.button(B)));
     new Trigger(operateCommandJoystick.button(RB)).onTrue(shootingSubsystem.stopWheelsCommand().alongWith(transferSubsystem.stopWheelsCommand()));
     new Trigger(operateCommandJoystick.button(LB)).onTrue(shootingSubsystem.spinWheelsToSpeedCommand(SHOOT_AMP_SPEED).raceWith(transferSubsystem.amp()));
     new Trigger(operateCommandJoystick.button(Y)).onTrue(transferSubsystem.transfer(false).raceWith(intakeRollerSubsystem.outakeNoteCommand()));
-    new Trigger(operateCommandJoystick.axisGreaterThan(LEFT_TRIGGER, THRESHOLD)).onTrue((transferSubsystem.transfer(true).raceWith(intakeRollerSubsystem.shoot())).andThen(shootingSubsystem.stopWheelsCommand()));    
+    new Trigger(operateCommandJoystick.axisGreaterThan(LEFT_TRIGGER, THRESHOLD)).onTrue(transferSubsystem.transfer(true).andThen(shootingSubsystem.stopWheelsCommand()));    
     new Trigger(operateCommandJoystick.povLeft()).onTrue(shootingArmSubsystem.closeSlow()); 
     new Trigger(operateCommandJoystick.povRight()).onTrue(shootingArmSubsystem.goToAngleCommand(SHOOT_AMP_POS)); 
     new Trigger(operateCommandJoystick.povUp()).onTrue(shootingArmSubsystem.OpenForIntakeCommand()); 
@@ -204,12 +206,10 @@ public class RobotContainer {
   
   public Command intakeNoteCommand()
   {
-    return (new ConditionalCommand(
-        shootingArmSubsystem.OpenForIntakeCommand().
-          andThen(intakeLiftSubsystem.OpenCloseIntake(true)), 
-        Commands.runOnce(() -> {}), () -> !intakeLiftSubsystem.isOpen())
-        .andThen(shootingArmSubsystem.goToAngleCommand(SUB_INTAKE_POS)).
-        andThen(intakeRollerSubsystem.intakeNoteCommand().raceWith(transferSubsystem.getFromIntake()))).until(operateCommandJoystick.button(B));
+    var openIntake = shootingArmSubsystem.OpenForIntakeCommand().andThen(intakeLiftSubsystem.OpenCloseIntake(true));
+    return openIntake.unless(intakeLiftSubsystem::isOpen)
+      .andThen(shootingArmSubsystem.goToAngleCommand(SUB_INTAKE_POS))
+      .andThen(intakeRollerSubsystem.intakeNoteCommand().raceWith(transferSubsystem.getFromIntake())).until(operateCommandJoystick.button(B));
   }
 
   

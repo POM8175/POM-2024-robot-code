@@ -28,11 +28,11 @@ public class DriveMeasured extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
 
-    pid = new PIDController(meters, meters, meters);
-    SmartDashboard.putNumber("fwd kp", KP);
-    SmartDashboard.putNumber("fwd ki", KI);
-    SmartDashboard.putNumber("fwd kd", KD);
-    SmartDashboard.putNumber("fwd meters", KD);
+    pid = new PIDController(0,0,0);
+    // SmartDashboard.putNumber("fwd kp", KP);
+    // SmartDashboard.putNumber("fwd ki", KI);
+    // SmartDashboard.putNumber("fwd kd", KD);
+    // SmartDashboard.putNumber("fwd meters", KD);
     pid.setTolerance(0.05);
   }
   double lEncoder;
@@ -43,10 +43,10 @@ public class DriveMeasured extends Command {
   @Override
   public void initialize() {
     pid.reset();
-    KP = SmartDashboard.getNumber("fwd kp", KP);
-    KI = SmartDashboard.getNumber("fwd ki", KI);
-    KD = SmartDashboard.getNumber("fwd kd", KD);
-    meters = SmartDashboard.getNumber("fwd meters", 0);
+    // KP = SmartDashboard.getNumber("fwd kp", KP);
+    // KI = SmartDashboard.getNumber("fwd ki", KI);
+    // KD = SmartDashboard.getNumber("fwd kd", KD);
+    // meters = SmartDashboard.getNumber("fwd meters", 0);
     lEncoder = driveSubsystem.getLeftEncoder().getPosition();
     pid.setPID(KP, KI, KD);
     pid.setSetpoint(meters + lEncoder);

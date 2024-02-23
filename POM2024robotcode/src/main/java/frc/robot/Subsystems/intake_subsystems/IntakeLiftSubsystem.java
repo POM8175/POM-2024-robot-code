@@ -42,6 +42,8 @@ public class IntakeLiftSubsystem extends PomSubsystem{
         SmartDashboard.putNumber("Potentiometer", potentiometer.get());
         SmartDashboard.putNumber("intake arm motor", motor.get());
         SmartDashboard.putBoolean("arm is there", armIsThere.getAsBoolean());
+        SmartDashboard.putBoolean("is intake opened", isOpen());
+        SmartDashboard.putBoolean("is intake closed", isClosed());
     }
     
     public boolean isIntakeOpen()

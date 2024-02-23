@@ -18,6 +18,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Subsystems.PomSubsystem;
 
 public class ShootingArmSubsystem extends PomSubsystem{
@@ -218,7 +219,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
   }
   public Command goToAngleCommand(double goal)
   {
-    return goToAngleCommand(new TrapezoidProfile.State(goal, 0));
+    return Commands.print("goToAngleCommand").andThen(goToAngleCommand(new TrapezoidProfile.State(goal, 0)));
   }
   public Command goToAngleCommand(Supplier<Pose2d> poseSup)
   {
@@ -230,10 +231,10 @@ public class ShootingArmSubsystem extends PomSubsystem{
   }
   public Command OpenForIntakeCommand()
   {
-    return runOnce(() -> controller.reset(getEncoderPosition())).andThen(this.run(() -> moveWithProfile(new TrapezoidProfile.State(INTAKE_CAN_MOVE + 0.1, 0))).until(()-> encoder.getPosition() > INTAKE_CAN_MOVE).andThen(() -> stopMotor()));
+    return Commands.print("OpenForIntakeCommand").andThen(runOnce(() -> controller.reset(getEncoderPosition())).andThen(this.run(() -> moveWithProfile(new TrapezoidProfile.State(INTAKE_CAN_MOVE + 0.1, 0))).until(()-> encoder.getPosition() > INTAKE_CAN_MOVE).andThen(() -> stopMotor())));
   }
   public Command closeSlow()
   {
-      return run(() -> setMotor(-0.07)).until(()-> isFoldSwitchPressed());
+      return run(() -> setMotor(-0.2)).until(()-> isFoldSwitchPressed());
   }
 }

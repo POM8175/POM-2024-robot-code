@@ -40,7 +40,8 @@ public class TransferSubsystem extends PomSubsystem
     @Override
     public void periodic()
     {
-        SmartDashboard.putNumber("transfer current speed", transferMotor.get());
+        SmartDashboard.putNumber("transfer current power", transferMotor.get());
+        SmartDashboard.putNumber("transfer current speed", transferMotor.getEncoder().getVelocity());
     }
 
     public boolean isNoteIn()
@@ -75,7 +76,7 @@ public class TransferSubsystem extends PomSubsystem
 
     public Command amp()
     {
-         return this.startEnd(() -> setMotor(-0.5), () -> {}).until(() -> !isNoteIn()).andThen(new WaitCommand(TRANSFER_TIME_OUT)).andThen(() -> stopMotor(), this);
+         return this.startEnd(() -> setMotor(-0.17), () -> {}).until(() -> !isNoteIn()).andThen(new WaitCommand(TRANSFER_TIME_OUT)).andThen(() -> stopMotor(), this);
     }
     public Command joystickShootCommand(DoubleSupplier sup)
     {

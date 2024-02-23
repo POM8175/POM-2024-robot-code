@@ -122,7 +122,7 @@ public class Constants {
         public static final int FOLD_MICRO_SWITCH_ID = 3;
         public static final int BRAKE_MICRO_SWITCH_ID = 9;
         
-        public static final double KP = 0.65;
+        public static final double KP = 0.9;
         public static final double KI = 0.03;
         public static final double KIZONE = 0;
         public static final double KD = 0.0;
@@ -148,14 +148,14 @@ public class Constants {
         public static final double TOLERANCE = 0.017;
         
         public static final double SHOOT_SPEED = 8500;
-        public static final double SHOOT_AMP_SPEED = 1200;
+        public static final double SHOOT_AMP_SPEED = 550;
         public static final double SHOOT_SPEED_TOLERANCE = 0.05;
         public static final double SHOOT_TO_WING_SPEED = 0.8;
 
         public static final double INTAKE_CAN_MOVE = 0.5;
         public static final double SUB_INTAKE_POS = 0;
         public static final double SHOOT_PODIUM_POS = 0.1;
-        public static final double SHOOT_AMP_POS = 0.87;
+        public static final double SHOOT_AMP_POS = 1.08;
 
 
 
