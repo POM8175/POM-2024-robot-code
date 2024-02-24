@@ -148,14 +148,14 @@ public class Constants {
         public static final double TOLERANCE = 0.017;
         
         public static final double SHOOT_SPEED = 8500;
-        public static final double SHOOT_AMP_SPEED = 550;
+        public static final double SHOOT_AMP_SPEED = 880;
         public static final double SHOOT_SPEED_TOLERANCE = 0.05;
         public static final double SHOOT_TO_WING_SPEED = 0.8;
 
         public static final double INTAKE_CAN_MOVE = 0.5;
         public static final double SUB_INTAKE_POS = 0;
         public static final double SHOOT_PODIUM_POS = 0.1;
-        public static final double SHOOT_AMP_POS = 1.08;
+        public static final double SHOOT_AMP_POS = 1.1;
 
 
 
@@ -204,12 +204,12 @@ public class Constants {
         public static final int POTEN_PORTS = 0;
         public static final double POTEN_OFFSET = 0;
 
-        public static final double KP = 0.1;
-        public static final double KI = 0.018;
+        public static final double KP = 0.07;
+        public static final double KI = 0.01;
         public static final double KD = 0;
 
         public static final double FOLD = 0;
-        public static final double GROUND = 4.38;
+        public static final double GROUND = 3.28;
         public static final double TOLERANCE = 0.08;
         
 
