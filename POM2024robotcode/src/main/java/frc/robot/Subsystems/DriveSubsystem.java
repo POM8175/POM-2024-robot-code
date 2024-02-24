@@ -3,6 +3,7 @@ package frc.robot.Subsystems;
 import static frc.robot.Constants.DriveConstants.*;
 
 import java.util.ArrayList;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
@@ -371,14 +372,21 @@ public class DriveSubsystem extends PomSubsystem {
   }
 
 
-    public Command arcadeDriveCommand(Supplier<Double> fwd, Supplier<Double> rot)
+  boolean isReverse = false;
+  boolean lastReverse = false;
+  public Command arcadeDriveCommand(Supplier<Double> fwd, Supplier<Double> rot, BooleanSupplier reverse)
   {
     // SlewRateLimiter rateLimit = new SlewRateLimiter(RATE);
     // SlewRateLimiter turnRateLimit = new SlewRateLimiter(RATE);
     // rateLimit.reset((leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2);
-    
     // return this.run(() -> arcadeDrive(rateLimit.calculate(-fwd.get()), turnRateLimit.calculate(rot.get())));
-    return this.run(() -> arcadeDrive((-fwd.get()), (rot.get())));
+    return this.run(() -> {
+      double f = fwd.get();
+      if(reverse.getAsBoolean() && !lastReverse) { isReverse = !isReverse;}
+      lastReverse = reverse.getAsBoolean();
+      if(isReverse){ f = -f;}
+      arcadeDrive((-f), (rot.get()));
+    });
     
   }
     public Command myArcadeDriveCommand(Supplier<Double> fwd, Supplier<Double> rot)
