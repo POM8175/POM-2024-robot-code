@@ -69,6 +69,10 @@ public class IntakeRollerSubsystem extends PomSubsystem
         return new StartEndCommand(() -> setMotor(-ROLLER_MOTOR_SPEED), () -> stopMotor(), this);
     }
 
+    public Command slow(boolean toShooter)
+    {
+        return startEnd(() -> setMotor(toShooter ? 0.25 : -0.5), this::stopMotor);
+    }
     public Command shoot()
     {
         return startEnd(() -> setMotor(0.2), () -> stopMotor());
