@@ -57,7 +57,7 @@ public class ShootingSubsystem extends PomSubsystem {
     @Override
     public void setMotor(double speed) {;
         rightPID.setReference(speed, CANSparkMax.ControlType.kVelocity);
-        leftPID.setReference(0.72 * speed, CANSparkMax.ControlType.kVelocity);
+        leftPID.setReference(1 * speed, CANSparkMax.ControlType.kVelocity);
         }
     @Override
     public void stopMotor() {
@@ -94,8 +94,6 @@ public class ShootingSubsystem extends PomSubsystem {
     public Command smartdashShootCommand()
     {
         return run(() -> setMotor(SmartDashboard.getNumber("wanted speed", 0)));
-    }
-
-        
+    }        
 
 }
