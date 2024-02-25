@@ -4,6 +4,7 @@ import static frc.robot.Constants.ShootingConstants.*;
 
 
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -40,6 +41,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
 
     private State state = State.Unkown;
     private final CANSparkMax liftMotor;
+    private final CANSparkMax liftMotorSlave;
     private final RelativeEncoder encoder;
     private SparkPIDController pid;
     private DigitalInput foldMicroSwitch;
@@ -54,12 +56,18 @@ public class ShootingArmSubsystem extends PomSubsystem{
     controller.setTolerance(TOLERANCE);
 
     liftMotor = new CANSparkMax(SHOOTER_ARM_MOTOR, MotorType.kBrushless);
+    liftMotorSlave = new CANSparkMax(14, MotorType.kBrushless);
     liftMotor.setInverted(true);
     encoder = liftMotor.getEncoder();
     pid = liftMotor.getPIDController();
     
     encoder.setPositionConversionFactor(POSITON_FACTOR);
     encoder.setVelocityConversionFactor(VELOCITY_FACTOR);
+
+    liftMotorSlave.getEncoder().setPositionConversionFactor(POSITON_FACTOR);
+    liftMotorSlave.getEncoder().setVelocityConversionFactor(VELOCITY_FACTOR);
+    liftMotorSlave.setIdleMode(IdleMode.kBrake);
+    liftMotorSlave.follow(liftMotor, true);
     pid.setP(KP, 0);
     pid.setI(KI, 0);
     pid.setD(KD, 0);
@@ -67,7 +75,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
     foldMicroSwitch = new DigitalInput(FOLD_MICRO_SWITCH_ID);
     brakeMicroSwitch = new DigitalInput(BRAKE_MICRO_SWITCH_ID);
 
-    liftMotor.setIdleMode(IdleMode.kBrake); // check
+    liftMotor.setIdleMode(IdleMode.kBrake); 
 
 
     // setDefaultCommand(stayInPlaceCommand());
@@ -101,6 +109,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
     else
       state = State.Unkown;
     liftMotor.setIdleMode(brakeMicroSwitch.get() ? IdleMode.kBrake : IdleMode.kCoast);
+    liftMotorSlave.setIdleMode(brakeMicroSwitch.get() ? IdleMode.kBrake : IdleMode.kCoast);
   }
 
   public void setIntakeSup(BooleanSupplier sup)
@@ -215,7 +224,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
 
   public Command goToAngleCommand(TrapezoidProfile.State goal)
   {
-    return runOnce(() -> controller.reset(getEncoderPosition())).andThen((this.run(() -> moveWithProfile(goal)).until(()-> controller.atGoal())).unless(() -> goal.position < INTAKE_CAN_MOVE && intakeIsThere.getAsBoolean()));
+    return runOnce(()-> controller.reset(getEncoderPosition())).andThen((this.run(() -> moveWithProfile(goal)).until(()-> controller.atGoal())).unless(() -> goal.position < INTAKE_CAN_MOVE && intakeIsThere.getAsBoolean()));
   }
   public Command goToAngleCommand(double goal)
   {
@@ -237,4 +246,9 @@ public class ShootingArmSubsystem extends PomSubsystem{
   {
       return run(() -> setMotor(-0.2)).until(()-> isFoldSwitchPressed());
   }
+  public Command joystickShootCommand(DoubleSupplier sup)
+  {
+      return run(() -> setMotor(sup.getAsDouble()));
+  }
+
 }

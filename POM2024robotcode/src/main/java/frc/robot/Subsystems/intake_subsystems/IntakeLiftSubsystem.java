@@ -25,7 +25,7 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     ArmFeedforward feedforward = new ArmFeedforward(0, 0.09, 0);
     public IntakeLiftSubsystem()
     {
-        potentiometer = new AnalogPotentiometer(POTEN_PORTS, 2 * Math.PI);
+        potentiometer = new AnalogPotentiometer(POTEN_PORTS, 2 * Math.PI, -1.1);
         motor = new WPI_VictorSPX(LIFT_MOTOR);
         pid = new PIDController(KP, KI, KD);
         pid.setTolerance(TOLERANCE);
@@ -69,10 +69,12 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     public boolean isOpen()
     {
         return getEncoderPosition() > GROUND / 5 * 4 && pid.getSetpoint() == GROUND;
+        // return open && motor.get() == 0;
     }
     public boolean isClosed()
     {
         return getEncoderPosition() < GROUND / 5 && pid.getSetpoint() == FOLD;
+        // return !open && motor.get() == 0;
     }
     @Override
     public void stopMotor()
@@ -106,13 +108,19 @@ public class IntakeLiftSubsystem extends PomSubsystem{
         return (runOnce(() -> pid.reset()).andThen(run(() -> setSetPoint(open ? GROUND : FOLD))).until(() -> pid.atSetpoint()).andThen(this.runOnce(() -> stopMotor()))).unless(armIsThere);
     }
 
+    
+    public Command OpenCloseIntakeTimers(boolean open)
+    {
+        this.open = open;
+        return (run(() -> setMotor(open ? 0.25 : -0.25)).withTimeout(open ? 1.07 : 1.23).andThen(this.runOnce(() -> setMotor(open ? -0.08: 0.08))).andThen(new WaitCommand(0.25)).andThen(() -> stopMotor())).unless(armIsThere);
+    }
+
     public Command stayInPlace()
     {
         return run(() -> setMotor(feedforward.calculate (potentiometer.get(), 0)));
     }
     public Command goToCommand(double to)
-    {
-        
+    {        
         return runOnce(() -> pid.reset()).andThen(run(() -> setSetPoint(to)).until(() -> pid.atSetpoint()));
     }
 }

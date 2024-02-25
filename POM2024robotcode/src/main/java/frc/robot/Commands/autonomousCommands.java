@@ -14,16 +14,17 @@ public class autonomousCommands {
     public Command shootTryCollect()
     {
         return arm.closeSlow().alongWith(shoot.spinWheelsCommand()).
+            andThen(new WaitCommand(0.9)).
             andThen(transfer.transfer(true).raceWith(roller.slow(true))).andThen(shoot.stopWheelsCommand()).
             andThen(arm.OpenForIntakeCommand()).
             andThen(intakeLift.OpenCloseIntake(true)).
-            andThen(arm.goToAngleCommand(0).withTimeout(0.4)).
+            andThen(arm.goToAngleCommand(0)).
             andThen(arm.goToAngleCommand(0).alongWith(new DriveMeasured(drive, 0.9)).alongWith((roller.intakeNoteCommand()).raceWith(transfer.getFromIntake())));
     }
     public Command shootCollectShoot()
     {
         return shootTryCollect().
-        andThen(new DriveMeasured(drive, -0.9).alongWith(shoot.spinWheelsCommand())).alongWith(arm.OpenForIntakeCommand().andThen(intakeLift.OpenCloseIntake(false)).andThen(arm.goToAngleCommand(0))).
+        andThen((new DriveMeasured(drive, -0.9).alongWith(shoot.spinWheelsCommand())).alongWith(arm.OpenForIntakeCommand().andThen(intakeLift.OpenCloseIntake(false)))).andThen(arm.goToAngleCommand(0)).
         andThen(new WaitCommand(0.17)).
         andThen(transfer.transfer(true)).
         andThen(shoot.stopWheelsCommand().alongWith(transfer.stopWheelsCommand()));        
@@ -31,7 +32,7 @@ public class autonomousCommands {
     public Command shoot()
     {
         return arm.closeSlow().alongWith(shoot.spinWheelsCommand()).
-        andThen(new WaitCommand(0.2)).
+        andThen(new WaitCommand(1)).
         andThen(transfer.transfer(true));
     }
     public Command shootMoveOut(){
