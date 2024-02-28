@@ -175,7 +175,8 @@ public class Constants {
     public static final class TransferConstants
     {
         public static final int TRANSFER_MOTOR = 8;
-        public static final double TRANSFER_SPEED =-0.95;
+        public static final double TRANSFER_SHOOT_SPEED =-0.95;
+        public static final double TRANSFER_INTAKE_SPEED =-0.22;
 
         public static final Color noteColor = new Color(130, 98, 26);
         public static final Color blueColor = new Color(54, 113, 86);

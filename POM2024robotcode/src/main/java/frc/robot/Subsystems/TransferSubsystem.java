@@ -54,24 +54,22 @@ public class TransferSubsystem extends PomSubsystem
     public void setMotor(double speed)
     {
         transferMotor.set(speed);
-        transferMotor.set(speed);
     }
 
     @Override
     public void stopMotor()
     {
         transferMotor.set(0);
-        transferMotor.set(0);
     }
 
     // the subsystems commands
     public Command getFromIntake()
     {
-        return this.startEnd(() -> setMotor(-0.22), () -> stopMotor()).until(() -> isNoteIn());
+        return this.startEnd(() -> setMotor(TRANSFER_INTAKE_SPEED), () -> stopMotor()).until(() -> isNoteIn());
     }
     public Command transfer(boolean isToShooter)
     {
-        return this.startEnd(() -> setMotor(isToShooter ? TRANSFER_SPEED : -TRANSFER_SPEED), () -> setMotor(isToShooter ? TRANSFER_SPEED : -TRANSFER_SPEED)).until(() -> !isNoteIn()).andThen(new WaitCommand(TRANSFER_TIME_OUT)).andThen(() -> stopMotor(), this);
+        return this.startEnd(() -> setMotor(isToShooter ? TRANSFER_SHOOT_SPEED : -TRANSFER_SHOOT_SPEED), () -> setMotor(isToShooter ? TRANSFER_SHOOT_SPEED : -TRANSFER_SHOOT_SPEED)).until(() -> !isNoteIn()).andThen(new WaitCommand(TRANSFER_TIME_OUT)).andThen(() -> stopMotor(), this);
     }
 
     public Command amp()
