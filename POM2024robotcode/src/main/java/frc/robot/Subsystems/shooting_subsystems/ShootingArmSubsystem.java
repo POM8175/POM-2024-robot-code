@@ -4,6 +4,7 @@ import static frc.robot.Constants.ShootingConstants.*;
 
 
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -12,36 +13,40 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Subsystems.PomSubsystem;
 
 public class ShootingArmSubsystem extends PomSubsystem{
 
   enum State{
-    OpenForIntake,
-    TakeFromIntake,
-    AutoForShoot,
-    AMP,
-    ShootFromPodium,
-    Unkown
+    TakeFromIntake(0),
+    OpenForIntake(1),
+    AutoForShoot(2),
+    AMP(3),
+    ShootFromPodium(4),
+    Unkown(5);
+    public final int value;
+
+    State(int value) {
+      this.value = value;
+    }
+  
   }
 
     private State state = State.Unkown;
     private final CANSparkMax liftMotor;
+    private final CANSparkMax liftMotorSlave;
     private final RelativeEncoder encoder;
     private SparkPIDController pid;
     private DigitalInput foldMicroSwitch;
+    private DigitalInput brakeMicroSwitch;
     private BooleanSupplier intakeIsThere;
-    //ShuffleboardTab liftTab = Shuffleboard.getTab("lift");
-      private final ArmFeedforward m_feedforward =
-      new ArmFeedforward(
-          KS_VOLTS, KG_VOLTS,
-          KV_VOLTS_SECOND_PER_RAD, KA_VOLTS_SECOND_SQUARED_PER_RAD);
 
     private final ProfiledPIDController controller;
   /** Creates a new LiftSubsystem. */
@@ -51,51 +56,60 @@ public class ShootingArmSubsystem extends PomSubsystem{
     controller.setTolerance(TOLERANCE);
 
     liftMotor = new CANSparkMax(SHOOTER_ARM_MOTOR, MotorType.kBrushless);
+    liftMotorSlave = new CANSparkMax(14, MotorType.kBrushless);
+    liftMotor.setInverted(true);
     encoder = liftMotor.getEncoder();
     pid = liftMotor.getPIDController();
     
     encoder.setPositionConversionFactor(POSITON_FACTOR);
     encoder.setVelocityConversionFactor(VELOCITY_FACTOR);
+
+    liftMotorSlave.getEncoder().setPositionConversionFactor(POSITON_FACTOR);
+    liftMotorSlave.getEncoder().setVelocityConversionFactor(VELOCITY_FACTOR);
+    liftMotorSlave.setIdleMode(IdleMode.kBrake);
+    // liftMotorSlave.follow(liftMotor, true);
     pid.setP(KP, 0);
     pid.setI(KI, 0);
     pid.setD(KD, 0);
     pid.setIZone(KIZONE, 0);
     foldMicroSwitch = new DigitalInput(FOLD_MICRO_SWITCH_ID);
+    brakeMicroSwitch = new DigitalInput(BRAKE_MICRO_SWITCH_ID);
 
-    liftMotor.setIdleMode(IdleMode.kBrake); // check
+    liftMotor.setIdleMode(IdleMode.kBrake); 
 
 
-    setDefaultCommand(goToAngleCommand(controller.getGoal()));
-    resetEncoder();
+    // setDefaultCommand(stayInPlaceCommand());
+    setDefaultCommand(runOnce(() -> stopMotor()));
+    // resetEncoder();
   }
 
   @Override
   public void periodic() {
-    //liftTab.add("arm encoder", liftMotor.getEncoder().getPosition()).withPosition(0, 0).withSize(1, 1).withWidget(BuiltInWidgets.kNumberSlider);
     // This method will be called once per scheduler run
     if(isFoldSwitchPressed())
     {
       resetEncoder();
     }
 
-
-    switch ((int)controller.getSetpoint().position) {
-      case (int)INTAKE_CAN_MOVE:
-        state = State.OpenForIntake;
-        break;
-      case (int)SUB_INTAKE_POS:
-        state = State.TakeFromIntake;
-        break;
-      case (int)SHOOT_PODIUM_POS:
-        state = State.ShootFromPodium;
-        break;
-      case (int)SHOOT_AMP_POS:
-        state = State.AMP;
-        break;
-      default:
-        state = State.Unkown;
-        break;
-    }
+    SmartDashboard.putNumber("arm encoder", getEncoderPosition());
+    SmartDashboard.putNumber("arm motor", liftMotor.get());
+    SmartDashboard.putNumber("arm set point", controller.getGoal().position);
+    SmartDashboard.putBoolean("arm micro switch", isFoldSwitchPressed());
+    SmartDashboard.putBoolean("arm can't move", intakeIsThere.getAsBoolean());
+    SmartDashboard.putBoolean("brake switch", !brakeMicroSwitch.get());
+    
+    if (controller.getSetpoint().position == INTAKE_CAN_MOVE)
+      state = State.OpenForIntake;
+    else if (controller.getSetpoint().position == SUB_INTAKE_POS)
+      state = State.TakeFromIntake;
+    else if (controller.getSetpoint().position == SHOOT_PODIUM_POS)
+      state = State.ShootFromPodium;
+    else if (controller.getSetpoint().position == SHOOT_AMP_POS)
+      state = State.AMP;
+    else
+      state = State.Unkown;
+    liftMotor.setIdleMode(brakeMicroSwitch.get() ? IdleMode.kBrake : IdleMode.kCoast);
+    liftMotorSlave.setIdleMode(brakeMicroSwitch.get() ? IdleMode.kBrake : IdleMode.kCoast);
   }
 
   public void setIntakeSup(BooleanSupplier sup)
@@ -142,13 +156,15 @@ public class ShootingArmSubsystem extends PomSubsystem{
 
   public void moveWithProfile(TrapezoidProfile.State goal)
   {
-    if(isFoldSwitchPressed() && state == State.TakeFromIntake)
+    controller.setGoal(goal);
+    if(isFoldSwitchPressed() && goal.position == SUB_INTAKE_POS)
     {
       stopMotor();
+      SmartDashboard.putBoolean("Enteredd", false);
     }
     else{
-      setVoltage(controller.calculate(encoder.getPosition(), goal) 
-        + m_feedforward.calculate(controller.getSetpoint().position, controller.getSetpoint().velocity));
+      SmartDashboard.putBoolean("Enteredd", true);
+      setMotor(controller.calculate(encoder.getPosition()));
     }
   }
 
@@ -159,14 +175,6 @@ public class ShootingArmSubsystem extends PomSubsystem{
   public void setSetPoint(double target) {
     pid.setReference(target, CANSparkMax.ControlType.kPosition, 0);
   }
-  /** set the motors to go to a specified position.
-   * @param targetHeight the position to go to
-   */
-  public void setSetPoint(double target, double feedforward) {
-    pid.setReference(target, CANSparkMax.ControlType.kPosition, 0, feedforward);
-  }
-
-  
 
   /**sets the motor to a paramater value
   * @param power the power to set the motor to
@@ -192,9 +200,9 @@ public class ShootingArmSubsystem extends PomSubsystem{
     return liftMotor;
   }
 
-  public BooleanSupplier intakeCanMove()
+  public BooleanSupplier intakeCantMove()
   {
-    return () -> encoder.getPosition() >= INTAKE_CAN_MOVE && controller.getSetpoint().position > INTAKE_CAN_MOVE;
+    return () -> !(encoder.getPosition() >= INTAKE_CAN_MOVE && controller.getSetpoint().position > INTAKE_CAN_MOVE);
   }
 
   public double calcArmPosForShoot(Supplier<Pose2d> curr)
@@ -216,18 +224,31 @@ public class ShootingArmSubsystem extends PomSubsystem{
 
   public Command goToAngleCommand(TrapezoidProfile.State goal)
   {
-    return this.run(() -> moveWithProfile(goal)).until(()-> controller.atGoal()).unless(() -> goal.position < INTAKE_CAN_MOVE && intakeIsThere.getAsBoolean());
+    return runOnce(()-> controller.reset(getEncoderPosition())).andThen((this.run(() -> moveWithProfile(goal)).until(()-> controller.atGoal())).unless(() -> goal.position < INTAKE_CAN_MOVE && intakeIsThere.getAsBoolean()));
   }
   public Command goToAngleCommand(double goal)
   {
-    return goToAngleCommand(new TrapezoidProfile.State(goal, 0));
+    return Commands.print("goToAngleCommand").andThen(goToAngleCommand(new TrapezoidProfile.State(goal, 0)));
   }
   public Command goToAngleCommand(Supplier<Pose2d> poseSup)
   {
-    return this.run(() -> moveWithProfile(new TrapezoidProfile.State(calcArmPosForShoot(poseSup), 0))).until(()-> controller.atGoal()).unless(() -> calcArmPosForShoot(poseSup) < INTAKE_CAN_MOVE && intakeIsThere.getAsBoolean());
+    return runOnce(() -> controller.reset(getEncoderPosition())).andThen(this.run(() -> moveWithProfile(new TrapezoidProfile.State(calcArmPosForShoot(poseSup), 0))).until(()-> controller.atGoal()).unless(() -> calcArmPosForShoot(poseSup) < INTAKE_CAN_MOVE && intakeIsThere.getAsBoolean()));
+  }
+    public Command stayInPlaceCommand()
+  {
+    return runOnce(() -> controller.reset(getEncoderPosition())).andThen((this.run(() -> moveWithProfile(controller.getGoal())).until(()-> controller.atGoal())));
   }
   public Command OpenForIntakeCommand()
   {
-    return this.run(() -> moveWithProfile(new TrapezoidProfile.State(INTAKE_CAN_MOVE, 0))).until(()-> encoder.getPosition() > INTAKE_CAN_MOVE).andThen(goToAngleCommand(new TrapezoidProfile.State(encoder.getPosition(), 0)));
+    return Commands.print("OpenForIntakeCommand").andThen(runOnce(() -> controller.reset(getEncoderPosition())).andThen(this.run(() -> moveWithProfile(new TrapezoidProfile.State(INTAKE_CAN_MOVE + 0.1, 0))).until(()-> encoder.getPosition() > INTAKE_CAN_MOVE).andThen(() -> stopMotor())));
   }
+  public Command closeSlow()
+  {
+      return run(() -> setMotor(-0.2)).until(()-> isFoldSwitchPressed());
+  }
+  public Command joystickShootCommand(DoubleSupplier sup)
+  {
+      return run(() -> setMotor(sup.getAsDouble()));
+  }
+
 }

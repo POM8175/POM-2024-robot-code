@@ -10,8 +10,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 
-import edu.wpi.first.math.controller.BangBangController;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.GeneralFunctions;
@@ -36,10 +34,11 @@ public class ShootingSubsystem extends PomSubsystem {
        leftEncoder.setPositionConversionFactor(1);
        shooterMotorLeft.setIdleMode(IdleMode.kCoast);
        shooterMotorRight.setIdleMode(IdleMode.kCoast);
-       setDefaultCommand(this.runOnce(() -> stopMotor()));
+    //    setDefaultCommand(this.runOnce(() -> stopMotor()));
        SmartDashboard.putNumber("wanted speed", 0);
-       leftPID.setP(0.5);
-       rightPID.setP(0.5);
+       leftPID.setP(0.0003);
+       rightPID.setP(0.0003);
+
    }
 
    @Override
@@ -57,8 +56,8 @@ public class ShootingSubsystem extends PomSubsystem {
 
     @Override
     public void setMotor(double speed) {;
-        shooterMotorRight.set(rightPID.setReference(speed, CANSparkMax.ControlType.kVelocity).value);
-        shooterMotorLeft.set(leftPID.setReference(0.8 * speed, CANSparkMax.ControlType.kVelocity).value);
+        rightPID.setReference(speed, CANSparkMax.ControlType.kVelocity);
+        leftPID.setReference(1 * speed, CANSparkMax.ControlType.kVelocity);
         }
     @Override
     public void stopMotor() {
@@ -76,7 +75,7 @@ public class ShootingSubsystem extends PomSubsystem {
 
    public Command spinWheelsCommand()
     {
-        return this.startEnd(() -> setMotor(SHOOT_SPEED), () -> {}).until(() -> getRate() >= SHOOT_SPEED - SHOOT_SPEED_TOLERANCE);
+        return this.startEnd(() -> setMotor(SHOOT_SPEED), () -> {}).until(() -> getRate() >= SHOOT_SPEED / 2 - SHOOT_SPEED_TOLERANCE);
     }
     public Command spinWheelsToSpeedCommand(double speed)
     {
@@ -95,8 +94,6 @@ public class ShootingSubsystem extends PomSubsystem {
     public Command smartdashShootCommand()
     {
         return run(() -> setMotor(SmartDashboard.getNumber("wanted speed", 0)));
-    }
-
-        
+    }        
 
 }
