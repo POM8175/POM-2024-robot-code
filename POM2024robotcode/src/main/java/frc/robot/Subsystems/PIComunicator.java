@@ -1,18 +1,11 @@
 package frc.robot.Subsystems;
 
 import java.io.IOException;
-import java.net.Authenticator;
-import java.net.InetSocketAddress;
-import java.net.ProxySelector;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.net.http.HttpClient.Redirect;
-import java.net.http.HttpClient.Version;
-import java.net.http.HttpResponse.BodyHandlers;
-import java.time.Duration;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +24,7 @@ public class PIComunicator extends SubsystemBase
         try{
             //TODO: put the correct URI
         request = HttpRequest.newBuilder()
-            .uri(new URI("http://192.168.55.225:8001/getMyBloodyNote"))
+            .uri(new URI("http://192.168.55.225:8001/Note"))
             .GET()
             .build();
 
@@ -57,6 +50,7 @@ public class PIComunicator extends SubsystemBase
             e.printStackTrace();
         }
 
+        if((left==0)&&(right==0)&&(top==0)&&(buttom==0)) return null;
         return new int[]{left,right,top,buttom};
     }
 }

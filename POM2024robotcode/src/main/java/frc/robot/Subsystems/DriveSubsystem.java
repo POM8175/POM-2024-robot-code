@@ -1,5 +1,6 @@
 package frc.robot.Subsystems;
 
+import static frc.robot.Constants.DriveConstants.ANGLE_TOLERANCE;
 import static frc.robot.Constants.DriveConstants.BOT_POSE_LEN;
 import static frc.robot.Constants.DriveConstants.DRIVE_KINEMATICS;
 import static frc.robot.Constants.DriveConstants.FIELD_X;
@@ -169,6 +170,20 @@ public class DriveSubsystem extends PomSubsystem {
       y = 0;
       field.getObject("note").setPose(new Pose2d(-100, -100, Rotation2d.fromDegrees(0)));
     }
+
+
+        SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Velocity",getLeftEncoder().getVelocity());
+        SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Velocity",getRightEncoder().getVelocity());
+        SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Position", getLeftEncoder().getPosition());
+        SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Position",getRightEncoder().getPosition());
+        SmartDashboard.putNumber("Drive/Encoder/Average Speed", (getLeftEncoder().getVelocity() + getRightEncoder().getVelocity())/2);
+        SmartDashboard.putBoolean("Drive/Is Angle To Speaker", (calcAngleToSpeaker() < ANGLE_TOLERANCE));
+      
+
+        SmartDashboard.putNumber("Field/Pose X Value", getPose().getX());
+        SmartDashboard.putNumber("Field/Pose Y Value", getPose().getY());
+        SmartDashboard.putNumber("Field/Pose Rotation Value", getPose().getRotation().getDegrees());
+        
 
   }
 
