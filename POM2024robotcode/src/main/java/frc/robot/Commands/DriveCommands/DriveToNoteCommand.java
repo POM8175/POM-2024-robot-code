@@ -23,6 +23,7 @@ public class DriveToNoteCommand extends Command
     public void initialize()
     {
         note = piComunicator.getNote();
+        if(note == null) this.end(true);
     }
 
     @Override
