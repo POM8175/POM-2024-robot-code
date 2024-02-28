@@ -1,26 +1,13 @@
 package frc.robot.Subsystems;
 
-import static frc.robot.Constants.DriveConstants.ANGLE_TOLERANCE;
-import static frc.robot.Constants.DriveConstants.BOT_POSE_LEN;
-import static frc.robot.Constants.DriveConstants.DRIVE_KINEMATICS;
-import static frc.robot.Constants.DriveConstants.FIELD_X;
-import static frc.robot.Constants.DriveConstants.GYRO_ID;
-import static frc.robot.Constants.DriveConstants.KD;
-import static frc.robot.Constants.DriveConstants.KI;
-import static frc.robot.Constants.DriveConstants.KP;
-import static frc.robot.Constants.DriveConstants.LEFT_MOTOR_LEAD;
-import static frc.robot.Constants.DriveConstants.LEFT_MOTOR_SLAVE;
-import static frc.robot.Constants.DriveConstants.RATE;
-import static frc.robot.Constants.DriveConstants.RIGHT_MOTOR_LEAD;
-import static frc.robot.Constants.DriveConstants.RIGHT_MOTOR_SLAVE;
-import static frc.robot.Constants.DriveConstants.ROTATIONS_TO_METERS;
-import static frc.robot.Constants.DriveConstants.SPEAKER_Y;
-import static frc.robot.Constants.DriveConstants.TL;
+import static frc.robot.Constants.DriveConstants.*;
 
 import java.util.ArrayList;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -29,7 +16,6 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -63,31 +49,20 @@ public class DriveSubsystem extends PomSubsystem {
   private final SparkPIDController leftPid = masterLeftMotor.getPIDController();
   private final SparkPIDController rightPid = masterRightMotor.getPIDController();
 
-  private final RelativeEncoder leftEncoder = masterLeftMotor.getEncoder();
-  private final RelativeEncoder rightEncoder = masterRightMotor.getEncoder();
+  private final RelativeEncoder leftEncoder;
+  private final RelativeEncoder rightEncoder;
 
   private final DifferentialDrive mDrive = new DifferentialDrive(masterLeftMotor, masterRightMotor);
 
   private final WPI_PigeonIMU mGyro = new WPI_PigeonIMU(GYRO_ID);
 
-  private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(
-                                            mGyro.getRotation2d(),
-                                          leftEncoder.getPosition(), 
-                                          rightEncoder.getPosition()
-                                          );
+  private final DifferentialDriveOdometry odometry;
 
 
   double x = 0,y = 0;
   boolean isNote = false;
 
-  private final DifferentialDrivePoseEstimator poseEstimator = new DifferentialDrivePoseEstimator
-              (DRIVE_KINEMATICS, 
-              mGyro.getRotation2d(), 
-              leftEncoder.getPosition(), 
-              rightEncoder.getPosition(), 
-              new Pose2d(),
-              VecBuilder.fill(0.02, 0.02, 0.01),
-              VecBuilder.fill(0.1, 0.1, 0.15));
+  private final DifferentialDrivePoseEstimator poseEstimator;
 
   double [] botPose = new double[BOT_POSE_LEN];
 
@@ -102,6 +77,14 @@ public class DriveSubsystem extends PomSubsystem {
     rightPid.setI(KI);
     rightPid.setD(KD);
 
+    leftPid.setP(VEL_P, VEL_SLOT);
+    rightPid.setP(VEL_P, VEL_SLOT);
+
+    leftPid.setOutputRange(-1, 1);
+    rightPid.setOutputRange(-1, 1);
+    leftPid.setOutputRange(-1, 1, VEL_SLOT);
+    rightPid.setOutputRange(-1, 1, VEL_SLOT);
+
     zeroHeading();
 
     // We need to invert one side of the drivetrain so that positive voltages
@@ -109,10 +92,29 @@ public class DriveSubsystem extends PomSubsystem {
     // gearbox is constructed, you might have to invert the left side instead.
     masterRightMotor.setInverted(true);
     slaveRightMotor.setInverted(true);
+    masterLeftMotor.setInverted(false);
+    slaveLeftMotor.setInverted(false);
     
+    leftEncoder = masterLeftMotor.getEncoder();
+    rightEncoder = masterRightMotor.getEncoder();
     leftEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
     rightEncoder.setPositionConversionFactor(ROTATIONS_TO_METERS);
+    leftEncoder.setVelocityConversionFactor(ROTATIONS_TO_METERS / 60);
+    rightEncoder.setVelocityConversionFactor(ROTATIONS_TO_METERS/ 60);
 
+    odometry = new DifferentialDriveOdometry(
+                                            mGyro.getRotation2d(),
+                                          leftEncoder.getPosition(), 
+                                          rightEncoder.getPosition()
+                                          );
+    poseEstimator = new DifferentialDrivePoseEstimator
+              (DRIVE_KINEMATICS, 
+              mGyro.getRotation2d(), 
+              leftEncoder.getPosition(), 
+              rightEncoder.getPosition(), 
+              new Pose2d(),
+              VecBuilder.fill(0.02, 0.02, 0.01),
+              VecBuilder.fill(0.1, 0.1, 0.15));
     field = new Field2d();
 
 
@@ -125,7 +127,6 @@ public class DriveSubsystem extends PomSubsystem {
     masterRightMotor.setIdleMode(IdleMode.kCoast);
     slaveLeftMotor.setIdleMode(IdleMode.kCoast);
     slaveRightMotor.setIdleMode(IdleMode.kCoast);
-    
     mGyro.reset();
   }
 
@@ -170,20 +171,8 @@ public class DriveSubsystem extends PomSubsystem {
       y = 0;
       field.getObject("note").setPose(new Pose2d(-100, -100, Rotation2d.fromDegrees(0)));
     }
-
-
-        SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Velocity",getLeftEncoder().getVelocity());
-        SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Velocity",getRightEncoder().getVelocity());
-        SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Position", getLeftEncoder().getPosition());
-        SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Position",getRightEncoder().getPosition());
-        SmartDashboard.putNumber("Drive/Encoder/Average Speed", (getLeftEncoder().getVelocity() + getRightEncoder().getVelocity())/2);
-        SmartDashboard.putBoolean("Drive/Is Angle To Speaker", (calcAngleToSpeaker() < ANGLE_TOLERANCE));
-      
-
-        SmartDashboard.putNumber("Field/Pose X Value", getPose().getX());
-        SmartDashboard.putNumber("Field/Pose Y Value", getPose().getY());
-        SmartDashboard.putNumber("Field/Pose Rotation Value", getPose().getRotation().getDegrees());
-        
+    SmartDashboard.putNumber("left Drive", masterLeftMotor.get());
+    SmartDashboard.putNumber("right Drive", masterRightMotor.get());
 
   }
 
@@ -207,6 +196,33 @@ public class DriveSubsystem extends PomSubsystem {
   public void setSetPoint(double distance) {
     leftPid.setReference(getLeftEncoder().getPosition() + distance, CANSparkMax.ControlType.kPosition);
     rightPid.setReference(getLeftEncoder().getPosition() + distance, CANSparkMax.ControlType.kPosition);
+  }
+
+  public void setPid(double kp, double ki, double kd)
+  {
+    leftPid.setP(kp);
+    leftPid.setI(ki);
+    leftPid.setD(kd);
+    rightPid.setP(kp);
+    rightPid.setI(ki);
+    rightPid.setD(kd);
+    
+  }
+
+  public void myArcadeDrive(double fwd, double rot)
+  {
+    double l = (((fwd + Math.abs(fwd) * rot) + (fwd + rot)) / 2);
+    double r = (((fwd - Math.abs(fwd) * rot) + (fwd - rot)) / 2);
+
+    double m = Math.max(Math.abs(fwd), Math.abs(rot));
+
+    if (m > 1.0)
+    {
+      l /= m;
+      r /= m;
+    }
+    leftPid.setReference(l * MAX_RPM, ControlType.kVelocity, VEL_SLOT);
+    rightPid.setReference(r * MAX_RPM, ControlType.kVelocity, VEL_SLOT);
   }
 
   /** returns the current pitch of the robot from gyro
@@ -247,6 +263,7 @@ public class DriveSubsystem extends PomSubsystem {
         masterRightMotor.getEncoder().getVelocity());
   }
 
+  double output;
   /**
    * Drives the robot using arcade controls.
    *
@@ -255,16 +272,17 @@ public class DriveSubsystem extends PomSubsystem {
    */
   public void arcadeDrive(double fwd, double rot) {
     //restroe if slew rate doesnt work properly
-    // if (Math.abs(output) < Math.abs(fwd / 2)) {
-    //   output = fwd / 2;
-    // }
-    // if (fwd - output > RATE) {
-    //   output += RATE;
-    // } else if (output - fwd > RATE) {
-    //   output -= RATE;
-    // }
-
-    mDrive.arcadeDrive(fwd, rot);
+    if (Math.abs(output) < Math.abs(fwd / 2)) {
+      output = fwd / 2;
+    }
+    if (fwd - output > RATE) {
+      output += RATE;
+    } else if (output - fwd > RATE) {
+      output -= RATE;
+    }
+    SmartDashboard.putNumber("fwd", fwd);
+    SmartDashboard.putNumber("rot", rot);
+    mDrive.arcadeDrive(output, rot);
   }
 
   /**
@@ -302,7 +320,7 @@ public class DriveSubsystem extends PomSubsystem {
    * @return the left drive encoder
    */
   public RelativeEncoder getLeftEncoder() {
-    return masterRightMotor.getEncoder();
+    return masterLeftMotor.getEncoder();
   }
 
   /**
@@ -335,7 +353,7 @@ public class DriveSubsystem extends PomSubsystem {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return mGyro.getFusedHeading();
+    return mGyro.getFusedHeading() % 360;
   }
 
   /**
@@ -354,12 +372,26 @@ public class DriveSubsystem extends PomSubsystem {
   }
 
 
-    public Command arcadeDriveCommand(Supplier<Double> fwd, Supplier<Double> rot)
+  boolean isReverse = false;
+  boolean lastReverse = false;
+  public Command arcadeDriveCommand(Supplier<Double> fwd, Supplier<Double> rot, BooleanSupplier reverse)
   {
-    SlewRateLimiter rateLimit = new SlewRateLimiter(RATE);
-    rateLimit.reset((leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2);
+    // SlewRateLimiter rateLimit = new SlewRateLimiter(RATE);
+    // SlewRateLimiter turnRateLimit = new SlewRateLimiter(RATE);
+    // rateLimit.reset((leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2);
+    // return this.run(() -> arcadeDrive(rateLimit.calculate(-fwd.get()), turnRateLimit.calculate(rot.get())));
+    return this.run(() -> {
+      double f = fwd.get();
+      if(reverse.getAsBoolean() && !lastReverse) { isReverse = !isReverse;}
+      lastReverse = reverse.getAsBoolean();
+      if(isReverse){ f = -f;}
+      arcadeDrive((-f), (rot.get()));
+    });
     
-    return this.run(() -> arcadeDrive(rateLimit.calculate(fwd.get()), rot.get()));
+  }
+    public Command myArcadeDriveCommand(Supplier<Double> fwd, Supplier<Double> rot)
+  {
+    return this.run(() -> myArcadeDrive(fwd.get(), rot.get()));
     
   }
 
