@@ -26,8 +26,8 @@ public class IntakeRollerSubsystem extends PomSubsystem
     {
         // setting rollerMotorSlave to follow rollerMotor
         rollerMotorSlave.follow(rollerMotor);
-        rollerMotor.setNeutralMode(NeutralMode.Brake);
-        rollerMotorSlave.setNeutralMode(NeutralMode.Brake);
+        rollerMotor.setNeutralMode(NeutralMode.Coast);
+        rollerMotorSlave.setNeutralMode(NeutralMode.Coast);
         setDefaultCommand(this.runOnce(() -> stopMotor()));
     }
     // the subsystems functions
@@ -67,5 +67,14 @@ public class IntakeRollerSubsystem extends PomSubsystem
     public Command outakeNoteCommand()
     {
         return new StartEndCommand(() -> setMotor(-ROLLER_MOTOR_SPEED), () -> stopMotor(), this);
+    }
+
+    public Command slow(boolean toShooter)
+    {
+        return startEnd(() -> setMotor(toShooter ? 0.12 : -0.6), this::stopMotor);
+    }
+    public Command shoot()
+    {
+        return startEnd(() -> setMotor(0.2), () -> stopMotor());
     }
 }
