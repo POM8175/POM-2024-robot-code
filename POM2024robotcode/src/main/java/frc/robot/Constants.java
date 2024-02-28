@@ -227,6 +227,11 @@ public class Constants {
         public static final double WAIT_REPEAT = 0.1;
     }
 
+    public static final class ArmLockConstants
+    {
+        public static final int lockServoChanel = 2;
+    }
+
     public static final class GeneralFunctions{
         /**
          * checks if you reached set point with an alowed error

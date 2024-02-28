@@ -22,11 +22,10 @@ public class PIComunicator extends SubsystemBase
     public PIComunicator()
     {
         try{
-            //TODO: put the correct URI
-        request = HttpRequest.newBuilder()
-            .uri(new URI("http://192.168.55.225:8001/Note"))
-            .GET()
-            .build();
+            request = HttpRequest.newBuilder()
+                .uri(new URI("http://10.81.75.14:8001/Note"))
+                .GET()
+                .build();
 
 
         }catch(URISyntaxException e){
@@ -40,7 +39,7 @@ public class PIComunicator extends SubsystemBase
         try{
             response = HttpClient.newHttpClient().send(request,HttpResponse.BodyHandlers.ofString());
                 System.out.println("response is: " + response.body());
-                json = map.readTree(response.body());
+                if(response.body() != "no notes detected")json = map.readTree(response.body());
                 
                 left = json.get("left").asInt();
                 right = json.get("right").asInt();
