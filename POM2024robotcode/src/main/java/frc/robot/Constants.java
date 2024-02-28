@@ -93,7 +93,7 @@ public class Constants {
         public static final double MAX_SPEED_METER_PER_SECOND = 2;
         public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 2;
 
-        public static final double RATE = 1.3; //Check!
+        public static final double RATE = 0.04; 
         public static final double ANGLE_TOLERANCE = 2;
 
         // const values we dont need to calculate
@@ -104,6 +104,12 @@ public class Constants {
         public static final int BOT_POSE_LEN = 7;
         public static final double SPEAKER_Y = 5.5;
         public static final double FIELD_X = 16;
+
+        public static final int VEL_SLOT = 1;
+        public static final double VEL_P = 0.0003;
+        public static final double MAX_RPM = 5500;
+
+
         
     }
 
@@ -114,15 +120,16 @@ public class Constants {
         
         public static final int SHOOTER_ARM_MOTOR = 7;
         public static final int FOLD_MICRO_SWITCH_ID = 3;
+        public static final int BRAKE_MICRO_SWITCH_ID = 9;
         
-        public static final double KP = 0.0124;
-        public static final double KI = 0.0;
+        public static final double KP = 0.9;
+        public static final double KI = 0.03;
         public static final double KIZONE = 0;
         public static final double KD = 0.0;
 
         //trpezoid contraits, need to be found using sysid
-        public static final double MAX_VELOCITY_RAD_PER_SECOND = 0;
-        public static final double MAX_ACCELERATION_RAD_PER_SECOND_SQUARED = 0;
+        public static final double MAX_VELOCITY_RAD_PER_SECOND = Math.PI;
+        public static final double MAX_ACCELERATION_RAD_PER_SECOND_SQUARED = Math.PI;
         public static final double STARTING_OFFSET_RAD = 0;
 
         //arm feed forward gains, need to be found
@@ -132,22 +139,23 @@ public class Constants {
         public static final double KA_VOLTS_SECOND_SQUARED_PER_RAD = 0;
 
         //calculate factors to rads and rads per second
-        public static final double POSITON_FACTOR = 0;
-        public static final double VELOCITY_FACTOR = 0;
+        public static final double POSITON_FACTOR = /*gears*/ 0.25 /*to rads*/ * 2 * Math.PI /*versa*/ /50;
+        public static final double VELOCITY_FACTOR = POSITON_FACTOR / 60;
 
 
         public static final double NONE = -1;
 
-        public static final double TOLERANCE = 0;
+        public static final double TOLERANCE = 0.017;
         
-        public static final double SHOOT_SPEED = 0.85;
+        public static final double SHOOT_SPEED = 7000;
+        public static final double SHOOT_AMP_SPEED = 880;
         public static final double SHOOT_SPEED_TOLERANCE = 0.05;
         public static final double SHOOT_TO_WING_SPEED = 0.8;
 
-        public static final double INTAKE_CAN_MOVE = 0;
-        public static final double SUB_INTAKE_POS = 1;
-        public static final double SHOOT_PODIUM_POS = 3;
-        public static final double SHOOT_AMP_POS = 4;
+        public static final double INTAKE_CAN_MOVE = 0.5;
+        public static final double SUB_INTAKE_POS = 0;
+        public static final double SHOOT_PODIUM_POS = 0.1;
+        public static final double SHOOT_AMP_POS = 1.1;
 
 
 
@@ -159,7 +167,7 @@ public class Constants {
         public static final double SHOOTER_ANGLE_TO_ARM = Math.toRadians(55.34);
         public static final double OTHER_SIDE = 10;
         
-        public static final double ARM_OFFSET = Math.PI / 2;
+        public static final double ARM_OFFSET = 0;
 
     }
     
@@ -167,7 +175,7 @@ public class Constants {
     public static final class TransferConstants
     {
         public static final int TRANSFER_MOTOR = 8;
-        public static final double TRANSFER_SPEED = 1;
+        public static final double TRANSFER_SPEED =-0.95;
 
         public static final Color noteColor = new Color(130, 98, 26);
         public static final Color blueColor = new Color(54, 113, 86);
@@ -182,27 +190,27 @@ public class Constants {
             new Color(100,30,255),
             new Color(189, 183, 170)};
 
-        public static final double TRANSFER_TIME_OUT = 2;
+        public static final double TRANSFER_TIME_OUT = 1.5;
     }
 
     public static final class IntakeConstants{
        public static final int ROLLER_MOTOR = 10;
        public static final int ROLLER_MOTOR_SLAVE = 11;
 
-       public static final double ROLLER_MOTOR_SPEED = 1;
+       public static final double ROLLER_MOTOR_SPEED = 0.42;
 
        public static final int LIFT_MOTOR = 12;
 
-        public static final int POTEN_PORTS = 1;
+        public static final int POTEN_PORTS = 0;
         public static final double POTEN_OFFSET = 0;
 
-        public static final double KP = 0.8;
-        public static final double KI = 0.02;
+        public static final double KP = 0.07;
+        public static final double KI = 0.007;
         public static final double KD = 0;
 
         public static final double FOLD = 0;
-        public static final double GROUND = 0;
-        public static final double TOLERANCE = 2.0;
+        public static final double GROUND = 3.28;
+        public static final double TOLERANCE = 0.08;
         
 
 
