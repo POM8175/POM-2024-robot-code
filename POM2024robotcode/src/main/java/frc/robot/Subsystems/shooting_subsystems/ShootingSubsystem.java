@@ -30,14 +30,11 @@ public class ShootingSubsystem extends PomSubsystem {
 
 
    public ShootingSubsystem(){
-       rightEncoder.setVelocityConversionFactor(1);
-       leftEncoder.setPositionConversionFactor(1);
        shooterMotorLeft.setIdleMode(IdleMode.kCoast);
        shooterMotorRight.setIdleMode(IdleMode.kCoast);
-    //    setDefaultCommand(this.runOnce(() -> stopMotor()));
        SmartDashboard.putNumber("wanted speed", 0);
-       leftPID.setP(0.0003);
-       rightPID.setP(0.0003);
+       leftPID.setP(SHOOT_KP);
+       rightPID.setP(SHOOT_KP);
 
    }
 

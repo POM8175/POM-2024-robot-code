@@ -244,7 +244,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
   }
   public Command closeSlow()
   {
-      return run(() -> setMotor(-0.2)).until(()-> isFoldSwitchPressed());
+      return run(() -> setMotor(CLOSE_SLOW)).until(()-> isFoldSwitchPressed());
   }
   public Command joystickShootCommand(DoubleSupplier sup)
   {

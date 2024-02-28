@@ -127,6 +127,8 @@ public class Constants {
         public static final double KIZONE = 0;
         public static final double KD = 0.0;
 
+        public static final double SHOOT_KP = 0.0003;
+
         //trpezoid contraits, need to be found using sysid
         public static final double MAX_VELOCITY_RAD_PER_SECOND = Math.PI;
         public static final double MAX_ACCELERATION_RAD_PER_SECOND_SQUARED = Math.PI;
@@ -169,6 +171,8 @@ public class Constants {
         
         public static final double ARM_OFFSET = 0;
 
+        public static final double CLOSE_SLOW = -0.2;
+
     }
     
 
@@ -198,7 +202,10 @@ public class Constants {
        public static final int ROLLER_MOTOR = 10;
        public static final int ROLLER_MOTOR_SLAVE = 11;
 
-       public static final double ROLLER_MOTOR_SPEED = 0.42;
+       public static final double INTAKE_SPEED = 0.42;
+       public static final double SLOW_OUT = -0.6;
+       public static final double SLOW_IN = 0.12;
+       public static final double SHOOT = 0.12;
 
        public static final int LIFT_MOTOR = 12;
 
@@ -208,10 +215,12 @@ public class Constants {
         public static final double KP = 0.07;
         public static final double KI = 0.007;
         public static final double KD = 0;
+        public static final double KG = 0.09;
 
         public static final double FOLD = 0;
         public static final double GROUND = 3.28;
         public static final double TOLERANCE = 0.08;
+        public static final double INTAKE_OFFSET = -1.1;
         
 
 

@@ -36,7 +36,12 @@ public class autonomousCommands {
         andThen(transfer.transfer(true));
     }
     public Command shootMoveOut(){
-        return shoot().andThen(new DriveMeasured(drive, 1.5));
+        return shoot().andThen(moveOut());
+    }
+
+    public Command moveOut()
+    {
+        return new DriveMeasured(drive, 2.5);
     }
     public autonomousCommands(DriveSubsystem drive, IntakeLiftSubsystem intakeLift, IntakeRollerSubsystem roller, ShootingSubsystem shoot, ShootingArmSubsystem arm, TransferSubsystem transfer)
     {

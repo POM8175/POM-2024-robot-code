@@ -32,7 +32,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Commands.autonomousCommands;
-import frc.robot.Commands.DriveCommands.DriveMeasured;
 import frc.robot.Subsystems.DriveSubsystem;
 import frc.robot.Subsystems.TransferSubsystem;
 import frc.robot.Subsystems.intake_subsystems.IntakeLiftSubsystem;
@@ -88,7 +87,7 @@ public class RobotContainer {
 
     m_chooser.setDefaultOption("none", new InstantCommand());
     m_chooser.addOption("shoot", autonomousCommands.shoot());
-    m_chooser.addOption("move out", new DriveMeasured(driveSubsystem, 2.5));
+    m_chooser.addOption("move out", autonomousCommands.moveOut());
     m_chooser.addOption("shoot move out", autonomousCommands.shootMoveOut());
     m_chooser.addOption("shoot try collect", autonomousCommands.shootTryCollect());
     m_chooser.addOption("shoot collect shoot", autonomousCommands.shootCollectShoot());
