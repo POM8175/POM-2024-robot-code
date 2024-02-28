@@ -67,7 +67,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
     liftMotorSlave.getEncoder().setPositionConversionFactor(POSITON_FACTOR);
     liftMotorSlave.getEncoder().setVelocityConversionFactor(VELOCITY_FACTOR);
     liftMotorSlave.setIdleMode(IdleMode.kBrake);
-    liftMotorSlave.follow(liftMotor, true);
+    // liftMotorSlave.follow(liftMotor, true);
     pid.setP(KP, 0);
     pid.setI(KI, 0);
     pid.setD(KD, 0);

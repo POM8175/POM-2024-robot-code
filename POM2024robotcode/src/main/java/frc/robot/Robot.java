@@ -17,6 +17,7 @@ import edu.wpi.first.hal.FRCNetComm.tResourceType;
 
 import static frc.robot.Constants.DriveConstants.ANGLE_TOLERANCE;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -64,7 +65,10 @@ public class Robot extends TimedRobot {
         enableLiveWindowInTest(true);
 
         // colorSensor.configureColorSensor(ColorSensorResolution.kColorSensorRes20bit, ColorSensorMeasurementRate.kColorRate25ms, GainFactor.kGain9x);
+                // CameraServer.startAutomaticCapture().setFPS(15);
                 DataLogManager.start();
+                
+                
 
 
         
