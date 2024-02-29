@@ -25,7 +25,7 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     ArmFeedforward feedforward = new ArmFeedforward(0, KG, 0);
     public IntakeLiftSubsystem()
     {
-        potentiometer = new AnalogPotentiometer(POTEN_PORTS, 2 * Math.PI, INTAKE_OFFSET);
+        potentiometer = new AnalogPotentiometer(POTEN_PORTS, 2 * Math.PI);
         motor = new WPI_VictorSPX(LIFT_MOTOR);
         pid = new PIDController(KP, KI, KD);
         pid.setTolerance(TOLERANCE);

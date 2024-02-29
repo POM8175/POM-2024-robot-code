@@ -21,6 +21,7 @@ import static frc.robot.Constants.ShootingConstants.SUB_INTAKE_POS;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Tracer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Commands.autonomousCommands;
+import frc.robot.Subsystems.ArmLockSubsystem;
 import frc.robot.Subsystems.DriveSubsystem;
 import frc.robot.Subsystems.TransferSubsystem;
 import frc.robot.Subsystems.intake_subsystems.IntakeLiftSubsystem;
@@ -59,7 +61,9 @@ public class RobotContainer {
     public final ShootingSubsystem shootingSubsystem = new ShootingSubsystem();
     public final ShootingArmSubsystem shootingArmSubsystem = new ShootingArmSubsystem();
     public final TransferSubsystem transferSubsystem = new TransferSubsystem();
+    public final ArmLockSubsystem armLockSubsystem = new ArmLockSubsystem();
     public final autonomousCommands autonomousCommands = new autonomousCommands(driveSubsystem, intakeLiftSubsystem, intakeRollerSubsystem, shootingSubsystem, shootingArmSubsystem, transferSubsystem);
+
 
     public CameraServer cameraServer;
     
@@ -121,6 +125,9 @@ public class RobotContainer {
     new Trigger(operateCommandJoystick.povRight()).onTrue(shootingArmSubsystem.goToAngleCommand(SHOOT_AMP_POS)); 
     new Trigger(operateCommandJoystick.povDown()).onTrue(shootingArmSubsystem.joystickShootCommand(() -> operateCommandJoystick.getRawAxis(RIGHT_JOYSTICK_Y) * -0.2)); 
     new Trigger(operateCommandJoystick.povUp()).whileTrue((shootingArmSubsystem.goToAngleCommand(0.25).raceWith(shootingSubsystem.spinWheelsCommand())).andThen(transferSubsystem.transfer(true)).andThen((shootingSubsystem.stopWheelsCommand().alongWith(transferSubsystem.stopWheelsCommand()))).andThen(shootingArmSubsystem.closeSlow()));
+    new Trigger(operateCommandJoystick.button(8)).onTrue(armLockSubsystem.TurnTo(100));
+    new Trigger(operateCommandJoystick.button(7)).onTrue(armLockSubsystem.TurnTo(20));
+
   }  
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

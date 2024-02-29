@@ -220,7 +220,7 @@ public class Constants {
         public static final double FOLD = 0;
         public static final double GROUND = 3.28;
         public static final double TOLERANCE = 0.08;
-        public static final double INTAKE_OFFSET = -1.1;
+        public static final double INTAKE_OFFSET = -6;
         
 
 
