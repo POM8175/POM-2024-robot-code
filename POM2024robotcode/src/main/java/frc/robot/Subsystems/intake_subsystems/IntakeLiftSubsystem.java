@@ -1,6 +1,14 @@
 package frc.robot.Subsystems.intake_subsystems;
 
-import static frc.robot.Constants.IntakeConstants.*;
+import static frc.robot.Constants.IntakeConstants.FOLD;
+import static frc.robot.Constants.IntakeConstants.GROUND;
+import static frc.robot.Constants.IntakeConstants.KD;
+import static frc.robot.Constants.IntakeConstants.KI;
+import static frc.robot.Constants.IntakeConstants.KP;
+import static frc.robot.Constants.IntakeConstants.LIFT_MOTOR;
+import static frc.robot.Constants.IntakeConstants.POTEN_OFFSET;
+import static frc.robot.Constants.IntakeConstants.POTEN_PORTS;
+import static frc.robot.Constants.IntakeConstants.TOLERANCE;
 
 import java.util.function.BooleanSupplier;
 
@@ -9,6 +17,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,6 +26,7 @@ import frc.robot.Subsystems.PomSubsystem;
 
 public class IntakeLiftSubsystem extends PomSubsystem{
     WPI_VictorSPX motor;
+    AnalogInput input;
     AnalogPotentiometer potentiometer;
     PIDController pid;
     private BooleanSupplier armIsThere;
@@ -25,7 +35,8 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     ArmFeedforward feedforward = new ArmFeedforward(0, 0.09, 0);
     public IntakeLiftSubsystem()
     {
-        potentiometer = new AnalogPotentiometer(POTEN_PORTS, 2 * Math.PI, -1.1);
+        input = new AnalogInput(POTEN_PORTS);
+        potentiometer = new AnalogPotentiometer(input, 2 * Math.PI, -1.1);
         motor = new WPI_VictorSPX(LIFT_MOTOR);
         pid = new PIDController(KP, KI, KD);
         pid.setTolerance(TOLERANCE);
@@ -40,6 +51,8 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     public void periodic()
     {
         SmartDashboard.putNumber("Potentiometer", potentiometer.get());
+        SmartDashboard.putNumber("Potentiometer Value", input.getValue());
+        SmartDashboard.putNumber("Potentiometer Voltage", input.getVoltage());
         SmartDashboard.putNumber("intake arm motor", motor.get());
         SmartDashboard.putBoolean("arm is there", armIsThere.getAsBoolean());
         SmartDashboard.putBoolean("is intake opened", isOpen());

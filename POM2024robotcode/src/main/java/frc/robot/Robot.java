@@ -65,7 +65,7 @@ public class Robot extends TimedRobot {
         enableLiveWindowInTest(true);
 
         // colorSensor.configureColorSensor(ColorSensorResolution.kColorSensorRes20bit, ColorSensorMeasurementRate.kColorRate25ms, GainFactor.kGain9x);
-                // CameraServer.startAutomaticCapture().setFPS(15);
+                CameraServer.startAutomaticCapture().setFPS(15);
                 DataLogManager.start();
                 
                 
