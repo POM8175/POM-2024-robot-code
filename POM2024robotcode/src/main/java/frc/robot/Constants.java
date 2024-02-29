@@ -149,7 +149,7 @@ public class Constants {
 
         public static final double TOLERANCE = 0.017;
         
-        public static final double SHOOT_SPEED = 7000;
+        public static final double SHOOT_SPEED = 8000;
         public static final double SHOOT_AMP_SPEED = 880;
         public static final double SHOOT_SPEED_TOLERANCE = 0.05;
         public static final double SHOOT_TO_WING_SPEED = 0.8;
