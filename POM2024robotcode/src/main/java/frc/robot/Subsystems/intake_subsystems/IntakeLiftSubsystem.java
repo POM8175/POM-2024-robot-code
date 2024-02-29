@@ -1,6 +1,12 @@
 package frc.robot.Subsystems.intake_subsystems;
 
-import static frc.robot.Constants.IntakeConstants.*;
+import static frc.robot.Constants.IntakeConstants.ENCODER_PORTS;
+import static frc.robot.Constants.IntakeConstants.FOLD;
+import static frc.robot.Constants.IntakeConstants.GROUND;
+import static frc.robot.Constants.IntakeConstants.KD;
+import static frc.robot.Constants.IntakeConstants.KI;
+import static frc.robot.Constants.IntakeConstants.KP;
+import static frc.robot.Constants.IntakeConstants.TOLERANCE;
 
 import java.util.function.BooleanSupplier;
 
