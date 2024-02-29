@@ -181,8 +181,8 @@ public class RobotContainer {
     new Trigger(operateCommandJoystick.button(RB)).onTrue(shootingSubsystem.stopWheelsCommand().alongWith(transferSubsystem.stopWheelsCommand()));
     new Trigger(operateCommandJoystick.button(LB)).onTrue((shootingSubsystem.spinWheelsToSpeedCommand(SHOOT_AMP_SPEED).raceWith(transferSubsystem.amp())).andThen(shootingSubsystem.stopWheelsCommand()));
     new Trigger(operateCommandJoystick.button(Y)).onTrue(transferSubsystem.transfer(false).raceWith(intakeRollerSubsystem.outakeNoteCommand()).until(operateCommandJoystick.button(B)));
-    new Trigger(operateCommandJoystick.axisGreaterThan(LEFT_TRIGGER, THRESHOLD)).onTrue(((intakeRollerSubsystem.slow(false))).andThen(new WaitCommand(0.15)).andThen((transferSubsystem.transfer(true))).andThen(shootingSubsystem.stopWheelsCommand()));    
-    // new Trigger(operateCommandJoystick.axisGreaterThan(LEFT_TRIGGER, THRESHOLD)).onTrue((transferSubsystem.outForShootCommand().raceWith(intakeRollerSubsystem.slow(false))).andThen(new WaitCommand(0.15)).andThen((transferSubsystem.transfer(true).alongWith(intakeRollerSubsystem.intakeNoteCommand()))).andThen(shootingSubsystem.stopWheelsCommand()));    
+    new Trigger(operateCommandJoystick.axisGreaterThan(LEFT_TRIGGER, THRESHOLD)).onTrue((transferSubsystem.outForShootCommand().raceWith(intakeRollerSubsystem.slow(false))).andThen(new WaitCommand(0.15)).andThen((transferSubsystem.transfer(true).alongWith(intakeRollerSubsystem.intakeNoteCommand()))).andThen(shootingSubsystem.stopWheelsCommand())); 
+    // new Trigger(operateCommandJoystick.axisGreaterThan(LEFT_TRIGGER, THRESHOLD)).onTrue((transferSubsystem.transfer(true)).andThen(shootingSubsystem.stopWheelsCommand()));       
     new Trigger(operateCommandJoystick.povLeft()).onTrue(shootingArmSubsystem.closeSlow()); 
     new Trigger(operateCommandJoystick.povRight()).onTrue(shootingArmSubsystem.goToAngleCommand(SHOOT_AMP_POS)); 
     new Trigger(operateCommandJoystick.povDown()).onTrue(shootingArmSubsystem.joystickShootCommand(() -> operateCommandJoystick.getRawAxis(RIGHT_JOYSTICK_Y) * -0.2)); 
