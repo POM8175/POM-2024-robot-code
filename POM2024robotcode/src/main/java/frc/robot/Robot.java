@@ -16,6 +16,7 @@ import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 
 import static frc.robot.Constants.DriveConstants.ANGLE_TOLERANCE;
+import static frc.robot.Constants.LedsConstants.POM_PURPLE;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.hal.HAL;
@@ -146,6 +147,7 @@ public class Robot extends TimedRobot {
         m_robotContainer.shootingSubsystem.stopMotor();
         // m_robotContainer.shootingArmSubsystem.stopMotor();
         m_robotContainer.transferSubsystem.stopMotor();
+        m_robotContainer.ledSubsystem.setLeds(POM_PURPLE);
     }
     
     @Override

@@ -73,9 +73,7 @@ public class LedSubsystem extends SubsystemBase {
         m_led.setData(m_ledBuffer);
     }
 
-    public void ShuffleboardColor(){
-       
-    }
+
 
     public Command setLedCommand(Color color)
     {

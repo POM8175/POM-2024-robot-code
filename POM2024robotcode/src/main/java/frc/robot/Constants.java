@@ -211,6 +211,8 @@ public class Constants {
 
         public static final int POTEN_PORTS = 0;
         public static final double POTEN_OFFSET = 0;
+        public static final double POTEN_MAX = 5;
+        public static final double POTEN_MIN = 4.6;
 
         public static final double KP = 0.07;
         public static final double KI = 0.007;
@@ -230,9 +232,8 @@ public class Constants {
         public static final int pRED = 0;
         public static final int pGREEN = 1;
         public static final int pBLUE = 2;
-        public static final int NUM_LEDS = 180;
+        public static final int NUM_LEDS = 23;
         public static final int LED_PORT = 9;
-        public static final int RIGHT_LED_PORT = 8;
         public static final Color POM_PURPLE = new Color(98, 0, 151);
         public static final double WAIT_REPEAT = 0.1;
     }
