@@ -150,14 +150,14 @@ public class Constants {
         public static final double TOLERANCE = 0.017;
         
         public static final double SHOOT_SPEED = 8000;
-        public static final double SHOOT_AMP_SPEED = 880;
+        public static final double SHOOT_AMP_SPEED = 760;
         public static final double SHOOT_SPEED_TOLERANCE = 0.05;
         public static final double SHOOT_TO_WING_SPEED = 0.8;
 
         public static final double INTAKE_CAN_MOVE = 0.5;
         public static final double SUB_INTAKE_POS = 0;
         public static final double SHOOT_PODIUM_POS = 0.1;
-        public static final double SHOOT_AMP_POS = 1.1;
+        public static final double SHOOT_AMP_POS = 1.4;
 
 
 
@@ -232,7 +232,7 @@ public class Constants {
         public static final int pRED = 0;
         public static final int pGREEN = 1;
         public static final int pBLUE = 2;
-        public static final int NUM_LEDS = 23;
+        public static final int NUM_LEDS = 24;
         public static final int LED_PORT = 9;
         public static final Color POM_PURPLE = new Color(98, 0, 151);
         public static final double WAIT_REPEAT = 0.1;
