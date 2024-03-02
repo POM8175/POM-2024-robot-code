@@ -30,7 +30,6 @@ import static frc.robot.Constants.JoystickConstants.Y;
 import static frc.robot.Constants.LedsConstants.POM_PURPLE;
 import static frc.robot.Constants.ShootingConstants.SHOOT_AMP_POS;
 import static frc.robot.Constants.ShootingConstants.SHOOT_AMP_SPEED;
-import static frc.robot.Constants.ShootingConstants.SUB_INTAKE_POS;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -137,7 +136,8 @@ public class RobotContainer {
     new Trigger(operateCommandJoystick.button(RB)).onTrue(shootingSubsystem.stopWheelsCommand().alongWith(transferSubsystem.stopWheelsCommand()));
     new Trigger(operateCommandJoystick.button(LB)).onTrue((shootingSubsystem.spinWheelsToSpeedCommand(SHOOT_AMP_SPEED).raceWith(transferSubsystem.amp())).andThen(shootingSubsystem.stopWheelsCommand()));
     new Trigger(operateCommandJoystick.button(Y)).onTrue(transferSubsystem.transfer(false).raceWith(intakeRollerSubsystem.outakeNoteCommand()).until(operateCommandJoystick.button(B)));
-    new Trigger(operateCommandJoystick.axisGreaterThan(LEFT_TRIGGER, THRESHOLD)).onTrue((transferSubsystem.outForShootCommand().raceWith(intakeRollerSubsystem.slow(false))).andThen(new WaitCommand(0.15)).andThen((transferSubsystem.inForShootCommand().raceWith(intakeRollerSubsystem.intakeNoteCommand()))).andThen(transferSubsystem.transfer(true)).andThen(shootingSubsystem.stopWheelsCommand()));    
+    // new Trigger(operateCommandJoystick.axisGreaterThan(LEFT_TRIGGER, THRESHOLD)).onTrue((transferSubsystem.outForShootCommand().raceWith(intakeRollerSubsystem.slow(false))).andThen(new WaitCommand(0.15)).andThen((transferSubsystem.inForShootCommand().raceWith(intakeRollerSubsystem.intakeNoteCommand()))).andThen(transferSubsystem.transfer(true)).andThen(shootingSubsystem.stopWheelsCommand()));    
+    new Trigger(operateCommandJoystick.axisGreaterThan(LEFT_TRIGGER, THRESHOLD)).onTrue(((transferSubsystem.transfer(true).raceWith(intakeRollerSubsystem.slow(true))).andThen(shootingSubsystem.stopWheelsCommand())));    
     new Trigger(operateCommandJoystick.povLeft()).onTrue(shootingArmSubsystem.closeSlow()); 
     new Trigger(operateCommandJoystick.povRight()).onTrue(shootingArmSubsystem.goToAngleCommand(SHOOT_AMP_POS)); 
     new Trigger(operateCommandJoystick.povDown()).onTrue(shootingArmSubsystem.joystickShootCommand(() -> operateCommandJoystick.getRawAxis(RIGHT_JOYSTICK_Y) * -0.2)); 
@@ -160,8 +160,8 @@ public class RobotContainer {
   {
     var openIntake = shootingArmSubsystem.OpenForIntakeCommand().andThen(intakeLiftSubsystem.OpenCloseIntake(true));
     return openIntake.unless(intakeLiftSubsystem::isOpen)
-      .andThen(shootingArmSubsystem.goToAngleCommand(SUB_INTAKE_POS))
-      .andThen(new WaitCommand(0.5))
+      .andThen(shootingArmSubsystem.closeSlow())
+      .andThen(new WaitCommand(0.3))
       .andThen(intakeRollerSubsystem.intakeNoteCommand().raceWith(transferSubsystem.getFromIntake())).until(operateCommandJoystick.button(B));
   }
 

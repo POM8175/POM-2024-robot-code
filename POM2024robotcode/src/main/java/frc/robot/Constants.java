@@ -149,7 +149,7 @@ public class Constants {
 
         public static final double TOLERANCE = 0.017;
         
-        public static final double SHOOT_SPEED = 8000;
+        public static final double SHOOT_SPEED = 6000;
         public static final double SHOOT_AMP_SPEED = 760;
         public static final double SHOOT_SPEED_TOLERANCE = 0.05;
         public static final double SHOOT_TO_WING_SPEED = 0.8;
@@ -204,7 +204,7 @@ public class Constants {
 
        public static final double INTAKE_SPEED = 0.42;
        public static final double SLOW_OUT = -0.6;
-       public static final double SLOW_IN = 0.12;
+       public static final double SLOW_IN = 0.3;
        public static final double SHOOT = 0.12;
 
        public static final int LIFT_MOTOR = 12;

@@ -27,15 +27,15 @@ public class autonomousCommands {
             andThen(intakeLift.OpenCloseIntake(true)).
             andThen(arm.closeSlow().alongWith(shoot.spinWheelsCommand())).
             andThen(new WaitCommand(0.8)).
-            andThen(transfer.outForShootCommand().raceWith(roller.slow(false))).andThen(new WaitCommand(0.15)).andThen((transfer.inForShootCommand().raceWith(roller.intakeNoteCommand()))).andThen(transfer.transfer(true)).
+            andThen(transfer.transfer(true).raceWith(roller.slow(true))).
             andThen(shoot.stopWheelsCommand()).
-            andThen(new DriveMeasured(drive, 0.9).alongWith((roller.intakeNoteCommand()).raceWith(transfer.getFromIntake())));
+            andThen(new DriveMeasured(drive, 1).alongWith((roller.intakeNoteCommand()).raceWith(transfer.getFromIntake())));
     }
     public Command shootCollectShoot()
     {
         return shootTryCollect().
-        andThen((new DriveMeasured(drive, -0.9).alongWith(shoot.spinWheelsCommand())).alongWith(arm.OpenForIntakeCommand().andThen(intakeLift.OpenCloseIntake(false)))).andThen(arm.goToAngleCommand(0)).
-        andThen(new WaitCommand(0.17)).
+        andThen(new DriveMeasured(drive, -1).alongWith(shoot.spinWheelsCommand()))/*.alongWith(arm.OpenForIntakeCommand().andThen(intakeLift.OpenCloseIntake(false)))).andThen(arm.goToAngleCommand(0))*/.
+        andThen(new WaitCommand(0.3)).
         andThen(transfer.transfer(true)).
         andThen(shoot.stopWheelsCommand().alongWith(transfer.stopWheelsCommand()));        
     }
