@@ -11,15 +11,25 @@ import frc.robot.Subsystems.shooting_subsystems.ShootingArmSubsystem;
 import frc.robot.Subsystems.shooting_subsystems.ShootingSubsystem;
 
 public class autonomousCommands {
+    // public Command shootTryCollect()
+    // {
+    //     return arm.closeSlow().alongWith(shoot.spinWheelsCommand()).
+    //         andThen(new WaitCommand(0.9)).
+    //         andThen(transfer.transfer(true).raceWith(roller.slow(true))).andThen(shoot.stopWheelsCommand()).
+    //         andThen(arm.OpenForIntakeCommand()).
+    //         andThen(intakeLift.OpenCloseIntake(true)).
+    //         andThen(arm.goToAngleCommand(0)).
+    //         andThen(arm.goToAngleCommand(0).alongWith(new DriveMeasured(drive, 0.9)).alongWith((roller.intakeNoteCommand()).raceWith(transfer.getFromIntake())));
+    // }
     public Command shootTryCollect()
     {
-        return arm.closeSlow().alongWith(shoot.spinWheelsCommand()).
-            andThen(new WaitCommand(0.9)).
-            andThen(transfer.transfer(true).raceWith(roller.slow(true))).andThen(shoot.stopWheelsCommand()).
-            andThen(arm.OpenForIntakeCommand()).
+        return arm.OpenForIntakeCommand().
             andThen(intakeLift.OpenCloseIntake(true)).
-            andThen(arm.goToAngleCommand(0)).
-            andThen(arm.goToAngleCommand(0).alongWith(new DriveMeasured(drive, 0.9)).alongWith((roller.intakeNoteCommand()).raceWith(transfer.getFromIntake())));
+            andThen(arm.closeSlow().alongWith(shoot.spinWheelsCommand())).
+            andThen(new WaitCommand(0.8)).
+            andThen(transfer.outForShootCommand().raceWith(roller.slow(false))).andThen(new WaitCommand(0.15)).andThen((transfer.inForShootCommand().raceWith(roller.intakeNoteCommand()))).andThen(transfer.transfer(true)).
+            andThen(shoot.stopWheelsCommand()).
+            andThen(new DriveMeasured(drive, 0.9).alongWith((roller.intakeNoteCommand()).raceWith(transfer.getFromIntake())));
     }
     public Command shootCollectShoot()
     {
@@ -32,8 +42,9 @@ public class autonomousCommands {
     public Command shoot()
     {
         return arm.closeSlow().alongWith(shoot.spinWheelsCommand()).
-        andThen(new WaitCommand(1)).
-        andThen(transfer.transfer(true));
+        andThen(new WaitCommand(1.2)).
+        andThen(transfer.transfer(true)).
+        andThen(shoot.stopWheelsCommand());
     }
     public Command shootMoveOut(){
         return shoot().andThen(moveOut());
