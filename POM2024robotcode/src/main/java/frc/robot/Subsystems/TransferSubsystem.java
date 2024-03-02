@@ -74,11 +74,15 @@ public class TransferSubsystem extends PomSubsystem
 
     public Command amp()
     {
-         return this.startEnd(() -> setMotor(-0.44), () -> {}).until(() -> !isNoteIn()).andThen(new WaitCommand(TRANSFER_TIME_OUT)).andThen(() -> stopMotor(), this);
+         return this.startEnd(() -> setMotor(-0.2), () -> {}).until(() -> !isNoteIn()).andThen(new WaitCommand(TRANSFER_TIME_OUT)).andThen(() -> stopMotor(), this);
     }
     public Command outForShootCommand()
     {
          return this.startEnd(() -> setMotor(0.07), () -> {}).until(() -> !isNoteIn()).andThen(() -> stopMotor(), this);
+    }
+    public Command inForShootCommand()
+    {
+         return this.startEnd(() -> setMotor(TRANSFER_SHOOT_SPEED), () -> {}).until(() -> isNoteIn());
     }
     public Command joystickShootCommand(DoubleSupplier sup)
     {
