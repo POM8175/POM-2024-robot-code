@@ -24,9 +24,10 @@ public class autonomousCommands {
     public Command shootTryCollect()
     {
         return arm.OpenForIntakeCommand().
-            andThen(intakeLift.OpenCloseIntake(true)).
+            andThen(intakeLift.OpenCloseIntakeTimersWithNote(true)).
             andThen(arm.closeSlow().alongWith(shoot.spinWheelsCommand())).
-            andThen(new WaitCommand(0.8)).
+            andThen(new WaitCommand(0.5)).
+            andThen(roller.intakeNoteCommand().raceWith(transfer.inForShootCommand())).
             andThen(transfer.transfer(true).raceWith(roller.slow(true))).
             andThen(shoot.stopWheelsCommand()).
             andThen(new DriveMeasured(drive, 1).alongWith((roller.intakeNoteCommand()).raceWith(transfer.getFromIntake())));
@@ -36,7 +37,7 @@ public class autonomousCommands {
         return shootTryCollect().
         andThen(new DriveMeasured(drive, -1).alongWith(shoot.spinWheelsCommand()))/*.alongWith(arm.OpenForIntakeCommand().andThen(intakeLift.OpenCloseIntake(false)))).andThen(arm.goToAngleCommand(0))*/.
         andThen(new WaitCommand(0.3)).
-        andThen(transfer.transfer(true)).
+        andThen(transfer.transfer(true).raceWith(roller.shoot())).
         andThen(shoot.stopWheelsCommand().alongWith(transfer.stopWheelsCommand()));        
     }
     public Command shoot()
