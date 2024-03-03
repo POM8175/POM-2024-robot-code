@@ -39,6 +39,10 @@ public class Constants {
         public static final int LB = 5;
         /**RB button axis */
         public static final int RB = 6;
+        /**back button axis */
+        public static final int BACK = 7;
+        /**start button axis */
+        public static final int START = 8;
 
         /** left joystick click button axis */
         public static final int LEFT_JOYSTICK_CLICK = 9;
@@ -204,7 +208,7 @@ public class Constants {
 
        public static final double INTAKE_SPEED = 0.42;
        public static final double SLOW_OUT = -0.6;
-       public static final double SLOW_IN = 0.3;
+       public static final double SLOW_IN = 0.5;
        public static final double SHOOT = 0.12;
 
        public static final int LIFT_MOTOR = 12;
@@ -221,7 +225,7 @@ public class Constants {
 
         public static final double FOLD = 0;
         public static final double GROUND = 3.28;
-        public static final double TOLERANCE = 0.08;
+        public static final double TOLERANCE = 0.15;
         public static final double INTAKE_OFFSET = -6;
         
 
@@ -240,7 +244,9 @@ public class Constants {
 
     public static final class ArmLockConstants
     {
-        public static final int lockServoChanel = 2;
+        public static final int lockServoChanel = 7;
+        public static final double LOCK_ANGLE = 62;
+        public static final double OPEN_ANGLE = 100;
     }
 
     public static final class GeneralFunctions{
