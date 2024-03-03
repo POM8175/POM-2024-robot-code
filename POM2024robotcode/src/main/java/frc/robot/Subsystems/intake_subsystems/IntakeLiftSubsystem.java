@@ -117,9 +117,11 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     public Command OpenCloseIntakeTimers(boolean open)
     {
         return (
-            run(() -> {setMotor(open ? 0.24 : -0.26); this.open = open;}).withTimeout(open ? 1.3 : 1.3).
-            andThen(this.runOnce(() -> setMotor(open ? 0.15: -0.1))).andThen(new WaitCommand(0.1)).
-            andThen(this.runOnce(() -> setMotor(open ? -0.1: 0.1))).andThen(new WaitCommand(0.1)).
+            run(() -> {setMotor(open ? 0.24 : -0.26); this.open = open;}).withTimeout(open ? 1 : 1).
+            andThen(this.runOnce(() -> setMotor(open ? 0.2: -0.22))).andThen(new WaitCommand(0.1)).
+            andThen(this.runOnce(() -> setMotor(open ? 0.05: -0.15))).andThen(new WaitCommand(0.1)).
+            andThen(this.runOnce(() -> setMotor(open ? 0.0: 0))).andThen(new WaitCommand(0.1)).
+            andThen(this.runOnce(() -> setMotor(open ? -0.1: 0.1))).andThen(new WaitCommand(0.2)).
             andThen(() -> stopMotor())
             ).unless(armIsThere);
     }
