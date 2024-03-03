@@ -244,11 +244,17 @@ public class ShootingArmSubsystem extends PomSubsystem{
   }
   public Command closeSlow()
   {
-      return run(() -> setMotor(-0.2)).until(()-> isFoldSwitchPressed());
+      return run(() -> setMotor(-0.27)).until(()-> isFoldSwitchPressed()).unless(this::isFoldSwitchPressed);
   }
   public Command joystickShootCommand(DoubleSupplier sup)
   {
-      return run(() -> setMotor(sup.getAsDouble()));
+    // return run(() -> setMotor(Math.abs(sup.getAsDouble()) > 0.6 ? Math.copySign(0.6, sup.getAsDouble()) : sup.getAsDouble()));
+    return run(() -> setMotor(sup.getAsDouble()));
+  }
+
+  public Command Climb()
+  {
+    return startEnd(() -> setMotor(-0.4), this::stopMotor).until(this::isFoldSwitchPressed);
   }
 
 }
