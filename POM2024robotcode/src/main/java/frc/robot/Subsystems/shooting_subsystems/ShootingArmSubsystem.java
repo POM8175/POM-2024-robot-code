@@ -240,7 +240,7 @@ public class ShootingArmSubsystem extends PomSubsystem{
   }
   public Command OpenForIntakeCommand()
   {
-    return Commands.print("OpenForIntakeCommand").andThen(runOnce(() -> controller.reset(getEncoderPosition())).andThen(this.run(() -> moveWithProfile(new TrapezoidProfile.State(INTAKE_CAN_MOVE + 0.1, 0))).until(()-> encoder.getPosition() > INTAKE_CAN_MOVE).andThen(() -> stopMotor())));
+    return Commands.print("OpenForIntakeCommand").andThen(runOnce(() -> controller.reset(getEncoderPosition())).andThen(this.run(() -> moveWithProfile(new TrapezoidProfile.State(INTAKE_CAN_MOVE + 0.2, 0))).until(()-> encoder.getPosition() > INTAKE_CAN_MOVE).andThen(() -> stopMotor())));
   }
   public Command closeSlow()
   {
