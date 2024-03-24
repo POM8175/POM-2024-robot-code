@@ -7,6 +7,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+import com.fasterxml.jackson.databind.deser.impl.PropertyValue;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -25,11 +26,13 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelPositions;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -52,7 +55,9 @@ public class DriveSubsystem extends PomSubsystem {
   private final EncoderSim leftEncoderSim = new EncoderSim((Encoder)masterLeftMotor.getEncoder());
   private final EncoderSim rightEncoderSim = new EncoderSim((Encoder)masterRightMotor.getEncoder());
 
-  
+  private final AnalogGyro gyro = new AnalogGyro(GYRO_ID);
+  private final AnalogGyroSim gyroSim = new AnalogGyroSim(gyro);
+
 
   private final SparkPIDController leftPid = masterLeftMotor.getPIDController();
   private final SparkPIDController rightPid = masterRightMotor.getPIDController();
