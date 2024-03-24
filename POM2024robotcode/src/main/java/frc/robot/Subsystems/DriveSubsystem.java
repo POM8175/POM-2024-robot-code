@@ -26,9 +26,12 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -45,6 +48,11 @@ public class DriveSubsystem extends PomSubsystem {
 
   private final CANSparkMax masterLeftMotor = new CANSparkMax(LEFT_MOTOR_LEAD, MotorType.kBrushless);
   private final CANSparkMax slaveLeftMotor = new CANSparkMax(LEFT_MOTOR_SLAVE, MotorType.kBrushless);
+
+  private final EncoderSim leftEncoderSim = new EncoderSim((Encoder)masterLeftMotor.getEncoder());
+  private final EncoderSim rightEncoderSim = new EncoderSim((Encoder)masterRightMotor.getEncoder());
+
+  
 
   private final SparkPIDController leftPid = masterLeftMotor.getPIDController();
   private final SparkPIDController rightPid = masterRightMotor.getPIDController();

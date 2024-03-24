@@ -35,7 +35,6 @@ import static frc.robot.Constants.ShootingConstants.SHOOT_AMP_SPEED;
 import static frc.robot.Constants.ArmLockConstants.LOCK_ANGLE;
 import static frc.robot.Constants.ArmLockConstants.OPEN_ANGLE;
 
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -86,7 +85,7 @@ public class RobotContainer {
     public final autonomousCommands autonomousCommands = new autonomousCommands(driveSubsystem, intakeLiftSubsystem, intakeRollerSubsystem, shootingSubsystem, shootingArmSubsystem, transferSubsystem);
 
 
-    public CameraServer cameraServer;
+    // public CameraServer cameraServer;
     
 // Joysticks
     

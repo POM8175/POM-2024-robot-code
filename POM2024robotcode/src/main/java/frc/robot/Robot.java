@@ -20,7 +20,7 @@ import static frc.robot.Constants.LedsConstants.POM_PURPLE;
 
 import org.littletonrobotics.junction.LoggedRobot;
 
-import edu.wpi.first.cameraserver.CameraServer;
+// import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -67,7 +67,7 @@ public class Robot extends LoggedRobot {
         enableLiveWindowInTest(true);
 
         // colorSensor.configureColorSensor(ColorSensorResolution.kColorSensorRes20bit, ColorSensorMeasurementRate.kColorRate25ms, GainFactor.kGain9x);
-        CameraServer.startAutomaticCapture().setFPS(15);
+        // CameraServer.startAutomaticCapture().setFPS(15);
         DataLogManager.start();
                 
                 
