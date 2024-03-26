@@ -24,6 +24,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelPositions;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogGyro;
@@ -34,6 +35,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -58,7 +60,6 @@ public class DriveSubsystem extends PomSubsystem {
   private final AnalogGyro gyro = new AnalogGyro(GYRO_ID);
   private final AnalogGyroSim gyroSim = new AnalogGyroSim(gyro);
 
-
   private final SparkPIDController leftPid = masterLeftMotor.getPIDController();
   private final SparkPIDController rightPid = masterRightMotor.getPIDController();
 
@@ -71,6 +72,7 @@ public class DriveSubsystem extends PomSubsystem {
 
   private final DifferentialDriveOdometry odometry;
 
+  private final DifferentialDrivetrainSim drivetrainSim;
 
   double x = 0,y = 0;
   boolean isNote = false;
@@ -82,6 +84,14 @@ public class DriveSubsystem extends PomSubsystem {
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
 
+    drivetrainSim = new DifferentialDrivetrainSim(
+      new DCMotor(12, 2.6, 105, 1.8, 5700* Math.PI * 60, 4),
+      8.75,
+      5,
+      28,
+      6*0.0254, 
+      0.56,
+      null);
     leftPid.setP(KP);
     leftPid.setI(KI);
     leftPid.setD(KD);
