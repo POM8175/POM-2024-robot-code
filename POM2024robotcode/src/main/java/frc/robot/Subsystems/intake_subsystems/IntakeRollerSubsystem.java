@@ -9,6 +9,8 @@ import frc.robot.Subsystems.PomSubsystem;
 
 import static frc.robot.Constants.IntakeConstants.*;
 
+import java.util.function.DoubleSupplier;
+
 
 public class IntakeRollerSubsystem extends PomSubsystem
 {
@@ -76,5 +78,9 @@ public class IntakeRollerSubsystem extends PomSubsystem
     public Command shoot()
     {
         return startEnd(() -> setMotor(SHOOT), () -> stopMotor());
+    }
+    public Command joystickShootCommand(DoubleSupplier sup)
+    {
+        return run(() -> setMotor(sup.getAsDouble()));
     }
 }
