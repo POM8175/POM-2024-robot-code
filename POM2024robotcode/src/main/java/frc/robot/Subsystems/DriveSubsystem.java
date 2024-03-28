@@ -30,6 +30,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -40,6 +41,7 @@ import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.Commands.TrajectoryFactory;
 /**
  *
@@ -201,7 +203,17 @@ public class DriveSubsystem extends PomSubsystem {
 
   @Override
   public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
+
+    drivetrainSim.setInputs(masterLeftMotor.get() * RobotController.getInputVoltage(), -masterRightMotor.get() * RobotController.getInputVoltage());
+
+    drivetrainSim.update(0.02);
+
+    leftEncoderSim.setDistance(drivetrainSim.getLeftPositionMeters());
+    leftEncoderSim.setRate(drivetrainSim.getLeftVelocityMetersPerSecond());
+
+    rightEncoderSim.setDistance(drivetrainSim.getRightPositionMeters());
+    rightEncoderSim.setRate(drivetrainSim.getRightVelocityMetersPerSecond());
+
   }
 
 
