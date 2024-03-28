@@ -158,7 +158,7 @@ public class Constants {
         public static final double SHOOT_SPEED_TOLERANCE = 0.05;
         public static final double SHOOT_TO_WING_SPEED = 0.8;
 
-        public static final double INTAKE_CAN_MOVE = 0.5;
+        public static final double INTAKE_CAN_MOVE = 0.7;
         public static final double SUB_INTAKE_POS = 0;
         public static final double SHOOT_PODIUM_POS = 0.1;
         public static final double SHOOT_AMP_POS = 1.47;
@@ -184,7 +184,7 @@ public class Constants {
     {
         public static final int TRANSFER_MOTOR = 8;
         public static final double TRANSFER_SHOOT_SPEED =-0.95;
-        public static final double TRANSFER_INTAKE_SPEED =-0.22;
+        public static final double TRANSFER_INTAKE_SPEED =-0.14;
 
         public static final Color noteColor = new Color(130, 98, 26);
         public static final Color blueColor = new Color(54, 113, 86);
@@ -245,7 +245,7 @@ public class Constants {
     public static final class ArmLockConstants
     {
         public static final int lockServoChanel = 7;
-        public static final double LOCK_ANGLE = 62;
+        public static final double LOCK_ANGLE = 72;
         public static final double OPEN_ANGLE = 100;
     }
 

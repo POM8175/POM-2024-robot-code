@@ -18,10 +18,11 @@ import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import static frc.robot.Constants.DriveConstants.ANGLE_TOLERANCE;
 import static frc.robot.Constants.LedsConstants.POM_PURPLE;
 
+import org.littletonrobotics.junction.LoggedRobot;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -36,7 +37,7 @@ import edu.wpi.first.util.datalog.*;
  * creating this project, you must also update the build.properties file in 
  * the project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
     double map(double x, double in_min, double in_max, double out_min, double out_max)
     {
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
