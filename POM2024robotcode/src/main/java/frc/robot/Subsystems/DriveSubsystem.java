@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
+import javax.print.attribute.standard.Fidelity;
+
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import com.fasterxml.jackson.databind.deser.impl.PropertyValue;
 import com.revrobotics.CANSparkBase.ControlType;
@@ -30,6 +32,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -48,7 +51,7 @@ import frc.robot.Commands.TrajectoryFactory;
  */
 public class DriveSubsystem extends PomSubsystem {
 
-  private Field2d field;
+  private Field2d field, simField;
 
   private final CANSparkMax masterRightMotor = new CANSparkMax(RIGHT_MOTOR_LEAD, MotorType.kBrushless);
   private final CANSparkMax slaveRightMotor = new CANSparkMax(RIGHT_MOTOR_SLAVE, MotorType.kBrushless);
@@ -56,10 +59,10 @@ public class DriveSubsystem extends PomSubsystem {
   private final CANSparkMax masterLeftMotor = new CANSparkMax(LEFT_MOTOR_LEAD, MotorType.kBrushless);
   private final CANSparkMax slaveLeftMotor = new CANSparkMax(LEFT_MOTOR_SLAVE, MotorType.kBrushless);
 
-  private final EncoderSim leftEncoderSim = new EncoderSim((Encoder)masterLeftMotor.getEncoder());
-  private final EncoderSim rightEncoderSim = new EncoderSim((Encoder)masterRightMotor.getEncoder());
+  private final EncoderSim leftEncoderSim;
+  private final EncoderSim rightEncoderSim;
 
-  private final AnalogGyro gyro = new AnalogGyro(GYRO_ID);
+  private final AnalogGyro gyro = new AnalogGyro(1);
   private final AnalogGyroSim gyroSim = new AnalogGyroSim(gyro);
 
   private final SparkPIDController leftPid = masterLeftMotor.getPIDController();
@@ -87,13 +90,22 @@ public class DriveSubsystem extends PomSubsystem {
   public DriveSubsystem() {
 
     drivetrainSim = new DifferentialDrivetrainSim(
-      new DCMotor(12, 2.6, 105, 1.8, 5700* Math.PI * 60, 4),
+      DCMotor.getNeo550(4),
       8.75,
       5,
       28,
       6*0.0254, 
       0.56,
       null);
+    if(RobotBase.isSimulation())
+    {
+      leftEncoderSim = new EncoderSim(new Encoder(0,1));
+      rightEncoderSim = new EncoderSim(new Encoder(2,4));
+    }
+    else{
+      leftEncoderSim = null;
+      rightEncoderSim = null;
+    }
     leftPid.setP(KP);
     leftPid.setI(KI);
     leftPid.setD(KD);
@@ -141,9 +153,11 @@ public class DriveSubsystem extends PomSubsystem {
               VecBuilder.fill(0.02, 0.02, 0.01),
               VecBuilder.fill(0.1, 0.1, 0.15));
     field = new Field2d();
+    simField = new Field2d();
 
 
     SmartDashboard.putData("Field", field);
+    SmartDashboard.putData("Simulated Field", simField);
 
     slaveLeftMotor.follow(masterLeftMotor);
     slaveRightMotor.follow(masterRightMotor);
@@ -198,13 +212,13 @@ public class DriveSubsystem extends PomSubsystem {
     }
     SmartDashboard.putNumber("left Drive", masterLeftMotor.get());
     SmartDashboard.putNumber("right Drive", masterRightMotor.get());
-
+    simField.setRobotPose(drivetrainSim.getPose());
   }
 
   @Override
   public void simulationPeriodic() {
 
-    drivetrainSim.setInputs(masterLeftMotor.get() * RobotController.getInputVoltage(), -masterRightMotor.get() * RobotController.getInputVoltage());
+    drivetrainSim.setInputs(masterLeftMotor.get() * RobotController.getInputVoltage() * 4, masterRightMotor.get() * RobotController.getInputVoltage() * 4);
 
     drivetrainSim.update(0.02);
 
@@ -214,6 +228,10 @@ public class DriveSubsystem extends PomSubsystem {
     rightEncoderSim.setDistance(drivetrainSim.getRightPositionMeters());
     rightEncoderSim.setRate(drivetrainSim.getRightVelocityMetersPerSecond());
 
+    gyroSim.setAngle(-drivetrainSim.getHeading().getDegrees());
+    
+    
+  
   }
 
 
