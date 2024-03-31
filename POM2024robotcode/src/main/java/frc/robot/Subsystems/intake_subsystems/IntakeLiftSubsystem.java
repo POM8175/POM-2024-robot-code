@@ -10,6 +10,9 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -23,6 +26,9 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     boolean open = false;
     double goodValue = 0;
     ArmFeedforward feedforward = new ArmFeedforward(0, KG, 0);
+    Mechanism2d intakeMec = new Mechanism2d(1, 1);
+    MechanismRoot2d root = intakeMec.getRoot("Intake", 2, 0);
+    MechanismLigament2d intakeArm = new MechanismLigament2d(getName(), LIFT_MOTOR, INTAKE_SPEED);
     public IntakeLiftSubsystem()
     {
         potentiometer = new AnalogPotentiometer(POTEN_PORTS, 2 * Math.PI, -0.7);
@@ -40,6 +46,7 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     @Override
     public void periodic()
     {
+        SmartDashboard.putData("Mechanism/Intake",intakeMec);
         SmartDashboard.putNumber("Potentiometer", goodValue);
         SmartDashboard.putNumber("intake arm motor", motor.get());
         SmartDashboard.putBoolean("arm is there", armIsThere.getAsBoolean());

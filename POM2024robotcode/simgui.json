@@ -18,6 +18,7 @@
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Auto Mode": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Mechanism/Intake": "Mechanism2d",
       "/SmartDashboard/Simulated Field": "Field2d"
     }
   },
