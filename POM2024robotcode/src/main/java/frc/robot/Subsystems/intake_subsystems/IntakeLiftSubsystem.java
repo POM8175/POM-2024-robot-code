@@ -28,7 +28,7 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     ArmFeedforward feedforward = new ArmFeedforward(0, KG, 0);
     Mechanism2d intakeMec = new Mechanism2d(1, 1);
     MechanismRoot2d root = intakeMec.getRoot("Intake", 2, 0);
-    MechanismLigament2d intakeArm = new MechanismLigament2d(getName(), LIFT_MOTOR, INTAKE_SPEED);
+    MechanismLigament2d intakeArm = new MechanismLigament2d("Intake Arm", 3, 0);
     public IntakeLiftSubsystem()
     {
         potentiometer = new AnalogPotentiometer(POTEN_PORTS, 2 * Math.PI, -0.7);
