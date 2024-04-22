@@ -5,6 +5,7 @@
   "MainWindow": {
     "GLOBAL": {
       "fps": "120",
+<<<<<<< HEAD
       "height": "974",
       "maximized": "0",
       "style": "0",
@@ -12,6 +13,15 @@
       "width": "1920",
       "xpos": "0",
       "ypos": "34"
+=======
+      "height": "1009",
+      "maximized": "1",
+      "style": "0",
+      "userScale": "2",
+      "width": "1920",
+      "xpos": "-1920",
+      "ypos": "23"
+>>>>>>> f298e4f1079f16937a0d12167d2abcf6d08e863a
     }
   },
   "Table": {
@@ -25,8 +35,13 @@
   "Window": {
     "###Addressable LEDs": {
       "Collapsed": "0",
+<<<<<<< HEAD
       "Pos": "130,21",
       "Size": "199,262"
+=======
+      "Pos": "212,19",
+      "Size": "142,205"
+>>>>>>> f298e4f1079f16937a0d12167d2abcf6d08e863a
     },
     "###DIO": {
       "Collapsed": "0",
@@ -35,6 +50,7 @@
     },
     "###FMS": {
       "Collapsed": "0",
+<<<<<<< HEAD
       "Pos": "985,796",
       "Size": "235,244"
     },
@@ -46,22 +62,49 @@
     "###NetworkTables": {
       "Collapsed": "0",
       "Pos": "376,548",
+=======
+      "Pos": "-2,655",
+      "Size": "283,140"
+    },
+    "###Joysticks": {
+      "Collapsed": "0",
+      "Pos": "450,504",
+      "Size": "796,73"
+    },
+    "###NetworkTables": {
+      "Collapsed": "0",
+      "Pos": "428,17",
+>>>>>>> f298e4f1079f16937a0d12167d2abcf6d08e863a
       "Size": "1128,288"
     },
     "###NetworkTables Info": {
       "Collapsed": "0",
+<<<<<<< HEAD
       "Pos": "383,38",
       "Size": "1125,186"
     },
     "###Other Devices": {
       "Collapsed": "0",
       "Pos": "1551,13",
+=======
+      "Pos": "429,302",
+      "Size": "1125,201"
+    },
+    "###Other Devices": {
+      "Collapsed": "0",
+      "Pos": "1556,-13",
+>>>>>>> f298e4f1079f16937a0d12167d2abcf6d08e863a
       "Size": "375,927"
     },
     "###PWM Outputs": {
       "Collapsed": "0",
       "Pos": "911,22",
       "Size": "151,66"
+    },
+    "###Plot <0>": {
+      "Collapsed": "0",
+      "Pos": "60,60",
+      "Size": "700,400"
     },
     "###RoboRIO": {
       "Collapsed": "0",
