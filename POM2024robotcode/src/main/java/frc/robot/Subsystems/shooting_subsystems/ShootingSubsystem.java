@@ -32,6 +32,8 @@ public class ShootingSubsystem extends PomSubsystem {
    public ShootingSubsystem(){
        shooterMotorLeft.setIdleMode(IdleMode.kCoast);
        shooterMotorRight.setIdleMode(IdleMode.kCoast);
+       shooterMotorLeft.setInverted(true);
+       shooterMotorRight.setInverted(true);
        SmartDashboard.putNumber("wanted speed", 0);
        leftPID.setP(SHOOT_KP);
        rightPID.setP(SHOOT_KP);
