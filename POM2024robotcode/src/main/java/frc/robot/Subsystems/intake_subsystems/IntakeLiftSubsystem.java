@@ -26,9 +26,6 @@ public class IntakeLiftSubsystem extends PomSubsystem{
     boolean open = false;
     double goodValue = 0;
     ArmFeedforward feedforward = new ArmFeedforward(0, KG, 0);
-    Mechanism2d intakeMec = new Mechanism2d(6, 6);
-    MechanismRoot2d root = intakeMec.getRoot("Intake", 2, 0);
-    MechanismLigament2d intakeArm = new MechanismLigament2d("Intake Arm", 3, 0);
     public IntakeLiftSubsystem()
     {
         potentiometer = new AnalogPotentiometer(POTEN_PORTS, 2 * Math.PI, -0.7);
@@ -41,12 +38,13 @@ public class IntakeLiftSubsystem extends PomSubsystem{
         pid.setTolerance(TOLERANCE);
         setDefaultCommand(runOnce(() -> stopMotor()).andThen(new WaitCommand(0.1)));
         // setDefaultCommand(stayInPlace());
+
+
     }
 
     @Override
     public void periodic()
     {
-        SmartDashboard.putData("Mechanism/Intake",intakeMec);
         SmartDashboard.putNumber("Potentiometer", goodValue);
         SmartDashboard.putNumber("intake arm motor", motor.get());
         SmartDashboard.putBoolean("arm is there", armIsThere.getAsBoolean());

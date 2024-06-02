@@ -1,60 +1,36 @@
 {
-  "HALProvider": {
-    "Addressable LEDs": {
-      "window": {
-        "visible": true
-      }
-<<<<<<< HEAD
-=======
-    },
-    "Other Devices": {
-      "SPARK MAX [1]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [2]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [3]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [4]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [8]": {
-        "header": {
-          "open": true
-        }
-      }
->>>>>>> f298e4f1079f16937a0d12167d2abcf6d08e863a
-    }
-  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Auto Mode": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
-      "/SmartDashboard/Mechanism/Intake": "Mechanism2d",
+      "/SmartDashboard/Mechs/Intake": "Mechanism2d",
       "/SmartDashboard/Simulated Field": "Field2d"
     }
   },
+  "NetworkTables": {
+    "transitory": {
+      "Shuffleboard": {
+        "open": true
+      },
+      "SmartDashboard": {
+        "Mechs": {
+          "Intake": {
+            "Intake_Lift": {
+              "open": true
+            },
+            "open": true
+          },
+          "double[]##v_/SmartDashboard/Mechs/Intake Lift": {
+            "open": true
+          },
+          "open": true
+        },
+        "open": true
+      }
+    }
+  },
   "NetworkTables Info": {
-    "Clients": {
-      "open": true
-    },
-    "Connections": {
-      "open": true
-    },
-    "Server": {
-      "open": true
-    },
     "visible": true
   },
   "Plot": {
@@ -67,7 +43,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 338
+          "height": 326
         }
       ],
       "window": {

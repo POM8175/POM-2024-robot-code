@@ -12,21 +12,26 @@
 
 package frc.robot;
 
-import edu.wpi.first.hal.FRCNetComm.tInstances;
-import edu.wpi.first.hal.FRCNetComm.tResourceType;
-
 import static frc.robot.Constants.DriveConstants.ANGLE_TOLERANCE;
+import static frc.robot.Constants.JoystickConstants.A;
+import static frc.robot.Constants.JoystickConstants.LEFT_JOYSTICK_X;
+import static frc.robot.Constants.JoystickConstants.LEFT_JOYSTICK_Y;
+import static frc.robot.Constants.JoystickConstants.RIGHT_JOYSTICK_X;
+import static frc.robot.Constants.JoystickConstants.RIGHT_JOYSTICK_Y;
 import static frc.robot.Constants.LedsConstants.POM_PURPLE;
 
 import org.littletonrobotics.junction.LoggedRobot;
 
+import edu.wpi.first.hal.FRCNetComm.tInstances;
+import edu.wpi.first.hal.FRCNetComm.tResourceType;
 // import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.util.datalog.*;
 
 
 
@@ -42,44 +47,51 @@ public class Robot extends LoggedRobot {
     {
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
-        /**
+    /**
      * Converts a raw optical inverse-square reading into a fitted, calibrated linear reading in
      * INCHES.
      */
     
-
     
-
+    
+    
     private Command m_autonomousCommand;
+    Double[] Intake_Arm_Pose = {-0.7,0.0,0.4,0.0,180.0,0.0};
 
+    private Joystick controller = new Joystick(0);
+    
+    
 
     private RobotContainer m_robotContainer;
     DataLog log = DataLogManager.getLog();
     
 
-
     public void robotInit() {
+        Intake_Arm_Pose[5] =30000.0;
+        Intake_Arm_Pose[3] =30.0;
 
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = RobotContainer.getInstance();
-        HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
+         HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
         enableLiveWindowInTest(true);
 
         // colorSensor.configureColorSensor(ColorSensorResolution.kColorSensorRes20bit, ColorSensorMeasurementRate.kColorRate25ms, GainFactor.kGain9x);
         // CameraServer.startAutomaticCapture().setFPS(15);
         DataLogManager.start();
-                
-                
 
 
         
+        
+        
+        
+        
     }
-
-
+    
+    
     /**
-    * This function is called every robot packet, no matter the mode. Use this for items like
-    * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
+     * This function is called every robot packet, no matter the mode. Use this for items like
+     * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
     *
     * <p>This runs after the mode specific periodic functions, but before
     * LiveWindow and SmartDashboard integrated updating.
@@ -91,8 +103,8 @@ public class Robot extends LoggedRobot {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
-
-
+        
+        
         
         //Field
         SmartDashboard.putNumber("Field/Pose X Value", m_robotContainer.driveSubsystem.getPose().getX());
@@ -108,7 +120,7 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putNumber("Drive/Encoder/Average Speed", (m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity() + m_robotContainer.driveSubsystem.getRightEncoder().getVelocity())/2);
         SmartDashboard.putBoolean("Drive/Is Angle To Speaker", (m_robotContainer.driveSubsystem.calcAngleToSpeaker() < ANGLE_TOLERANCE));
       
-
+        
 
         //Intake Tab
         SmartDashboard.putNumber("Transfer/Color/Red", m_robotContainer.transferSubsystem.colorSensor.getRed());
@@ -117,8 +129,8 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putString("Transfer/Color/Color",m_robotContainer.transferSubsystem.colorSensor.getColor().toHexString());
         SmartDashboard.putBoolean("Transfer/Color/IsNoteIn",m_robotContainer.transferSubsystem.isNoteIn());
         // SmartDashboard.putNumber("Intake/Lift/Encoder Position", m_robotContainer.intakeLiftSubsystem.getEncoderPosition());
-
-
+        
+        
         //Shooting Tab
         // SmartDashboard.putNumber("Arm/Encoder Position", m_robotContainer.shootingArmSubsystem.getEncoderPosition());
         // SmartDashboard.putNumber("Arm/Speed", m_robotContainer.shootingArmSubsystem.getEncoder().getVelocity());
@@ -127,12 +139,11 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putNumber("Shooting/Speed", m_robotContainer.shootingSubsystem.getRate());
         SmartDashboard.putBoolean("Shooting/Is At Wanted Speed", isAutonomous());
         // m_robotContainer.ledSubsystem.setLeds(m_robotContainer.intakeSubsystem.colorSensor.getRed(), m_robotContainer.intakeSubsystem.colorSensor.getGreen(), m_robotContainer.intakeSubsystem.colorSensor.getBlue());        
-
-
-
-       
-
-
+        
+        
+        
+        SmartDashboard.putNumberArray("Mechs/Intake Lift",Intake_Arm_Pose);
+        
     }
     
     
@@ -197,6 +208,17 @@ public class Robot extends LoggedRobot {
         // Uncomment This To GO RAINBOW
         // m_robotContainer.ledSubsystem.rainbow();
 
+
+
+        
+        // if(controller.getRawButton(A) && Intake_Arm_Pose[5] < 90){
+        //     Intake_Arm_Pose[5]+= 1.0;
+        // }
+        // else if(controller.getRawButton(2) && Intake_Arm_Pose[5] > 0){
+        //     Intake_Arm_Pose[5]-= 1.0;
+        // }
+
+        
         
        
     }   
@@ -213,5 +235,9 @@ public class Robot extends LoggedRobot {
     @Override
     public void testPeriodic() {
     }
+    
+
+    
 
 }
+

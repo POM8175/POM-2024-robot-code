@@ -185,6 +185,8 @@ public class RobotContainer {
     andThen(new PrintCommand("now servo")).
     andThen(armLockSubsystem.TurnTo(LOCK_ANGLE).alongWith(new StartEndCommand(() -> shootingArmSubsystem.setMotor(-0), shootingArmSubsystem::stopMotor, shootingArmSubsystem)).alongWith(new RunCommand(() -> {}))).withTimeout(2);
   }
+
+
   
 }
 
