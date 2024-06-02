@@ -131,7 +131,8 @@ public class Constants {
         public static final double KIZONE = 0;
         public static final double KD = 0.0;
 
-        public static final double SHOOT_KP = 0.0002;
+        public static final double SHOOT_KP = 0.00001;
+        public static final double SHOOT_KI = 6e-8;
 
         //trpezoid contraits, need to be found using sysid
         public static final double MAX_VELOCITY_RAD_PER_SECOND = Math.PI;

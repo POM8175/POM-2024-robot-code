@@ -37,6 +37,8 @@ public class ShootingSubsystem extends PomSubsystem {
        SmartDashboard.putNumber("wanted speed", 0);
        leftPID.setP(SHOOT_KP);
        rightPID.setP(SHOOT_KP);
+       leftPID.setI(SHOOT_KI);
+       rightPID.setI(SHOOT_KI);
 
    }
 
