@@ -184,6 +184,7 @@ public class Constants {
     public static final class TransferConstants
     {
         public static final int TRANSFER_MOTOR = 8;
+        public static final int IR_SENSOR_ID = 0;
         public static final double TRANSFER_SHOOT_SPEED =-0.35;
         public static final double TRANSFER_INTAKE_SPEED =-0.1;
 

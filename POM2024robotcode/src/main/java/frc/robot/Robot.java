@@ -111,10 +111,6 @@ public class Robot extends LoggedRobot {
 
 
         //Intake Tab
-        SmartDashboard.putNumber("Transfer/Color/Red", m_robotContainer.transferSubsystem.colorSensor.getRed());
-        SmartDashboard.putNumber("Transfer/Color/Green", m_robotContainer.transferSubsystem.colorSensor.getGreen());
-        SmartDashboard.putNumber("Transfer/Color/Blue", m_robotContainer.transferSubsystem.colorSensor.getBlue());
-        SmartDashboard.putString("Transfer/Color/Color",m_robotContainer.transferSubsystem.colorSensor.getColor().toHexString());
         SmartDashboard.putBoolean("Transfer/Color/IsNoteIn",m_robotContainer.transferSubsystem.isNoteIn());
         // SmartDashboard.putNumber("Intake/Lift/Encoder Position", m_robotContainer.intakeLiftSubsystem.getEncoderPosition());
 

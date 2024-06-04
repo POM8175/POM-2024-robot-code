@@ -5,13 +5,10 @@ import static frc.robot.Constants.TransferConstants.*;
 import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ColorMatch;
-import com.revrobotics.ColorMatchResult;
-import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -19,21 +16,10 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class TransferSubsystem extends PomSubsystem
 {
     CANSparkMax transferMotor = new CANSparkMax(TRANSFER_MOTOR, MotorType.kBrushless);
-    // Color Sensor
-    //------------------------------------------------------------------------------------
-    public I2C.Port i2cPort =  I2C.Port.kOnboard;
-    public  ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
-
-    private final ColorMatch m_colorMatcher = new ColorMatch();
-    ColorMatchResult match;
-    //------------------------------------------------------------------------------------
+    DigitalInput IrSensor = new DigitalInput(IR_SENSOR_ID);
 
     public TransferSubsystem()
     {
-        // adding collors to the dataset of m_colorMatcher
-        for(int i = 0;i<notNoteColors.length;i++) m_colorMatcher.addColorMatch(notNoteColors[i]);
-        
-        m_colorMatcher.addColorMatch(noteColor);
         transferMotor.setIdleMode(IdleMode.kBrake);
         setDefaultCommand(this.runOnce(() -> stopMotor()));
     }
@@ -46,8 +32,7 @@ public class TransferSubsystem extends PomSubsystem
 
     public boolean isNoteIn()
     {
-        match = m_colorMatcher.matchClosestColor(colorSensor.getColor());
-        return match.color == noteColor;
+        return !IrSensor.get();
     } 
 
     @Override
