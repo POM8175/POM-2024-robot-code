@@ -46,7 +46,7 @@ public class DriveMeasured extends Command {
     // KI = SmartDashboard.getNumber("fwd ki", KI);
     // KD = SmartDashboard.getNumber("fwd kd", KD);
     // meters = SmartDashboard.getNumber("fwd meters", 0);
-    lEncoder = driveSubsystem.getLeftEncoder().getPosition();
+    lEncoder = 0;
     pid.setPID(KP, KI, KD);
     pid.setSetpoint(meters + lEncoder);
   }
@@ -54,7 +54,7 @@ public class DriveMeasured extends Command {
   @Override
   public void execute()
   {
-    double x = pid.calculate(driveSubsystem.getLeftEncoder().getPosition());
+    double x = pid.calculate(0);
     driveSubsystem.arcadeDrive(x > 0.5 ? 0.5 : x, 0);
   }
 

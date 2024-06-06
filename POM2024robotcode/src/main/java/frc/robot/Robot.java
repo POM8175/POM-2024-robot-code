@@ -101,11 +101,11 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putNumber("Field/Yaw", m_robotContainer.driveSubsystem.getHeading());
 
         //Drive
-        SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Velocity",m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity());
-        SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Velocity",m_robotContainer.driveSubsystem.getRightEncoder().getVelocity());
-        SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Position", m_robotContainer.driveSubsystem.getLeftEncoder().getPosition());
-        SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Position", m_robotContainer.driveSubsystem.getRightEncoder().getPosition());
-        SmartDashboard.putNumber("Drive/Encoder/Average Speed", (m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity() + m_robotContainer.driveSubsystem.getRightEncoder().getVelocity())/2);
+        // SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Velocity",m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity());
+        // SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Velocity",m_robotContainer.driveSubsystem.getRightEncoder().getVelocity());
+        // SmartDashboard.putNumber("Drive/Encoder/LeftEncoder/Position", m_robotContainer.driveSubsystem.getLeftEncoder().getPosition());
+        // SmartDashboard.putNumber("Drive/Encoder/RightEncoder/Position", m_robotContainer.driveSubsystem.getRightEncoder().getPosition());
+        // SmartDashboard.putNumber("Drive/Encoder/Average Speed", (m_robotContainer.driveSubsystem.getLeftEncoder().getVelocity() + m_robotContainer.driveSubsystem.getRightEncoder().getVelocity())/2);
         SmartDashboard.putBoolean("Drive/Is Angle To Speaker", (m_robotContainer.driveSubsystem.calcAngleToSpeaker() < ANGLE_TOLERANCE));
       
 
