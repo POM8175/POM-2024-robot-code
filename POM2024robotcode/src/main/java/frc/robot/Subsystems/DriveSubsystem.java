@@ -66,8 +66,8 @@ public class DriveSubsystem extends PomSubsystem {
 
     SmartDashboard.putData("Field", field);
 
-    slaveLeftMotor.follow(masterLeftMotor);
-    slaveRightMotor.follow(masterRightMotor);
+    // slaveLeftMotor.follow(masterLeftMotor);
+    // slaveRightMotor.follow(masterRightMotor);
 
     masterLeftMotor.setNeutralMode(NeutralMode.Coast);
     masterRightMotor.setNeutralMode(NeutralMode.Coast);

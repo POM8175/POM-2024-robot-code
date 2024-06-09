@@ -59,7 +59,12 @@ public class ShootingSubsystem extends PomSubsystem {
     public void setMotor(double speed) {;
         rightPID.setReference(speed, CANSparkMax.ControlType.kVelocity);
         leftPID.setReference(1 * speed, CANSparkMax.ControlType.kVelocity);
-        }
+    }
+
+    public void setPercent(double percent) {
+        shooterMotorLeft.set(percent);
+        shooterMotorRight.set(percent);
+    }
     @Override
     public void stopMotor() {
         shooterMotorRight.set(0);
@@ -86,6 +91,10 @@ public class ShootingSubsystem extends PomSubsystem {
     public Command stopWheelsCommand()
     {
         return this.runOnce(() -> stopMotor());
+    }
+
+    public Command setPercentComand(double percent){
+        return this.run(() -> setPercent(percent)); 
     }
 
     public Command joystickShootCommand(DoubleSupplier sup)
