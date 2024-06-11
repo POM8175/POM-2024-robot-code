@@ -19,6 +19,7 @@ import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,6 +40,8 @@ public class Robot extends TimedRobot {
     {
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
+
+    AnalogEncoder magEncoder = new AnalogEncoder(3);
         /**
      * Converts a raw optical inverse-square reading into a fitted, calibrated linear reading in
      * INCHES.
@@ -127,7 +130,10 @@ public class Robot extends TimedRobot {
 
 
 
-       
+        SmartDashboard.putNumber("Magnetic Encoder/Abs", magEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("Magnetic Encoder/Get", magEncoder.get());
+        SmartDashboard.putNumber("Magnetic Encoder/Dis", magEncoder.getDistance());
+        
 
 
     }
