@@ -1,15 +1,29 @@
 package frc.robot.Subsystems;
 
-import static frc.robot.Constants.DriveConstants.*;
+import static frc.robot.Constants.DriveConstants.BOT_POSE_LEN;
+import static frc.robot.Constants.DriveConstants.DRIVE_KINEMATICS;
+import static frc.robot.Constants.DriveConstants.FIELD_X;
+import static frc.robot.Constants.DriveConstants.GYRO_ID;
+import static frc.robot.Constants.DriveConstants.KD;
+import static frc.robot.Constants.DriveConstants.KI;
+import static frc.robot.Constants.DriveConstants.KP;
+import static frc.robot.Constants.DriveConstants.LEFT_MOTOR_LEAD;
+import static frc.robot.Constants.DriveConstants.LEFT_MOTOR_SLAVE;
+import static frc.robot.Constants.DriveConstants.MAX_RPM;
+import static frc.robot.Constants.DriveConstants.RATE;
+import static frc.robot.Constants.DriveConstants.RIGHT_MOTOR_LEAD;
+import static frc.robot.Constants.DriveConstants.RIGHT_MOTOR_SLAVE;
+import static frc.robot.Constants.DriveConstants.ROTATIONS_TO_METERS;
+import static frc.robot.Constants.DriveConstants.SPEAKER_Y;
+import static frc.robot.Constants.DriveConstants.TL;
+import static frc.robot.Constants.DriveConstants.VEL_P;
+import static frc.robot.Constants.DriveConstants.VEL_SLOT;
 
 import java.util.ArrayList;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-import javax.print.attribute.standard.Fidelity;
-
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
-import com.fasterxml.jackson.databind.deser.impl.PropertyValue;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -31,20 +45,18 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
 import frc.robot.Commands.TrajectoryFactory;
 /**
  *
